@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use App\Models\TransaksiUser;
 
 //Controllers
 use App\Http\Controllers\ProfileController;
@@ -64,11 +65,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/transaksi', function () {
         return view('livewire.pages.user.daftar-transaksi');
     })->name('user.transaksi')->middleware('role:' . User::ROLE_USER);
-
+    
     Route::get('/user/checkout', function () {
         return view('livewire.pages.user.checkout');
     })->name('user.checkout')->middleware('role:' . User::ROLE_USER);
-
 
 });
 

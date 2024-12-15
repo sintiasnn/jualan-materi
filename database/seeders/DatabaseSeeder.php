@@ -21,5 +21,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RefUniversitasListSeeder::class);
         // $this->call(TransaksiUserTestSeeder::class);
         $this->call(PaketListSeeder::class);
+        $this->call(TryoutSeeder::class);
+        $this->call(TryoutPaketSeeder::class);
+        $this->call(ClassSeeder::class);
+        $this->call(ClassPaketSeeder::class);
+
     }
 }

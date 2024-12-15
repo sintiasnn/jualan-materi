@@ -47,9 +47,9 @@ class TransaksiUser extends Model
         return $this->belongsTo(RedeemCode::class);
     }
 
-    public function paket(): BelongsTo
+    public function paket()
     {
-        return $this->belongsTo(PaketList::class);
+        return $this->belongsTo(PaketList::class, 'paket_id', 'id');
     }
 
     // Status Helpers

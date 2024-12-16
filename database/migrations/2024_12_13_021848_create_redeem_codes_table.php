@@ -27,6 +27,10 @@ return new class extends Migration
             // Discount amount (in case it's a discount code)
             $table->decimal('discount_amount', 15, 2)->nullable(); // Discount in currency amount (e.g. 50000)
 
+            // Quota tracking
+            $table->integer('max_quota')->default(1); // Maximum number of times the code can be used
+            $table->integer('used_quota')->default(0); // Number of times the code has been used
+
             // Code status
             $table->boolean('activation_status')->default(false);
 

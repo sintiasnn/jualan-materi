@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TryoutPaketSeeder::class);
         $this->call(ClassSeeder::class);
         $this->call(ClassPaketSeeder::class);
+        $this->call(RedeemCodeSeeder::class);
 
     }
 }

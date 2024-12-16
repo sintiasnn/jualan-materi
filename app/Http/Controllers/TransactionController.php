@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TransaksiUser; // Import your models here
+use App\Models\TransaksiUser;
+use App\Models\RedeemCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Midtrans\Notification;
 use Midtrans\Config;
 use Midtrans\Transaction;
 
 class TransactionController extends Controller
 {
-    /**
-     * Initialize MidTrans Config.
-     */
     public function __construct()
     {
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
@@ -25,90 +24,100 @@ class TransactionController extends Controller
 
     public function bayarSekarang()
     {
-        // Generate transaction ID
-        $transactionId = 'TRX-' . time();
+        try {
+            DB::beginTransaction();
 
-        // Simpan transaksi user ke database
-        // Create transaction record
-        $transaksi = TransaksiUser::create([
-            'user_id' => auth()->id(),
-            'paket_id' => $this->paket->id,
-            'kode_transaksi' => $transactionId,
-            'total_amount' => $this->total,
-            'status' => 'pending',
-            'tanggal_pembelian' => now(),  // Add this line
-            'waktu_expired' => now()->addDays(1)
-        ]);
+            $transactionId = 'TRX-' . time();
 
-        // Panggil controller untuk proses pembayaran
-        $response = $this->createPayment($transactionId);
+            $transaksi = TransaksiUser::create([
+                'user_id' => auth()->id(),
+                'paket_id' => $this->paket->id,
+                'kode_transaksi' => $transactionId,
+                'total_amount' => $this->total,
+                'status' => 'pending',
+                'tanggal_pembelian' => now(),
+                'waktu_expired' => now()->addDays(1)
+            ]);
 
-        // Redirect user ke halaman pembayaran atau tampilkan pesan error
-        if ($response['success']) {
-            return redirect()->to($response['redirect_url']);  // Ganti dengan URL pembayaran dari MidTrans
-        } else {
-            $this->promoMessage = $response['message'];
-            $this->promoMessageClass = 'text-danger';
+            $response = $this->createPayment($transactionId);
+
+            DB::commit();
+
+            if ($response['success']) {
+                return redirect()->to($response['redirect_url']);
+            } else {
+                $this->promoMessage = $response['message'];
+                $this->promoMessageClass = 'text-danger';
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Payment creation error: ' . $e->getMessage());
+            throw $e;
         }
     }
 
-    /**
-     * Generate a MidTrans Snap payment URL.
-     */
     public function createPayment(Request $request, $transactionId)
     {
-        $transaction = TransaksiUser::findOrFail($transactionId);
-
-        if ($transaction->status !== 'pending') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Transaction already processed.'
-            ], 400);
-        }
-
-        $user = Auth::user();
-
-        // MidTrans payment payload
-        $payload = [
-            'transaction_details' => [
-                'order_id' => $transaction->kode_transaksi,
-                'gross_amount' => $transaction->total_amount,
-            ],
-            'customer_details' => [
-                'first_name' => $user->name,
-                'email' => $user->email,
-            ],
-            'enabled_payments' => [
-                // Virtual Accounts
-                'echannel',       // Mandiri Bill Payment
-                'permata_va',
-                'bca_va',
-                'bni_va',
-                'bri_va',
-                'cimb_va',
-
-                // E-Wallets
-                'gopay',
-                'shopeepay',
-
-                // Other QRIS
-                'other_qris',
-
-                // Bank Transfers
-                'bank_transfer',  // Bank Transfer payment method
-            ],
-
-        ];
-        
+        DB::beginTransaction();
         try {
-            // Generate Snap Token
-            $snapToken = \Midtrans\Snap::getSnapToken($payload);
+            $transaction = TransaksiUser::lockForUpdate()->findOrFail($transactionId);
 
+            if ($transaction->status !== 'pending') {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Transaction already processed.'
+                ], 400);
+            }
+
+            // Check and lock redeem code if exists
+            if ($transaction->redeem_code_id) {
+                $redeemCode = RedeemCode::lockForUpdate()->find($transaction->redeem_code_id);
+                
+                if (!$redeemCode || !$redeemCode->hasAvailableQuota()) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Redeem code no longer available.'
+                    ], 400);
+                }
+                
+                $redeemCode->increment('used_quota');
+            }
+
+            $user = Auth::user();
+
+            $payload = [
+                'transaction_details' => [
+                    'order_id' => $transaction->kode_transaksi,
+                    'gross_amount' => $transaction->total_amount,
+                ],
+                'customer_details' => [
+                    'first_name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'enabled_payments' => [
+                    'echannel',
+                    'permata_va',
+                    'bca_va',
+                    'bni_va',
+                    'bri_va',
+                    'cimb_va',
+                    'gopay',
+                    'shopeepay',
+                    'other_qris',
+                    'bank_transfer',
+                ],
+            ];
+
+            $snapToken = \Midtrans\Snap::getSnapToken($payload);
 
             $transaction->update([
                 'snap_token' => $snapToken,
                 'redirect_url' => "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
             ]);
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
@@ -116,8 +125,10 @@ class TransactionController extends Controller
                 'redirect_url' => "https://app.sandbox.midtrans.com/snap/v2/vtweb/{$snapToken}",
             ]);
 
-    
         } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Payment creation error: ' . $e->getMessage());
+            
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
@@ -125,75 +136,81 @@ class TransactionController extends Controller
         }
     }
 
-    /**
-     * Handle MidTrans Payment Notification Callback.
-     */
     public function notificationHandler(Request $request)
     {
-        // Validate required fields
-        $notification = $request->all();
+        return DB::transaction(function () use ($request) {
+            try {
+                $notification = $request->all();
 
-        if (!isset($notification['order_id']) || !isset($notification['transaction_status'])) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid notification payload'
-            ], 400);
-        }
+                if (!isset($notification['order_id']) || !isset($notification['transaction_status'])) {
+                    throw new \Exception('Invalid notification payload');
+                }
 
-        $orderId = $notification['order_id'];
-        $transactionStatus = $notification['transaction_status'];
-        $transactionId = $notification['transaction_id'];
-        $paymentMethod = $notification['payment_type'];
-        $fraudStatus = $notification['fraud_status'];
-        $statusMessage = $notification['status_message'];
+                $transaction = TransaksiUser::lockForUpdate()
+                    ->where('kode_transaksi', $notification['order_id'])
+                    ->first();
 
-        // Fetch the transaction from the database
-        $transaction = TransaksiUser::where('kode_transaksi', $orderId)->first();
+                if (!$transaction) {
+                    throw new \Exception('Transaction not found');
+                }
 
-        if (!$transaction) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Transaction not found'
-            ], 404);
-        }
+                $transactionStatus = $notification['transaction_status'];
+                
+                // Handle redeem code quota if transaction fails/expires/cancels
+                if ($transaction->redeem_code_id && 
+                    in_array($transactionStatus, ['cancel', 'expire', 'failure']) && 
+                    $transaction->status === 'pending') {
+                    
+                    $redeemCode = RedeemCode::lockForUpdate()
+                        ->find($transaction->redeem_code_id);
+                    
+                    if ($redeemCode) {
+                        $redeemCode->decrement('used_quota');
+                    }
+                }
 
-        // Update transaction status based on MidTrans notification
-        if ($transactionStatus === 'settlement') {
-            $transaction->update([
-                'status' => 'success',
-                'gateway_waktu_pembayaran' => now(),
-                'gateway_fraud_status' => $fraudStatus,
-                'gateway_payment_method' => $paymentMethod,
-                'gateway_transaction_id'=> $transactionId,
-                'gateway_status_message' => $statusMessage,
-            ]);
-            // $transaction->update(['status' => 'success']);
-        } elseif ($transactionStatus === 'pending') {
-            $transaction->update(['status' => 'pending']);
-        } elseif (in_array($transactionStatus, ['cancel', 'expire', 'failure'])) {
-            $transaction->update(['status' => 'failed']);
-        }
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Transaction status updated successfully',
-            'fraud_status' => $fraudStatus,
-            'gateway_waktu_pembayaran' => now(),
-            'gateway_transaction_id' => $transactionId,
-        ]);
+                // Update transaction status
+                $updateData = [
+                    'status' => $transactionStatus === 'settlement' ? 'success' : 
+                              ($transactionStatus === 'pending' ? 'pending' : 'failed'),
+                    'gateway_waktu_pembayaran' => now(),
+                    'gateway_fraud_status' => $notification['fraud_status'],
+                    'gateway_payment_method' => $notification['payment_type'],
+                    'gateway_transaction_id' => $notification['transaction_id'],
+                    'gateway_status_message' => $notification['status_message'],
+                ];
+
+                $transaction->update($updateData);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Transaction status updated successfully',
+                    'fraud_status' => $notification['fraud_status'],
+                    'gateway_waktu_pembayaran' => now(),
+                    'gateway_transaction_id' => $notification['transaction_id'],
+                ]);
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Notification handling error: ' . $e->getMessage());
+                
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        });
     }
 
     public function verifyPayment($orderId)
     {
         try {
-            $status = Transaction::status($orderId);  // Get the transaction status
+            $status = Transaction::status($orderId);
 
-            // Process the response and check the status
             if ($status->transaction_status == 'settlement') {
                 // Payment successful
             }
         } catch (\Exception $e) {
-            // Handle error if something goes wrong
             return response()->json(['error' => $e->getMessage()]);
         }
     }

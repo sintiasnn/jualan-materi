@@ -70,5 +70,21 @@
             });
 
         </script>
+        <script>
+            // Check for flash message on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                @if(session()->has('success-free'))
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: '{{ session('success-free') }}',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        position: 'bottom-end',
+                        toast: true
+                    });
+                @endif
+            });
+        </script>
     </main>
 </x-app-layout>

@@ -4,6 +4,7 @@ use App\Models\PaketList;
 use App\Models\RedeemCode;
 use App\Models\TransaksiUser; // Import TransaksiUser model
 use Livewire\Volt\Component;
+use App\Http\Controllers\TransactionController;
 
 new class extends Component
 {
@@ -103,6 +104,52 @@ new class extends Component
         $this->total = $this->paket->harga - $this->discount;
     }
 
+    public $isProcessingPayment = false;
+
+    public function bayarSekarang()
+    {
+        $this->isProcessingPayment = true;
+
+        try {
+            // Generate transaction ID
+            $transactionId = 'TRX-' . time();
+            
+            // Create transaction record
+            $transaksi = new TransaksiUser();
+            $transaksi->user_id = auth()->id();
+            $transaksi->paket_id = $this->paket->id;
+            $transaksi->kode_transaksi = $transactionId;
+            $transaksi->total_amount = $this->total;
+            $transaksi->status = 'pending';
+            $transaksi->tanggal_pembelian = now();
+            $transaksi->save();
+
+            logger("Transaction created with ID: " . $transaksi->id);
+
+            // Create instance of TransactionController and call directly
+            $controller = app(TransactionController::class);
+            $response = $controller->createPayment(request(), $transaksi->id);
+            
+            // Convert response to array
+            $data = $response->getData(true);
+            
+            logger("Payment response: " . json_encode($data));
+
+            if (isset($data['redirect_url'])) {
+                return redirect()->to($data['redirect_url']);
+            } else {
+                $this->addError('payment', 'No redirect URL in response');
+                logger("No redirect URL in response: " . json_encode($data));
+            }
+
+        } catch (\Exception $e) {
+            logger("Payment error: " . $e->getMessage());
+            $this->addError('payment', 'Error: ' . $e->getMessage());
+        } finally {
+            $this->isProcessingPayment = false;
+        }
+    }
+
     public function render(): mixed
     {
         // Mengembalikan tampilan dengan parameter
@@ -185,9 +232,36 @@ new class extends Component
                             </ul>
 
                             <!-- Payment Button -->
-                            <div class="text-center mt-4">
-                                <button class="btn btn-success btn-block">Bayar Sekarang</button>
-                            </div>
+                            <div class="card-footer bg-white text-center">
+                                <button 
+                                    wire:click="bayarSekarang"
+                                    class="btn btn-sm btn-success w-100"
+                                    wire:loading.attr="disabled"
+                                    wire:target="bayarSekarang">
+                                    
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <!-- Loading spinner -->
+                                        <div wire:loading wire:target="bayarSekarang" class="me-2">
+                                            <div class="spinner-border spinner-border-sm text-white" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Button text -->
+                                        <span wire:loading.remove wire:target="bayarSekarang">
+                                            Beli Sekarang!
+                                        </span>
+                                        <span wire:loading wire:target="bayarSekarang">
+                                            Memproses Pembayaran...
+                                        </span>
+                                    </div>
+                                </button>
+                            
+                                <!-- Error message -->
+                                @error('payment')
+                                    <div class="text-danger mt-2 small">{{ $message }}</div>
+                                @enderror
+                            </div>                         
                         </div>
                     </div>
                 </div>

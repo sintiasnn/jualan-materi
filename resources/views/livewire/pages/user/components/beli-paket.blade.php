@@ -238,7 +238,7 @@ new class extends Component
                                 @if ($paket->tier === 'free')
                                     <a href="#" class="btn btn-sm btn-primary w-100">Daftar Sekarang!</a>
                                 @else
-                                    <a href="#" class="btn btn-sm btn-success w-100">Beli Sekarang!</a>
+                                <a href="{{ route('user.checkout', ['id' => $paket->id]) }}" class="btn btn-sm btn-success w-100">Beli Sekarang!</a>
                                 @endif
                             </div>
                         </div>

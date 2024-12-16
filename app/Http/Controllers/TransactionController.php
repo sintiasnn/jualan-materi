@@ -23,6 +23,35 @@ class TransactionController extends Controller
         \Midtrans\Config::$is3ds = true;
     }
 
+    public function bayarSekarang()
+    {
+        // Generate transaction ID
+        $transactionId = 'TRX-' . time();
+
+        // Simpan transaksi user ke database
+        // Create transaction record
+        $transaksi = TransaksiUser::create([
+            'user_id' => auth()->id(),
+            'paket_id' => $this->paket->id,
+            'kode_transaksi' => $transactionId,
+            'total_amount' => $this->total,
+            'status' => 'pending',
+            'tanggal_pembelian' => now(),  // Add this line
+            'waktu_expired' => now()->addDays(1)
+        ]);
+
+        // Panggil controller untuk proses pembayaran
+        $response = $this->createPayment($transactionId);
+
+        // Redirect user ke halaman pembayaran atau tampilkan pesan error
+        if ($response['success']) {
+            return redirect()->to($response['redirect_url']);  // Ganti dengan URL pembayaran dari MidTrans
+        } else {
+            $this->promoMessage = $response['message'];
+            $this->promoMessageClass = 'text-danger';
+        }
+    }
+
     /**
      * Generate a MidTrans Snap payment URL.
      */

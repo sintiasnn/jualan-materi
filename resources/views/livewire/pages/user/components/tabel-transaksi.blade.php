@@ -15,12 +15,12 @@ new class extends Component
 
     public function loadTransactions()
     {
-        $userId = auth()->id(); // Ambil ID user yang sedang login
+        $userId = auth()->id();
+        
+        $query = TransaksiUser::with('paket')
+            ->where('user_id', $userId)
+            ->orderBy('id', 'desc'); // Added ordering by ID descending
 
-        // Query untuk transaksi milik user yang sedang login
-        $query = TransaksiUser::with('paket')->where('user_id', $userId);
-
-        // Filter berdasarkan tab aktif
         if ($this->selectedTab === 'pending') {
             $query->where('status', 'pending');
         } elseif ($this->selectedTab === 'success') {
@@ -29,7 +29,6 @@ new class extends Component
             $query->where('status', 'cancelled');
         }
 
-        // Format data transaksi
         $this->transactions = $query->get()->map(function ($transaksi) {
             return [
                 'kode_transaksi' => $transaksi->kode_transaksi,
@@ -43,13 +42,20 @@ new class extends Component
                     'failed' => '<span class="badge bg-danger">Gagal</span>',
                     default => '-',
                 },
-                'aksi' => $transaksi->status === 'success' 
-                    ? '<a href="' . 
-                        (($transaksi->paket->tipe ?? '') == 'tryout' ? '/user/tryout' : '/user/kelas') . 
-                        '" class="btn btn-sm btn-primary">Buka Paket</a>'
-                    : '',
+                'aksi' => $this->getActionButton($transaksi),
             ];
         });
+    }
+
+    private function getActionButton($transaksi)
+    {
+        if ($transaksi->status === 'success') {
+            $route = ($transaksi->paket->tipe ?? '') == 'tryout' ? '/user/tryout' : '/user/kelas';
+            return '<a href="' . $route . '" class="btn btn-sm btn-success">Buka Paket</a>';
+        } elseif ($transaksi->status === 'pending' && !empty($transaksi->redirect_url)) {
+            return '<a href="' . $transaksi->redirect_url . '" class="btn btn-sm btn-primary">Bayar</a>';
+        }
+        return '';
     }
 
     public function switchTab($tab)
@@ -59,7 +65,6 @@ new class extends Component
     }
 };
 ?>
-
 
 <div class="container-xl px-4 mt-n10">
     <div class="card shadow-sm">

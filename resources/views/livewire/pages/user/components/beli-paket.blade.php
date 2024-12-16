@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\PaketList;
+use App\Models\TransaksiUser;
 use Livewire\Volt\Component;
 
 new class extends Component
@@ -18,6 +19,14 @@ new class extends Component
     public function loadPaket()
     {
         $query = PaketList::where('active_status', true);
+
+        // Cek paket yang sudah dibeli oleh user
+        $purchasedPackages = TransaksiUser::where('user_id', auth()->id())
+            ->whereIn('status', ['success', 'pending']) // Exclude both 'success' and 'pending'
+            ->pluck('paket_id'); // Ambil hanya paket_id yang sudah dibeli atau pending
+
+        // Exclude the purchased packages from the query
+        $query->whereNotIn('id', $purchasedPackages);
 
         // Filter Kategori
         if (!empty($this->filterKategori)) {
@@ -39,8 +48,10 @@ new class extends Component
             $query->whereIn('audience', $this->filterAudience);
         }
 
+        // Ambil paket-paket yang belum dibeli oleh user
         $this->pakets = $query->get();
     }
+
 
     public function updatedFilterKategori()
     {

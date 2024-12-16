@@ -9,7 +9,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\TransactionController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -65,10 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/transaksi', function () {
         return view('livewire.pages.user.daftar-transaksi');
     })->name('user.transaksi')->middleware('role:' . User::ROLE_USER);
-    
-    Route::get('/user/checkout', function () {
-        return view('livewire.pages.user.checkout');
-    })->name('user.checkout')->middleware('role:' . User::ROLE_USER);
+
+    Route::get('/user/beli/checkout/{id}', function ($id) {
+        return view('livewire.pages.user.checkout', ['id' => $id]);
+    })->name('user.checkout')->middleware('role:' . User::ROLE_USER); 
 
 });
 

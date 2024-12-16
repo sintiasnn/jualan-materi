@@ -24,6 +24,9 @@ return new class extends Migration
             $table->unsignedBigInteger('related_id')->nullable(); 
             $table->string('related_type')->nullable(); // Polymorphic for flexibility
 
+            // Discount amount (in case it's a discount code)
+            $table->decimal('discount_amount', 15, 2)->nullable(); // Discount in currency amount (e.g. 50000)
+
             // Code status
             $table->boolean('activation_status')->default(false);
 

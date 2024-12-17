@@ -46,16 +46,27 @@
                         <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
                         Kode Promo
                     </a>
-                    <div class="sidenav-menu-heading">App</div>
-                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
-                        href="{{ '/user/beli' }}">
+                    <div class="sidenav-menu-heading">Membership</div>
+                    <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                         <div class="nav-link-icon"><i data-feather="user"></i></div>
-                        User Management
+                        Manajemen User
+                        <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
+                    <div class="collapse {{ request()->is('admin/users*') ? 'show' : '' }}"  id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                        <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                            
+                            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" 
+                                href="{{ '/admin/users' }}">
+                                Daftar User</a>
+                            <a class="nav-link" href="dashboard-3.html">Data Universitas</a>
+                        </nav>
+                    </div>
+                    <div class="sidenav-menu-heading">App</div>
+                    
                     <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
                         href="{{ '/user/beli' }}">
                         <div class="nav-link-icon"><i data-feather="settings"></i></div>
-                        App Configuration
+                        Konfigurasi
                     </a>
                     {{-- <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
                         href="{{ '/user/transaksi' }}">

@@ -17,27 +17,52 @@ new #[Layout('layouts.guest')] class extends Component
      */
     public function login(): void
     {
-        $this->validate();
-
-        $this->form->authenticate();
-
-        Session::regenerate();
+        // Validate the login form
+        $this->form->validate();
 
         try {
-            $role = Auth::user()->role;
+            // Attempt to authenticate
+            $this->form->authenticate();
+            
+            // Regenerate session for security
+            Session::regenerate();
 
-            if ($role === User::ROLE_ADMIN) {
-                $this->redirect(route('admin.dashboard'));
-            } elseif ($role === User::ROLE_TUTOR) {
-                $this->redirect(route('tutor.dashboard'));
-            } elseif ($role === User::ROLE_USER) {
-                $this->redirect(route('user.dashboard'));
-            } else {
-                $this->redirect(route('dashboard'));
-            }
+            $user = Auth::user();
+            $name = $user->name ?? 'User';
+            
+            // Prepare redirect based on user role
+            $redirectRoute = match ($user->role) {
+                User::ROLE_ADMIN => route('admin.dashboard'),
+                User::ROLE_TUTOR => route('tutor.dashboard'),
+                User::ROLE_USER => route('user.dashboard'),
+                default => route('dashboard')
+            };
+
+            session()->flash('alert', [
+                'type' => 'success',
+                'title' => 'Login Berhasil!',
+                'message' => "Selamat datang kembali, {$name}!"
+            ]);
+
+            $this->redirect($redirectRoute);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->addError('form.email', trans('auth.failed'));
+            
+            session()->flash('alert', [
+                'type' => 'error',
+                'title' => 'Login Gagal!',
+                'message' => 'Email atau password yang anda masukkan salah.'
+            ]);
+
         } catch (\Exception $e) {
-            // Fallback to default dashboard if something goes wrong
-            $this->redirect(route('dashboard'));
+            session()->flash('alert', [
+                'type' => 'error',
+                'title' => 'Error!',
+                'message' => 'Terjadi kesalahan. Silahkan coba beberapa saat lagi.'
+            ]);
+            
+            $this->redirect(route('login'));
         }
     }
 }
@@ -52,8 +77,12 @@ new #[Layout('layouts.guest')] class extends Component
                         <div class="col-lg-5">
                             <!-- Basic login form-->
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header justify-content-center">
-                                    <h3 class="fw-light my-4">LMSAxon</h3>
+                                <div class="card-header d-flex align-items-center">
+                                    <!-- Image beside the text -->
+                                    <img src="{{asset('assets/img/favicon.png')}}" alt="LMSAxon Logo" class="img-fluid me-2" style="width: 40px; height: 40px; border-radius:10px">
+                                    
+                                    <!-- LMSAxon Text -->
+                                    <h3 class="fw-light my-0">Axon Education - Login</h3>
                                 </div>
                                 <div class="card-body">
                                     <!-- Session Status -->

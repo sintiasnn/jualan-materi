@@ -39,4 +39,9 @@ class RefUniversitasList extends Model
     {
         return "{$this->universitas_name} ({$this->singkatan})";
     }
+
+    public function universitas(): BelongsTo
+    {
+        return $this->belongsTo(RefUniversitasList::class, 'universitas_id');
+    }
 }

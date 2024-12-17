@@ -14,6 +14,14 @@ new class extends Component
 
         $this->redirect('/', navigate: true);
     }
+
+    public function logoutUser()
+    {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return $this->redirect('/login', navigate: true);
+    }
 }; ?>
 
 <nav x-data="{ open: false }" class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
@@ -75,16 +83,45 @@ new class extends Component
                     {{ __('Transaksi Saya') }}
                 </a>
                 @endif
-                <button wire:click="logout" class="dropdown-item" type="button">
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     <div class="dropdown-item-icon">
                         <i data-feather="log-out"></i>
                     </div>
                     {{ __('Logout') }}
-                </button>
-                
+                </button>          
             </div>
         </li>
     </ul>
 </nav>
+<!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Apakah anda yakin ingin keluar dari aplikasi?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="button" data-bs-dismiss="modal">Batal</button>
+                <button class="btn btn-danger" type="button" onclick="handleLogout()">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function handleLogout() {
+        // Close modal first
+        const modal = bootstrap.Modal.getInstance(document.getElementById('logoutModal'));
+        modal.hide();
+        
+        // Then call Livewire's logout
+        @this.logoutUser();
+    }
+</script>
 
 

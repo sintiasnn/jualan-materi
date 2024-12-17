@@ -1,7 +1,7 @@
 <?php
 
-
 namespace App\Http\Controllers;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -14,20 +14,21 @@ class ProfileController extends Controller
         $request->validate([
             'avatar' => 'required|image|mimes:jpeg,png,jpg|max:1024',
         ]);
-
-        $user = auth()->user();
+    
+        // Determine which user's avatar to update
+        $user = $request->has('user_id') ? User::findOrFail($request->user_id) : auth()->user();
         $oldAvatar = $user->avatar; // Get the current avatar name
-
+    
         try {
             // Check if the request has a new avatar file
             if ($request->hasFile('avatar')) {
                 // Define the new avatar filename
                 $avatar = $request->file('avatar');
                 $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
-
+    
                 // Move the new avatar to the server
                 $avatar->move(public_path('assets/img/avatar'), $avatarName);
-
+    
                 // Delete the old avatar if it's not 'default.jpg'
                 if ($oldAvatar !== 'default.jpg') {
                     $oldAvatarPath = public_path('assets/img/avatar/' . $oldAvatar);
@@ -35,12 +36,20 @@ class ProfileController extends Controller
                         File::delete($oldAvatarPath);
                     }
                 }
-
+    
                 // Update the user's avatar in the database
                 $user->avatar = $avatarName;
                 $user->save();
-
-                // Set success message to session
+    
+                // Handle the response based on request type
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Foto profil berhasil diperbarui.'
+                    ]);
+                }
+    
+                // Set success message to session for non-ajax requests
                 session()->flash('swal:modal', [
                     'type' => 'success',
                     'title' => 'Berhasil!',
@@ -48,15 +57,23 @@ class ProfileController extends Controller
                 ]);
             }
         } catch (\Exception $e) {
-            // In case of failure, set error message to session
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan saat memperbarui foto profil.'
+                ], 500);
+            }
+    
+            // Set error message to session for non-ajax requests
             session()->flash('swal:modal', [
                 'type' => 'error',
                 'title' => 'Gagal!',
                 'text' => 'Terjadi kesalahan saat memperbarui foto profil.',
             ]);
         }
-
-        return redirect()->back();
+    
+        // For non-ajax requests, redirect back
+        return back();
     }
 }
 

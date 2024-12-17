@@ -130,7 +130,7 @@ new class extends Component
     <div class="card mb-4">
         <div class="card-header">Ubah Password</div>
         <div class="card-body">
-            <form wire:submit.prevent="updatePassword" class="space-y-4">
+            <form id="password-form" wire:submit.prevent="updatePassword" class="space-y-4">
                 <!-- Current Password -->
                 <div class="mb-3">
                     <x-input-label for="update_password_current_password" :value="__('Password Sekarang')" class="small mb-1" />
@@ -183,9 +183,30 @@ new class extends Component
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updatePasswordModal">
+                        Simpan Perubahan
+                    </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Password Update Confirmation Modal -->
+    <div class="modal fade" id="updatePasswordModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updatePasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updatePasswordModalLabel">Konfirmasi Perubahan Password</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin ingin mengubah password?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-success" type="button" wire:click="updatePassword" data-bs-dismiss="modal">Simpan</button>
+                </div>
+            </div>
         </div>
     </div>
 </section>

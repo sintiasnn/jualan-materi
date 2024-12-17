@@ -5,6 +5,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -12,6 +13,7 @@ use App\Models\RefUniversitasList;
 
 new #[Layout('layouts.guest')] class extends Component
 {
+    // Form inputs
     public string $name = '';
     public string $email = '';
     public string $password = '';
@@ -19,36 +21,63 @@ new #[Layout('layouts.guest')] class extends Component
     public string $phone_number = '+62';
     public string $username = '';
     public string $universitas_id = '';
+    public ?string $g_recaptcha_response = null;
 
-    // Validation state properties
+    // Validation states
     public bool $isNameValid = false;
     public bool $isUsernameValid = false;
     public bool $isPhoneValid = false;
     public bool $isEmailValid = false;
     public ?string $usernameError = null;
     public ?string $emailError = null;
+    public ?string $phoneError = null;
 
-    public function mount()
+    public function mount(): void
     {
         $this->phone_number = '+62';
     }
 
-    public function updatedName()
+    protected function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:19'],
+            'username' => ['required', 'string', 'max:13', 'unique:'.User::class],
+            'phone_number' => ['required', 'string', 'regex:/^\+62[0-9]{8,12}$/'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'universitas_id' => ['required', 'exists:ref_universitas_list,id'],
+            'g_recaptcha_response' => ['required']
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'g_recaptcha_response.required' => 'Mohon centang reCAPTCHA terlebih dahulu.'
+        ];
+    }
+
+    public function updatedName(): void
     {
         $this->isNameValid = strlen($this->name) <= 19 && strlen($this->name) > 0;
     }
 
-    public function updatedUsername()
+    public function updatedUsername(): void
     {
         $this->validateUsername();
     }
 
-    public function updatedEmail()
+    public function updatedEmail(): void
     {
         $this->validateEmail();
     }
 
-    public function validateUsername()
+    public function updatedPhoneNumber(): void
+    {
+        $this->validatePhoneNumber();
+    }
+
+    private function validateUsername(): void
     {
         $this->usernameError = null;
         
@@ -63,7 +92,6 @@ new #[Layout('layouts.guest')] class extends Component
             return;
         }
 
-        // Check uniqueness
         if (User::where('username', $this->username)->exists()) {
             $this->isUsernameValid = false;
             $this->usernameError = 'Username sudah digunakan';
@@ -73,7 +101,7 @@ new #[Layout('layouts.guest')] class extends Component
         $this->isUsernameValid = true;
     }
 
-    public function validateEmail()
+    private function validateEmail(): void
     {
         $this->emailError = null;
         
@@ -88,7 +116,6 @@ new #[Layout('layouts.guest')] class extends Component
             return;
         }
 
-        // Check uniqueness
         if (User::where('email', strtolower($this->email))->exists()) {
             $this->isEmailValid = false;
             $this->emailError = 'Email sudah digunakan';
@@ -98,16 +125,41 @@ new #[Layout('layouts.guest')] class extends Component
         $this->isEmailValid = true;
     }
 
-    public function updatedPhoneNumber()
+    private function validatePhoneNumber(): void
     {
-        // Ensure +62 prefix remains
-        if (!str_starts_with($this->phone_number, '+62')) {
-            $this->phone_number = '+62' . substr($this->phone_number, 3);
+        $this->phoneError = null;
+        
+        $phone = preg_replace('/[^0-9+]/', '', $this->phone_number);
+        
+        if (!str_starts_with($phone, '+62')) {
+            if (str_starts_with($phone, '0')) {
+                $phone = '+62' . substr($phone, 1);
+            } elseif (str_starts_with($phone, '62')) {
+                $phone = '+' . $phone;
+            } else {
+                $phone = '+62' . $phone;
+            }
         }
-        $this->isPhoneValid = strlen($this->phone_number) <= 15 && strlen($this->phone_number) > 4;
+
+        $this->phone_number = $phone;
+        
+        $digits = substr($phone, 3);
+        if (strlen($digits) < 8) {
+            $this->isPhoneValid = false;
+            $this->phoneError = 'Nomor telepon terlalu pendek';
+            return;
+        }
+        
+        if (strlen($digits) > 12) {
+            $this->isPhoneValid = false;
+            $this->phoneError = 'Nomor telepon terlalu panjang';
+            return;
+        }
+
+        $this->isPhoneValid = true;
     }
 
-    public function generateReferralCode(): string
+    private function generateReferralCode(): string
     {
         do {
             $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -120,28 +172,95 @@ new #[Layout('layouts.guest')] class extends Component
         return $code;
     }
 
+    private function validateRecaptcha(): bool
+    {
+        if (empty($this->g_recaptcha_response)) {
+            return false;
+        }
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => config('services.recaptcha.secret_key'),
+            'response' => $this->g_recaptcha_response,
+        ]);
+
+        return $response->json('success', false);
+    }
+
+    public function setRecaptcha($token): void
+    {
+        $this->g_recaptcha_response = $token;
+    }
+
     public function register(): void
     {
-        $validated = $this->validate([
-            'name' => ['required', 'string', 'max:19'],
-            'username' => ['required', 'string', 'max:13', 'unique:'.User::class],
-            'phone_number' => ['required', 'string', 'max:15', 'min:10', 'regex:/^\+62\d+$/'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-            'universitas_id' => ['required', 'exists:ref_universitas_list,id'],
-        ]);
-        
-        $validated['password'] = Hash::make($validated['password']);
-        $validated['referral_code'] = $this->generateReferralCode();
-        
-        event(new Registered($user = User::create($validated)));
+        try {
+            // First validate form inputs
+            $validated = $this->validate([
+                'name' => ['required', 'string', 'max:19'],
+                'username' => ['required', 'string', 'max:13', 'unique:'.User::class],
+                'phone_number' => ['required', 'string', 'regex:/^\+62[0-9]{8,12}$/'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+                'universitas_id' => ['required', 'exists:ref_universitas_list,id'],
+                'g_recaptcha_response' => ['required', function ($attribute, $value, $fail) {
+                    if (empty($value)) {
+                        $fail('Mohon centang reCAPTCHA terlebih dahulu.');
+                        return;
+                    }
 
-        Auth::login($user);
+                    $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                        'secret' => config('services.recaptcha.secret_key'),
+                        'response' => $value,
+                    ]);
 
-        $this->redirect(RouteServiceProvider::HOME, navigate: true);
+                    if (!$response->json('success')) {
+                        $fail('Verifikasi reCAPTCHA gagal. Silakan coba lagi.');
+                    }
+                }],
+            ]);
+
+            // Format email to lowercase
+            $validated['email'] = strtolower($validated['email']);
+
+            // Create user data array
+            $userData = [
+                'name' => $validated['name'],
+                'username' => $validated['username'],
+                'email' => $validated['email'],
+                'phone_number' => $validated['phone_number'],
+                'password' => Hash::make($validated['password']),
+                'universitas_id' => $validated['universitas_id'],
+                'referral_code' => $this->generateReferralCode(),
+            ];
+
+            // Create the user
+            $user = User::create($userData);
+
+            // Fire registered event
+            event(new Registered($user));
+
+            // Log the user in
+            Auth::login($user);
+
+            // Show success message
+            session()->flash('alert', [
+                'type' => 'success',
+                'title' => 'Registrasi Berhasil!',
+                'message' => "Selamat datang di Axon Education, {$validated['name']}!"
+            ]);
+
+            // Redirect to user dashboard since we know this is a new user registration
+            $this->redirect(route('user.dashboard'));
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('registrationFailed');
+            throw $e;
+        } catch (\Exception $e) {
+            $this->dispatch('registrationFailed');
+            $this->addError('registration', 'Terjadi kesalahan saat mendaftar. Silakan coba lagi.');
+        }
     }
-}
-?>
+}?>
 
 <div>
     <div id="layoutAuthentication">
@@ -151,10 +270,21 @@ new #[Layout('layouts.guest')] class extends Component
                     <div class="row justify-content-center">
                         <div class="col-lg-7">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header justify-content-center">
-                                    <h3 class="fw-light my-4">Buat Akun LMSAxon</h3>
+                                <div class="card-header d-flex align-items-center">
+                                    <!-- Image beside the text -->
+                                    <img src="{{asset('assets/img/favicon.png')}}" alt="LMSAxon Logo" class="img-fluid me-2" style="width: 40px; height: 40px; border-radius:10px">
+                                    
+                                    <!-- LMSAxon Text -->
+                                    <h3 class="fw-light my-0">Axon Education - Buat Akun</h3>
                                 </div>
                                 <div class="card-body">
+                                    <script>
+                                        // Define global function for reCAPTCHA
+                                        window.setRecaptchaResponse = function(token) {
+                                            @this.set('g_recaptcha_response', token);
+                                        }
+                                    </script>
+
                                     <form wire:submit.prevent="register">
                                         <!-- Full Name -->
                                         <div class="mb-3">
@@ -168,7 +298,6 @@ new #[Layout('layouts.guest')] class extends Component
                                                 placeholder="Masukkan nama anda" 
                                                 required 
                                             />
-                                            {{-- <div class="small text-muted">Maksimal 19 karakter</div> --}}
                                             <x-input-error :messages="$errors->get('name')" class="mt-2 text-danger" />
                                         </div>
 
@@ -184,7 +313,6 @@ new #[Layout('layouts.guest')] class extends Component
                                                 placeholder="Masukkan username" 
                                                 required 
                                             />
-                                            {{-- <div class="small text-muted">Maksimal 13 karakter</div> --}}
                                             @if($usernameError)
                                                 <div class="small text-danger mt-2">{{ $usernameError }}</div>
                                             @endif
@@ -221,7 +349,6 @@ new #[Layout('layouts.guest')] class extends Component
                                                 placeholder="+62"
                                                 required 
                                             />
-                                            {{-- <div class="small text-muted">Format: +62 diikuti nomor telepon</div> --}}
                                             <x-input-error :messages="$errors->get('phone_number')" class="mt-2 text-danger" />
                                         </div>
 
@@ -269,10 +396,27 @@ new #[Layout('layouts.guest')] class extends Component
                                             </div>
                                         </div>
 
+                                        <!-- reCAPTCHA -->
+                                        <div class="mb-3">
+                                            <div wire:ignore>
+                                                <div class="g-recaptcha" 
+                                                     data-sitekey="{{ config('services.recaptcha.site_key') }}"
+                                                     data-callback="setRecaptchaResponse">
+                                                </div>
+                                            </div>
+                                            <x-input-error :messages="$errors->get('g_recaptcha_response')" class="mt-2 text-danger" />
+                                        </div>
+                                        
+                                    
+
+                                        @error('general')
+                                            <div class="alert alert-danger mb-3">{{ $message }}</div>
+                                        @enderror
+
                                         <!-- Submit Button -->
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small text-decoration-none" href="{{ route('login') }}">Sudah punya akun? Login disini!</a>
                                             <button class="btn btn-primary" type="submit">Buat Akun</button>
+                                            <a class="small text-decoration-none" href="{{ route('login') }}">Sudah punya akun? Login disini!</a>
                                         </div>
                                     </form>
                                 </div>
@@ -299,4 +443,16 @@ new #[Layout('layouts.guest')] class extends Component
             </footer>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        // Handle registration failed event
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('registrationFailed', () => {
+                grecaptcha.reset();
+                @this.set('g_recaptcha_response', null);
+            });
+        });
+    </script>
+    @endpush
 </div>

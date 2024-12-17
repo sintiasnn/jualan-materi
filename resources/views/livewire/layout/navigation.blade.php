@@ -45,12 +45,19 @@ new class extends Component
                        </div>
                     </div>
                     <div>
-                        <div class="dropdown-user-details-email">
+                        @if(auth()->user()->role === 'user')
+                        <div class="dropdown-user-details-email mt-1">
                             <div x-data="{ singkatan: '{{ auth()->user()->universitas->singkatan ?? 'Unknown' }}' }" 
                                 x-text="singkatan" 
                                 x-on:profile-updated.window="singkatan = $event.detail.universitas_singkatan">
                             </div>
                         </div>
+                        @endif
+                        @if(auth()->user()->role === 'admin')
+                        <div class="dropdown-user-details-email mt-1">
+                            <div>Administrator</div>
+                        </div>
+                        @endif
                     </div>
                 </h6>
                 <div class="dropdown-divider"></div>
@@ -60,12 +67,14 @@ new class extends Component
                     </div>
                     {{ __('Pengaturan Akun') }}
                 </a>
+                @if(auth()->user()->role === 'user')
                 <a class="dropdown-item" href="{{ route('user.transaksi') }}">
                     <div class="dropdown-item-icon">
                         <i data-feather="shopping-bag"></i>
                     </div>
                     {{ __('Transaksi Saya') }}
                 </a>
+                @endif
                 <button wire:click="logout" class="dropdown-item" type="button">
                     <div class="dropdown-item-icon">
                         <i data-feather="log-out"></i>

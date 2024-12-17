@@ -29,6 +29,40 @@
                          <div class="nav-link-icon"><i data-feather="home"></i></div>
                          Halaman Utama
                      </a>
+                    @if(auth()->user()->role === 'admin')
+                    <div class="sidenav-menu-heading">Paket</div>
+                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
+                        href="{{ '/user/beli' }}">
+                        <div class="nav-link-icon"><i data-feather="package"></i></div>
+                        Daftar Paket
+                    </a>
+                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                        href="{{ '/user/transaksi' }}">
+                        <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
+                        Daftar Transaksi
+                    </a>
+                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                        href="{{ '/user/transaksi' }}">
+                        <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
+                        Kode Promo
+                    </a>
+                    <div class="sidenav-menu-heading">App</div>
+                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
+                        href="{{ '/user/beli' }}">
+                        <div class="nav-link-icon"><i data-feather="user"></i></div>
+                        User Management
+                    </a>
+                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
+                        href="{{ '/user/beli' }}">
+                        <div class="nav-link-icon"><i data-feather="settings"></i></div>
+                        App Configuration
+                    </a>
+                    {{-- <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                        href="{{ '/user/transaksi' }}">
+                        <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
+                        Daftar Transaksi
+                    </a> --}}
+                    @endif
                     
                     @if(auth()->user()->role === 'user')
                         <div class="sidenav-menu-heading">Pembelian</div>
@@ -66,13 +100,15 @@
                             Belajar
                         </a>
                     @endif
+
+                    @if(in_array(auth()->user()->role, ['user', 'tutor']))
                     <div class="sidenav-menu-heading">Akun</div>
                     <a class="nav-link {{ request()->is('profile*') ? 'active' : '' }}" 
                         href="{{ '/profile' }}">
                         <div class="nav-link-icon"><i data-feather="settings"></i></div>
                         Pengaturan Akun
                     </a>
-                   
+                   @endif
                     
                    
                 </div>

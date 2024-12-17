@@ -78,10 +78,10 @@
                         icon: 'success',
                         title: 'Berhasil!',
                         text: '{{ session('success-free') }}',
-                        timer: 3000,
-                        showConfirmButton: false,
-                        position: 'bottom-end',
-                        toast: true
+                        // timer: 3000,
+                        // showConfirmButton: false,
+                        // position: 'bottom-end',
+                        // toast: true
                     });
                 @endif
             });

@@ -111,6 +111,7 @@ new #[Layout('layouts.guest')] class extends Component
                                                 <label class="form-check-label" for="rememberPasswordCheck">Ingat saya</label>
                                             </div>
                                         </div>
+                                        <div id="login-error" class="text-red-500 mt-2 hidden"></div>
 
                                         <!-- Login Button -->
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
@@ -155,3 +156,60 @@ new #[Layout('layouts.guest')] class extends Component
         </div>
     </div>
 </div>
+
+<script>
+    // Add this to your login page or create a new JS file
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.querySelector('form');
+    
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (response.status === 429) {
+                // Show confirmation dialog
+                if (confirm(data.message)) {
+                    // User clicked OK, force logout oldest session
+                    try {
+                        await fetch('/sessions/force-logout', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        // Retry the login
+                        loginForm.submit();
+                    } catch (error) {
+                        console.error('Error during force logout:', error);
+                    }
+                }
+            } else if (!response.ok) {
+                // Handle other errors
+                const errorDiv = document.getElementById('login-error');
+                if (errorDiv) {
+                    errorDiv.textContent = data.message || 'Login failed';
+                    errorDiv.classList.remove('hidden');
+                }
+            } else {
+                // Successful login - redirect
+                window.location.href = data.redirect || '/dashboard';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+});
+</script>

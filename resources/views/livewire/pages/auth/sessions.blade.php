@@ -69,7 +69,7 @@
                         <div class="small text-sm mb-2">
                             Maksimum <span class="text-danger"><strong>3 PERANGKAT</strong></span> diperbolehkan secara bersamaan!</div>
                         <div class="small text-sm mb-2">
-                            Untuk melanjutkan silahkan logout salah satu device terlebih dahulu
+                            Untuk melanjutkan silahkan <span class="text-danger"><strong>LOGOUT</strong></span> salah satu device terlebih dahulu.
                         </div>
                         @if($sessions->count() < 3)
                             <a href="{{ route('login') }}" class="btn btn-primary">

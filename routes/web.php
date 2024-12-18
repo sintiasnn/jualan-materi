@@ -8,6 +8,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\DatatablesController;
+use Livewire\Volt\Volt;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -95,10 +98,27 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
             return view('livewire.pages.admin.users.groups');
         })->name('admin.user-groups');
 
+        // Admin Universitas Management
+        Route::get('/admin/universitas', function () {
+            return view('livewire.pages.admin.universitas.index');
+        })->name('admin.universitas');
+        
+        Route::get('/admin/universitas/create', function () {
+            return view('livewire.pages.admin.universitas.create');
+        })->name('admin.universitas.create');
+        
+        Route::get('/admin/universitas/{universitasId}/edit', function () {
+            return view('livewire.pages.admin.universitas.edit');
+        })->name('admin.universitas.edit');
+        
+        Route::get('/admin/universitas/{universitas}', function () {
+            return view('livewire.pages.admin.universitas.show');
+        })->name('admin.universitas.show');
+       
         // Admin Active Sessions Management
         Route::get('/admin/activesessions', function () {
             return view('livewire.pages.admin.sessions.index');
-        })->name('admin.users');
+        })->name('admin.activesessions');
     });
 
     /*
@@ -151,6 +171,22 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
     });
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| DataTables Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['role:admin'])->group(function () {
+    Route::post('/datatables/active-sessions', [DatatablesController::class, 'activeSessions'])
+        ->name('datatables.active-sessions');
+    Route::post('/datatables/users', [DatatablesController::class, 'users'])
+        ->name('datatables.users');
+    Route::post('/datatables/universities', [DatatablesController::class, 'universities'])
+        ->name('datatables.universities');
+    Route::post('/datatables/universitas', [DatatablesController::class, 'universitas'])
+    ->name('datatables.universitas');
+});
 /*
 |--------------------------------------------------------------------------
 | API Routes

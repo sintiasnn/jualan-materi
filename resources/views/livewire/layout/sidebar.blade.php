@@ -61,8 +61,13 @@
                             <a class="nav-link" href="dashboard-3.html">Data Universitas</a>
                         </nav>
                     </div>
+                    <a class="nav-link {{ request()->is('admin/activesessions*') ? 'active' : '' }}" 
+                        href="{{ '/admin/activesessions' }}">
+                        <div class="nav-link-icon"><i data-feather="activity"></i></div>
+                        Active Sessions
+                    </a>
                     <div class="sidenav-menu-heading">App</div>
-                    
+                   
                     <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
                         href="{{ '/user/beli' }}">
                         <div class="nav-link-icon"><i data-feather="settings"></i></div>

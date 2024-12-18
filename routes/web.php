@@ -44,10 +44,10 @@ Route::middleware(['auth'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated Routes
+| Protected Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'device.limit'])->group(function () {
+Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(function () {
     /*
     |--------------------------------------------------------------------------
     | Profile & General Routes
@@ -94,6 +94,11 @@ Route::middleware(['auth', 'device.limit'])->group(function () {
         Route::get('/admin/user-groups', function () {
             return view('livewire.pages.admin.users.groups');
         })->name('admin.user-groups');
+
+        // Admin Active Sessions Management
+        Route::get('/admin/activesessions', function () {
+            return view('livewire.pages.admin.sessions.index');
+        })->name('admin.users');
     });
 
     /*
@@ -144,22 +149,17 @@ Route::middleware(['auth', 'device.limit'])->group(function () {
         Route::get('/paket/{id}/ownership', [PaketController::class, 'checkOwnership']);
         Route::post('/paket/{id}/purchase', [PaketController::class, 'purchase']);
     });
-
-    /*
-    |--------------------------------------------------------------------------
-    | Payment Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('/transaction/{id}/pay', [TransactionController::class, 'createPayment'])
-        ->middleware('auth:sanctum')
-        ->name('transaction.createPayment');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Public API Routes
+| API Routes
 |--------------------------------------------------------------------------
 */
+Route::post('/transaction/{id}/pay', [TransactionController::class, 'createPayment'])
+    ->middleware(['auth:sanctum', 'check.active.session'])
+    ->name('transaction.createPayment');
+
 Route::post('/midtrans/notification', [TransactionController::class, 'notificationHandler']);
 
 require __DIR__.'/auth.php';

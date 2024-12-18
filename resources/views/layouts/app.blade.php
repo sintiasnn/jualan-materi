@@ -64,6 +64,7 @@ new class extends Component
                     @endif
                 });
             </script>
+            <script src="{{ asset('js/check-session.js') }}"></script>
         </div>
         </div>
         @livewireScripts

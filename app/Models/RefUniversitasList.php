@@ -21,7 +21,8 @@ class RefUniversitasList extends Model
     // Relationships
     public function users(): HasMany
     {
-        return $this->hasMany(User::class, 'universitas_id');
+        // return $this->hasMany(User::class, 'universitas_id');
+        return $this->hasMany(User::class, 'universitas_id', 'id');
     }
 
     // Scopes

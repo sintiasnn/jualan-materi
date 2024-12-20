@@ -12,7 +12,7 @@
                     <div class="row align-items-center justify-content-between pt-3">
                         <div class="col-auto mb-3">
                             <h1 class="page-header-title">
-                                <div class="page-header-icon"><i data-feather="user"></i></div>
+                                <div class="page-header-icon"><i data-feather="home"></i></div>
                                 Data Universitas
                             </h1>
                         </div>

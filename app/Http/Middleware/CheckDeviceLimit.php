@@ -17,6 +17,7 @@ class CheckDeviceLimit
             // Clean up old sessions first
             ActiveSession::where('last_active_at', '<', now()->subHours(24))->delete();
             
+            // Get current session
             $currentToken = session()->getId();
             $hasExistingSession = ActiveSession::where('token', $currentToken)->exists();
             
@@ -24,12 +25,15 @@ class CheckDeviceLimit
             $activeSessions = ActiveSession::where('user_id', $user)->count();
             
             if (!$hasExistingSession && $activeSessions >= 3) {
-                // Log out the user from this device
-                auth()->logout();
-                session()->invalidate();
-                session()->regenerateToken();
+                // If this is a login attempt
+                if ($request->is('login') && $request->isMethod('post')) {
+                    return response()->json([
+                        'maxDevicesReached' => true,
+                        'message' => 'Maximum device limit reached. Would you like to logout from another device?'
+                    ], 429);
+                }
                 
-                // Redirect to sessions page
+                // For other requests, redirect to sessions page
                 return redirect()->route('sessions.index')
                     ->with('error', 'Maksimal perangkat tercapai. Silakan logout dari perangkat lain terlebih dahulu.');
             }

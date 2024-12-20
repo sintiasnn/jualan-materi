@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActiveSession;
+use App\Models\TransaksiUser;
 use App\Models\User;
 use App\Models\RefUniversitasList;
 use Carbon\Carbon;
@@ -181,8 +182,8 @@ class DatatablesController extends Controller
         try {
             $params = $this->getBaseQuery($request);
             
-            $query = RefUniversitasList::withCount('users') // Add this to count related users
-                ->select('id', 'universitas_name', 'singkatan');
+            // Remove the select() call since withCount adds a virtual column
+            $query = RefUniversitasList::withCount('users');
 
             // Apply search
             if (!empty($params['search'])) {
@@ -197,13 +198,13 @@ class DatatablesController extends Controller
             $orderDir = $params['order'][0]['dir'] ?? 'asc';
             
             switch($orderColumn) {
-                case 1: // singkatan
+                case 1:
                     $query->orderBy('singkatan', $orderDir);
                     break;
-                case 2: // users count
+                case 2:
                     $query->orderBy('users_count', $orderDir);
                     break;
-                default: // universitas name
+                default:
                     $query->orderBy('universitas_name', $orderDir);
             }
 
@@ -213,6 +214,9 @@ class DatatablesController extends Controller
                 ->take($params['length'])
                 ->get();
 
+            // Add debug logging
+            \Log::info('Query results:', $results->toArray());
+
             return response()->json([
                 'draw' => (int)$params['draw'],
                 'recordsTotal' => $totalRecords,
@@ -220,7 +224,7 @@ class DatatablesController extends Controller
                 'data' => $results->map(fn($univ) => [
                     'name' => $univ->universitas_name,
                     'singkatan' => $univ->singkatan,
-                    'users_count' => $univ->users_count, // This will show the actual count
+                    'users_count' => $univ->users_count,
                     'actions' => [
                         'edit_url' => route('admin.universitas.edit', $univ->id),
                         'view_url' => route('admin.universitas.show', $univ->id)
@@ -239,5 +243,79 @@ class DatatablesController extends Controller
             ], 500);
         }
     }
-    // Add other DataTables methods as needed...
+    public function transactions(Request $request)
+    {
+        try {
+            $params = $this->getBaseQuery($request);
+            
+            $query = TransaksiUser::with('paket')
+                ->where('user_id', auth()->id())
+                ->select('id', 'kode_transaksi', 'tanggal_pembelian', 'status', 'redirect_url', 'paket_id');
+
+            if ($request->filled('status') && $request->status !== 'all') {
+                $query->where('status', $request->status);
+            }
+
+            if (!empty($params['search'])) {
+                $query->where(function($q) use ($params) {
+                    $q->where('kode_transaksi', 'like', "%{$params['search']}%")
+                    ->orWhereHas('paket', function($q) use ($params) {
+                        $q->where('nama_paket', 'like', "%{$params['search']}%");
+                    });
+                });
+            }
+
+            $totalRecords = $query->count();
+            
+            // Apply order
+            $orderColumn = $params['order'][0]['column'] ?? 2;
+            $orderDir = $params['order'][0]['dir'] ?? 'desc';
+            
+            if ($orderColumn == 2) {
+                $query->orderBy('tanggal_pembelian', $orderDir);
+            }
+
+            $results = $query->skip($params['start'])
+                ->take($params['length'])
+                ->get();
+
+            return response()->json([
+                'draw' => (int)$params['draw'],
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $results->map(function($transaksi, $index) use ($params) {
+                    return [
+                        'DT_RowIndex' => $params['start'] + $index + 1,
+                        'kode_transaksi' => $transaksi->kode_transaksi,
+                        'tanggal_pembelian' => $transaksi->tanggal_pembelian->format('Y-m-d'),
+                        'nama_paket' => $transaksi->paket->nama_paket ?? '-',
+                        'harga_paket' => $transaksi->paket->harga ? 'Rp ' . number_format($transaksi->paket->harga, 0, ',', '.') : '-',
+                        'status' => $transaksi->status,
+                        'action' => $this->getActionButton($transaksi)
+                    ];
+                })
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('DataTables Error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'error' => 'An error occurred while fetching data'
+            ], 500);
+        }
+    }
+
+    private function getActionButton($transaksi)
+    {
+        if ($transaksi->status === 'success') {
+            $route = ($transaksi->paket->tipe ?? '') == 'tryout' ? '/user/tryout' : '/user/kelas';
+            return '<a href="' . $route . '" class="btn btn-sm btn-success">Buka Paket</a>';
+        } elseif ($transaksi->status === 'pending' && !empty($transaksi->redirect_url)) {
+            return '<a href="' . $transaksi->redirect_url . '" class="btn btn-sm btn-primary">Bayar</a>';
+        }
+        return '';
+    }
 }

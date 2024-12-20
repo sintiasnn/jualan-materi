@@ -44,6 +44,7 @@ new class extends Component {
         
         $this->sessionToTerminate = null;
     }
+    
 }; ?>
 
 <div>
@@ -131,17 +132,19 @@ document.addEventListener('livewire:initialized', function() {
                 data: 'device_info',
                 render: function(data) {
                     const deviceIcon = {
-                        'windows': 'fa-windows',
-                        'mac': 'fa-apple',
-                        'iphone': 'fa-mobile',
-                        'ios': 'fa-mobile',
-                        'android': 'fa-android',
-                        'linux': 'fa-linux'
-                    }[data.platform.toLowerCase()] || 'fa-desktop';
+                        'windows': 'fa-brands fa-windows',
+                        'mac': 'fa-brands fa-apple',
+                        'macintosh': 'fa-brands fa-apple',
+                        'os x': 'fa-brands fa-apple',
+                        'iphone': 'fa-brands fa-apple',
+                        'ios': 'fa-brands fa-apple',
+                        'android': 'fa-brands fa-android',
+                        'linux': 'fa-brands fa-linux'
+                    }[data.platform.toLowerCase()] || 'fas fa-desktop';
                     
                     return `
                         <div>
-                            <i class="fas ${deviceIcon} me-2"></i>
+                            <i class="${deviceIcon} me-2"></i>
                             ${data.platform}
                         </div>
                         <small class="text-muted">

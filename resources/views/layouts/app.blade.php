@@ -25,6 +25,9 @@ new class extends Component
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        {{-- FOR NGROK LOCAL ONLY --}}
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -56,6 +59,18 @@ new class extends Component
                 document.addEventListener('DOMContentLoaded', function() {
                     // Check for flash message
                     @if (session()->has('alert'))
+                        Swal.fire({
+                            icon: '{{ session('alert.type') }}',
+                            title: '{{ session('alert.title') }}',
+                            text: '{{ session('alert.message') }}',
+                        });
+                    @endif
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Check for flash message
+                    @if (session()->has('success'))
                         Swal.fire({
                             icon: '{{ session('alert.type') }}',
                             title: '{{ session('alert.title') }}',

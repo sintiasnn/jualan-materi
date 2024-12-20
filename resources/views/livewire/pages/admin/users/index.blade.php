@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-12 col-xl-auto mb-3">
                             <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.universitas') }}">
-                                <i class="me-1" data-feather="users"></i>
+                                <i class="me-1" data-feather="home"></i>
                                 Data Universitas
                             </a>
                             <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.users.create') }}">

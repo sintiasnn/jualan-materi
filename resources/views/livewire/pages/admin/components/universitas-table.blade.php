@@ -64,7 +64,11 @@ new class extends Component {
                             { data: 'singkatan' },
                             { 
                                 data: 'users_count',
-                                className: 'text-center'
+                                className: 'text-center',
+                                render: function(data, type, row) {
+                                    console.log('Row data:', row);  // Add this debug line
+                                    return data || '0';  // This will show 0 instead of empty if null
+                                }
                             },
                             { 
                                 data: 'actions',
@@ -82,7 +86,7 @@ new class extends Component {
                                 }
                             }
                         ],
-                        order: [[0, 'asc']],
+                        order: [[2, 'desc']],
                         pageLength: 10,
                         language: {
                             processing: 'Loading...',

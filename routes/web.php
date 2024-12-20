@@ -187,6 +187,11 @@ Route::middleware(['role:admin'])->group(function () {
     Route::post('/datatables/universitas', [DatatablesController::class, 'universitas'])
     ->name('datatables.universitas');
 });
+
+Route::middleware(['role:user'])->group(function () {
+    Route::post('/datatables/transactions', [DatatablesController::class, 'transactions'])
+        ->name('datatables.transactions');
+});
 /*
 |--------------------------------------------------------------------------
 | API Routes

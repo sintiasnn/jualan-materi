@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MateriController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -105,6 +106,13 @@ Route::middleware(['auth', 'device.limit'])->group(function () {
         Route::get('/tutor/dashboard', function () {
             return view('livewire.pages.tutor.dashboard');
         })->name('tutor.dashboard');
+        Route::resource('/tutor/materi', MateriController::class);
+        /*
+        Route::get('/tutor/materi', [MateriController::class, 'index'])->name('paket.index');
+        Route::get('/tutor/materi/create', [MateriController::class, 'create'])->name('paket.create');
+        Route::post('/tutor/materi/store', [MateriController::class, 'store'])->name('paket.store');
+        Route::get('/tutor/materi/show/{id}', [MateriController::class, 'show'])->name('paket.show');
+        Route::get('/tutor/materi/edit/{id}', [MateriController::class, 'edit'])->name('paket.edit'); */
     });
 
     /*

@@ -11,16 +11,24 @@ class ClassContent extends Model
     protected $fillable = [
         'class_id',
         'bidang_id',
+        'guru_id',
+        'subdomain_id',
         'video_url',
         'file_url',
         'deskripsi',
-        'type'
+        'type',
+        'kode_materi',
+        'nama_materi',
     ];
 
     protected $casts = [
         'video_url' => 'string',
         'file_url' => 'string',
         'type' => 'string',
+    ];
+
+    protected $hidden = [
+        'type'
     ];
 
     // Relationships
@@ -32,6 +40,14 @@ class ClassContent extends Model
     public function bidang(): BelongsTo
     {
         return $this->belongsTo(RefBidangList::class, 'bidang_id');
+    }
+
+    public function guru(): BelongsTo {
+        return $this->belongsTo(User::class, 'guru_id');
+    }
+
+    public function subdomain(): BelongsTo {
+        return $this->belongsTo(Subdomain::class, 'subdomain_id');
     }
 
     // Scopes

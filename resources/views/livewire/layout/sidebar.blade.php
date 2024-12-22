@@ -24,24 +24,24 @@
                     <!-- Sidenav Menu Heading (Core)-->
                     <div class="sidenav-menu-heading">Dashboard</div>
                     <!-- Sidenav Accordion (Dashboard)-->
-                    <a class="nav-link {{ request()->is(auth()->user()->role.'/dashboard*') ? 'active' : '' }}" 
+                    <a class="nav-link {{ request()->is(auth()->user()->role.'/dashboard*') ? 'active' : '' }}"
                         href="{{ '/'.auth()->user()->role.'/dashboard' }}">
                          <div class="nav-link-icon"><i data-feather="home"></i></div>
                          Halaman Utama
                      </a>
                     @if(auth()->user()->role === 'admin')
                     <div class="sidenav-menu-heading">Paket</div>
-                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
+                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
                         href="{{ '/user/beli' }}">
                         <div class="nav-link-icon"><i data-feather="package"></i></div>
                         Daftar Paket
                     </a>
-                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
                         href="{{ '/user/transaksi' }}">
                         <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
                         Daftar Transaksi
                     </a>
-                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
                         href="{{ '/user/transaksi' }}">
                         <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
                         Kode Promo
@@ -54,35 +54,35 @@
                     </a>
                     <div class="collapse {{ request()->is('admin/users*') ? 'show' : '' }}"  id="collapseDashboards" data-bs-parent="#accordionSidenav">
                         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                            
-                            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" 
+
+                            <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}"
                                 href="{{ '/admin/users' }}">
                                 Daftar User</a>
                             <a class="nav-link" href="dashboard-3.html">Data Universitas</a>
                         </nav>
                     </div>
                     <div class="sidenav-menu-heading">App</div>
-                    
-                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
+
+                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
                         href="{{ '/user/beli' }}">
                         <div class="nav-link-icon"><i data-feather="settings"></i></div>
                         Konfigurasi
                     </a>
-                    {{-- <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                    {{-- <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
                         href="{{ '/user/transaksi' }}">
                         <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
                         Daftar Transaksi
                     </a> --}}
                     @endif
-                    
+
                     @if(auth()->user()->role === 'user')
                         <div class="sidenav-menu-heading">Pembelian</div>
-                        <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}" 
+                        <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
                             href="{{ '/user/beli' }}">
                             <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
                             Beli Paket
                         </a>
-                        <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}" 
+                        <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
                             href="{{ '/user/transaksi' }}">
                             <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
                             Transaksi
@@ -112,16 +112,25 @@
                         </a>
                     @endif
 
+                    @if(in_array(auth()->user()->role, ['tutor']))
+                        <div class="sidenav-menu-heading">Materi</div>
+                        <a class="nav-link {{ request()->is(auth()->user()->role.'/materi*') ? 'active' : '' }}"
+                           href="{{ '/'.auth()->user()->role.'/materi' }}">
+                            <div class="nav-link-icon"><i data-feather="book"></i></div>
+                            Materi
+                        </a>
+                    @endif
+
                     @if(in_array(auth()->user()->role, ['user', 'tutor']))
                     <div class="sidenav-menu-heading">Akun</div>
-                    <a class="nav-link {{ request()->is('profile*') ? 'active' : '' }}" 
+                    <a class="nav-link {{ request()->is('profile*') ? 'active' : '' }}"
                         href="{{ '/profile' }}">
                         <div class="nav-link-icon"><i data-feather="settings"></i></div>
                         Pengaturan Akun
                     </a>
                    @endif
-                    
-                   
+
+
                 </div>
             </div>
             <!-- Sidenav Footer-->
@@ -129,8 +138,8 @@
                 <div class="sidenav-footer-content">
                     <div class="sidenav-footer-subtitle">Login sebagai:</div>
                     <div class="sidenav-footer-title">
-                        <div x-data="{ name: '{{ auth()->user()->name }}' }" 
-                            x-text="name" 
+                        <div x-data="{ name: '{{ auth()->user()->name }}' }"
+                            x-text="name"
                             x-on:profile-updated.window="name = $event.detail.name">
                        </div>
                     </div>
@@ -138,4 +147,4 @@
             </div>
         </nav>
     </div>
-    
+

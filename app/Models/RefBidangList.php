@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class RefBidangList extends Model
 {
     public $timestamps = false;
+    protected $table = 'ref_bidang_list';
 
     protected $fillable = [
         'bidang_name',

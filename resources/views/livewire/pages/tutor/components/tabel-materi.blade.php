@@ -53,12 +53,68 @@ new class extends Component {
                                 <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{route('materi.show',$content->id)}}">
                                     <i data-feather="eye"></i>
                                 </a>
+                                <button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#modalConfirm" href="javascript:void(0);">
+                                    <i data-feather="trash-2"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <!-- Avatar Update Confirmation Modal -->
+    <div class="modal fade" id="modalConfirm" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateAvatarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateAvatarModalLabel">Konfirmasi Hapus</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah anda yakin ingin menghapus data ini ?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-success" onclick="deleteNews(`{{$content ? $content->id : ''}}`)" id="btn-submit" type="submit" form="avatar-form">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        let id = @json($content->id);
+        const indexRoute = `{{route('materi.index')}}`
+        const updateModal = document.getElementById('updateAvatarModal');
+        const deleteMateri = document.getElementById('formHapus')
+        const deleteConfirm = document.querySelector('.btn-hapus');
+        const table = document.getElementById('materiTable')
+        const indexUrl = `{{route('materi.index')}}`;
+
+
+        function deleteNews(id = null){
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirm'));
+            axios.delete(`${indexUrl}/${id}`, {})
+                .then(response => {
+                    Swal.fire('Success', response.data.message, 'success')
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+                })
+                .catch(err => {
+                    Swal.fire('Error', err.response?.data, 'error')
+                })
+                .finally(() => {
+                    modal.hide();
+                })
+        }
+    </script>
+
 </main>

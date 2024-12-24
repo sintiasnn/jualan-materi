@@ -73,9 +73,13 @@ class MateriController extends Controller
 
     }
 
-    public function destroy(){
-
-
+    public function destroy($id){
+        try {
+            ClassContent::find($id)->delete();
+            return response()->json(['message'=> 'Materi berhasil dihapus', 'success' => true]);
+        } catch (\Exception $exception){
+            return response($exception->getMessage(), 500);
+        }
     }
 
 }

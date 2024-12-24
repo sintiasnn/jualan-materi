@@ -53,11 +53,30 @@ new class extends Component {
                                 <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{route('materi.show',$content->id)}}">
                                     <i data-feather="eye"></i>
                                 </a>
-                                <button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#modalConfirm" href="javascript:void(0);">
+                                <button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#modalConfirm-{{$content->id}}" href="javascript:void(0);">
                                     <i data-feather="trash-2"></i>
                                 </button>
                             </td>
                         </tr>
+
+                        <!-- Avatar Update Confirmation Modal -->
+                        <div class="modal fade" id="modalConfirm-{{$content->id}}" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateAvatarModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="updateAvatarModalLabel">Konfirmasi Hapus</h5>
+                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Apakah anda yakin ingin menghapus data ini ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Batal</button>
+                                        <button class="btn btn-success" onclick="deleteNews(`{{$content ? $content->id : ''}}`)" id="btn-submit" type="submit" form="avatar-form">Hapus</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
 
                     </tbody>
@@ -66,24 +85,6 @@ new class extends Component {
         </div>
     </div>
 
-    <!-- Avatar Update Confirmation Modal -->
-    <div class="modal fade" id="modalConfirm" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateAvatarModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="updateAvatarModalLabel">Konfirmasi Hapus</h5>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Apakah anda yakin ingin menghapus data ini ?
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Batal</button>
-                    <button class="btn btn-success" onclick="deleteNews(`{{$content ? $content->id : ''}}`)" id="btn-submit" type="submit" form="avatar-form">Hapus</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -99,20 +100,18 @@ new class extends Component {
         const indexUrl = `{{route('materi.index')}}`;
 
 
-        function deleteNews(id = null){
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalConfirm'));
+        function deleteNews(id){
+            const modal = bootstrap.Modal.getInstance(document.getElementById(`modalConfirm-${id}`));
             axios.delete(`${indexUrl}/${id}`, {})
                 .then(response => {
                     Swal.fire('Success', response.data.message, 'success')
                     setTimeout(() => {
                         window.location.reload()
                     }, 1000)
+                    modal.hide();
                 })
                 .catch(err => {
                     Swal.fire('Error', err.response?.data, 'error')
-                })
-                .finally(() => {
-                    modal.hide();
                 })
         }
     </script>

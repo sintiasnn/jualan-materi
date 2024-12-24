@@ -82,4 +82,9 @@ class MateriController extends Controller
         }
     }
 
+    public function getSubdomain($domainCode){
+        return Subdomain::select('id', 'domain_code','code', 'keterangan')
+            ->where('domain_code', $domainCode)->get();
+    }
+
 }

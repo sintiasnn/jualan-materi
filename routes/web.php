@@ -107,6 +107,7 @@ Route::middleware(['auth', 'device.limit'])->group(function () {
             return view('livewire.pages.tutor.dashboard');
         })->name('tutor.dashboard');
         Route::resource('/tutor/materi', MateriController::class);
+        Route::get('tutor/materi/subdomain/{domainCode}', [MateriController::class, 'getSubdomain'])->name('tutor.materi.getSubdomain');
 
     });
 

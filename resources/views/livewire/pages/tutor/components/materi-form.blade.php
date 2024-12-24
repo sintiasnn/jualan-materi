@@ -34,12 +34,12 @@
                                 <div class="mb-3">
                                     <label class="small mb-1" for="selectDomain">Domain</label>
                                     <select class="form-control"
-                                            {{isset($domains) && isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} id="selectSubdomain"
+                                            {{isset($domains) && isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} id="selectDomain"
                                             wire:model="form.domain" required autofocus>
                                         <option disabled selected>{{ __('Pilih Domain') }}</option>
                                         @foreach($domains as $domain)
                                             <option
-                                                {{isset($content) && $content->$domain_id ? 'selected' : ''}}  value="{{$domain->id}}">{{$domain->keterangan}}</option>
+                                                {{isset($content) && $content->domain_id ? 'selected' : ''}}  value="{{$domain->code}}">{{$domain->keterangan}}</option>
                                         @endforeach
                                     </select>
                                     @error('form.domain') <span class="text-danger">{{ $message }}</span> @enderror
@@ -51,7 +51,7 @@
                             <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <!-- Subdomain -->
                                 <div class="mb-3">
-                                    <label class="small mb-1" for="selectDomain">Subdomain</label>
+                                    <label class="small mb-1" for="selectSubdomain">Subdomain</label>
                                     <select class="form-control" name="subdomain_id"
                                             {{isset($subdomains) && isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} id="selectSubdomain"
                                             wire:model="form.subdomain" required autofocus>
@@ -173,7 +173,23 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
     <script>
+
         $(document).ready(function() {
+            $('#selectDomain').change(function (){
+                const materiIndex = `{{route('materi.index')}}`;
+                const code = $(this).val();
+                axios.get(`${materiIndex}/subdomain/${code}`,{})
+                    .then(res =>{
+                        $('#selectSubdomain option').remove();
+                        res.data.forEach((val, i) => {
+                            let option = document.createElement("option");
+                            option.value = val.id;
+                            option.text = val.keterangan;
+                            $('#selectSubdomain').append(option);
+                        })
+                    });
+            })
+
             $("#inputDescription").summernote('code',{
                 placeholder: "Hello stand alone ui",
                 tabsize: 2,

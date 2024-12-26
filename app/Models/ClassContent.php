@@ -19,6 +19,8 @@ class ClassContent extends Model
         'type',
         'kode_materi',
         'nama_materi',
+        'kode_submateri',
+        'nama_submateri',
     ];
 
     protected $casts = [

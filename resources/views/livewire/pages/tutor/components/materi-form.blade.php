@@ -25,7 +25,10 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{route('materi.store')}}">
+                    <form method="POST" action="{{isset($content) && $content->editMode ? route('materi.update',$content->id) : route('materi.store')}}">
+                        @if(isset($content) && $content->editMode)
+                            @method('PUT')
+                        @endif
                         @csrf
                         <div class="row">
 
@@ -39,7 +42,7 @@
                                         <option disabled selected>{{ __('Pilih Domain') }}</option>
                                         @foreach($domains as $domain)
                                             <option
-                                                {{isset($content) && $content->domain_id ? 'selected' : ''}}  value="{{$domain->code}}">{{$domain->keterangan}}</option>
+                                                {{isset($content) && $content->subdomain->domain_code == $domain->code ? 'selected' : ''}}  value="{{$domain->code}}">{{$domain->keterangan}}</option>
                                         @endforeach
                                     </select>
                                     @error('form.domain') <span class="text-danger">{{ $message }}</span> @enderror
@@ -58,7 +61,7 @@
                                         <option disabled selected>{{ __('Pilih Subdomain') }}</option>
                                         @foreach($subdomains as $subdomainItem)
                                             <option
-                                                {{isset($content) && $content->subdomain_id ? 'selected' : ''}}  value="{{$subdomainItem->id}}">{{$subdomainItem->keterangan}}</option>
+                                                {{isset($content) && $content->subdomain_id == $subdomainItem->id ? 'selected' : ''}}  value="{{$subdomainItem->id}}">{{$subdomainItem->keterangan}}</option>
                                         @endforeach
                                     </select>
                                     @error('form.subdomain') <span class="text-danger">{{ $message }}</span> @enderror
@@ -67,19 +70,19 @@
 
 
                             <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <!-- Bidang -->
+                                <!--URL Video -->
                                 <div class="mb-3">
-                                    <label class="small mb-1" for="selectBidang">Bidang</label>
-                                    <select class="form-control" name="bidang_id"
-                                            {{isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} id="selectBidang"
-                                            wire:model="form.bidang" required autofocus>
-                                        <option disabled selected>{{ __('Pilih Bidang') }}</option>
-                                        @foreach($bidang as $bidangItem)
-                                            <option
-                                                {{isset($content) && $content->bidang_id ? 'selected' : ''}} value="{{$bidangItem->id}}">{{$bidangItem->bidang_name}}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('form.bidang') <span class="text-danger">{{ $message }}</span> @enderror
+                                    <label class="small mb-1" for="inputVideoUrl">URL Video</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1">@</span>
+                                        <input type="url" name="video_url"
+                                               value="{{isset($content) ? $content->video_url : ''}}"
+                                               {{isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} class="form-control"
+                                               placeholder="Masukkan URL Video"
+                                               aria-describedby="basic-addon1" wire:model="form.videoUrl" required
+                                               autofocus>
+                                    </div>
+                                    @error('form.videoUrl') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -117,20 +120,36 @@
                                 </div>
                             </div>
 
+                        </div>
 
+                        <div class="row">
                             <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <!-- Kode Submateri -->
                                 <div class="mb-3">
-                                    <label class="small mb-1" for="inputVideoUrl">URL Video</label>
+                                    <label class="small mb-1" for="inputKodeSubmateri">Kode Submateri</label>
                                     <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="url" name="video_url"
-                                               value="{{isset($content) ? $content->video_url : ''}}"
+                                        <input type="text" name="kode_submateri"
+                                               value="{{isset($content) ? $content->kode_submateri : ''}}"
                                                {{isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} class="form-control"
-                                               placeholder="Masukkan URL Video"
-                                               aria-describedby="basic-addon1" wire:model="form.videoUrl" required
+                                               placeholder="Kode Submateri" wire:model="form.kodeSubmateri" required
                                                autofocus>
                                     </div>
-                                    @error('form.videoUrl') <span class="text-danger">{{ $message }}</span> @enderror
+                                    @error('form.kodeSubmateri') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+
+                            <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
+                                <!-- Nama Submateri -->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="inputNamaSubmateri">Nama Submateri</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="nama_submateri"
+                                               value="{{isset($content) ? $content->nama_submateri : ''}}"
+                                               {{isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} class="form-control"
+                                               placeholder="Nama Submateri" wire:model="form.namaSubmateri" required
+                                               autofocus>
+                                    </div>
+                                    @error('form.namaSubmateri') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -176,19 +195,32 @@
 
         $(document).ready(function() {
             $('#selectDomain').change(function (){
-                const materiIndex = `{{route('materi.index')}}`;
                 const code = $(this).val();
+                changeDomainSelect(code);
+            })
+
+            function changeDomainSelect(code){
+                const selected = @json(isset($content) ? $content->subdomain_id : '');
+                const materiIndex = `{{route('materi.index')}}`;
                 axios.get(`${materiIndex}/subdomain/${code}`,{})
                     .then(res =>{
                         $('#selectSubdomain option').remove();
+                        let optionDisabled = document.createElement('option')
+                        optionDisabled.setAttribute('disabled', true);
+                        optionDisabled.setAttribute('selected', true);
+                        optionDisabled.text = 'Pilih Subdomain'
+                        $('#selectSubdomain').append(optionDisabled);
                         res.data.forEach((val, i) => {
                             let option = document.createElement("option");
+                            if(selected && selected === val.id){
+                                option.setAttribute('selected', true);
+                            }
                             option.value = val.id;
                             option.text = val.keterangan;
                             $('#selectSubdomain').append(option);
                         })
                     });
-            })
+            }
 
             $("#inputDescription").summernote('code',{
                 placeholder: "Hello stand alone ui",
@@ -215,6 +247,10 @@
                     }
                 }
             })
+            $('#inputDescription').summernote('code', @json(isset($content) ? $content->deskripsi : ''));
+            if(@json(isset($content) && $content->editMode)){
+                changeDomainSelect($('#selectDomain').val());
+            }
         });
     </script>
 

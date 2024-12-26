@@ -20,11 +20,9 @@ class MateriController extends Controller
     }
 
     public function create(){
-        $classes = Classes::all();
-        $bidang = RefBidangList::all();
         $subdomains = Subdomain::all();
         $domains = Domain::all();
-        return view('livewire.pages.tutor.components.materi-form', compact('classes', 'bidang', 'subdomains', 'domains'));
+        return view('livewire.pages.tutor.components.materi-form', compact( 'subdomains', 'domains'));
     }
 
     public function store(Request $request){
@@ -46,31 +44,44 @@ class MateriController extends Controller
     }
 
     public function show($id){
-        $classes = Classes::all();
-        $bidang = RefBidangList::all();
         $content = ClassContent::find($id);
         $content->viewOnly = true;
         return view('livewire.pages.tutor.components.materi-show', [
-            'classes' => $classes,
-            'bidang' => $bidang,
             'content' => $content,
         ]);
     }
 
     public function edit($id){
-        $classes = Classes::all();
-        $bidang = RefBidangList::all();
         $content = ClassContent::find($id);
+        $subdomains = Subdomain::all();
+        $domains = Domain::all();
         $content->viewOnly = false;
+        $content->editMode = true;
         return view('livewire.pages.tutor.components.materi-form', [
-            'classes' => $classes,
-            'bidang' => $bidang,
-            'content' => $content
+            'content' => $content,
+            'subdomains' => $subdomains,
+            'domains' => $domains,
+            'editMode' => $content->editMode,
+
         ]);
     }
 
-    public function update(){
-
+    public function update(Request $request, $id){
+        try {
+            DB::beginTransaction();
+            $classContent = ClassContent::find($id)->fill($request->request->all());
+            if($classContent->saveOrFail()){
+                DB::commit();
+                return redirect()->route('materi.index')->with('message', 'materi berhasil diperbarui');
+            }
+            else {
+                DB::rollBack();
+                return redirect()->route('materi.edit',$id)->with('error', true);
+            }
+        } catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->route('materi.edit', $id)->with('error-message', $e->getMessage());
+        }
     }
 
     public function destroy($id){

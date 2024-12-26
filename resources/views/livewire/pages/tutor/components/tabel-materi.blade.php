@@ -47,7 +47,7 @@ new class extends Component {
                             </td>
                             <td>{{ Carbon::parse($content->created_at)->translatedFormat('d F Y') }}</td>
                             <td>
-                                <a class="btn btn-datatable btn-icon btn-transparent-dark" href="#">
+                                <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{route('materi.edit',$content->id)}}">
                                     <i data-feather="edit"></i>
                                 </a>
                                 <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{route('materi.show',$content->id)}}">

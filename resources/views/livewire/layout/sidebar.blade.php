@@ -119,6 +119,15 @@
                         </a>
                     @endif
 
+                    @if(in_array(auth()->user()->role, ['tutor']))
+                        <div class="sidenav-menu-heading">Materi</div>
+                        <a class="nav-link {{ request()->is(auth()->user()->role.'/materi*') ? 'active' : '' }}"
+                           href="{{ '/'.auth()->user()->role.'/materi' }}">
+                            <div class="nav-link-icon"><i data-feather="book"></i></div>
+                            Materi
+                        </a>
+                    @endif
+
                     @if(in_array(auth()->user()->role, ['user', 'tutor']))
                     <div class="sidenav-menu-heading">Akun</div>
                     <a class="nav-link {{ request()->is('profile*') ? 'active' : '' }}"

@@ -103,19 +103,19 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/admin/universitas', function () {
             return view('livewire.pages.admin.universitas.index');
         })->name('admin.universitas');
-        
+
         Route::get('/admin/universitas/create', function () {
             return view('livewire.pages.admin.universitas.create');
         })->name('admin.universitas.create');
-        
+
         Route::get('/admin/universitas/{universitasId}/edit', function () {
             return view('livewire.pages.admin.universitas.edit');
         })->name('admin.universitas.edit');
-        
+
         Route::get('/admin/universitas/{universitas}', function () {
             return view('livewire.pages.admin.universitas.show');
         })->name('admin.universitas.show');
-       
+
         // Admin Active Sessions Management
         Route::get('/admin/activesessions', function () {
             return view('livewire.pages.admin.sessions.index');

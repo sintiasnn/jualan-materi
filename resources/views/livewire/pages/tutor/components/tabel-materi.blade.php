@@ -77,6 +77,36 @@ new class extends Component {
                                 </div>
                             </div>
                         </div>
+
+                        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+
+                            let id = @json($content->id);
+                            const indexRoute = `{{route('materi.index')}}`
+                            const updateModal = document.getElementById('updateAvatarModal');
+                            const deleteMateri = document.getElementById('formHapus')
+                            const deleteConfirm = document.querySelector('.btn-hapus');
+                            const table = document.getElementById('materiTable')
+                            const indexUrl = `{{route('materi.index')}}`;
+
+
+                            function deleteNews(id){
+                                const modal = bootstrap.Modal.getInstance(document.getElementById(`modalConfirm-${id}`));
+                                axios.delete(`${indexUrl}/${id}`, {})
+                                    .then(response => {
+                                        Swal.fire('Success', response.data.message, 'success')
+                                        setTimeout(() => {
+                                            window.location.reload()
+                                        }, 1000)
+                                        modal.hide();
+                                    })
+                                    .catch(err => {
+                                        Swal.fire('Error', err.response?.data, 'error')
+                                    })
+                            }
+                        </script>
+
                     @endforeach
 
                     </tbody>
@@ -84,36 +114,5 @@ new class extends Component {
             </div>
         </div>
     </div>
-
-
-
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-
-        let id = @json($content->id);
-        const indexRoute = `{{route('materi.index')}}`
-        const updateModal = document.getElementById('updateAvatarModal');
-        const deleteMateri = document.getElementById('formHapus')
-        const deleteConfirm = document.querySelector('.btn-hapus');
-        const table = document.getElementById('materiTable')
-        const indexUrl = `{{route('materi.index')}}`;
-
-
-        function deleteNews(id){
-            const modal = bootstrap.Modal.getInstance(document.getElementById(`modalConfirm-${id}`));
-            axios.delete(`${indexUrl}/${id}`, {})
-                .then(response => {
-                    Swal.fire('Success', response.data.message, 'success')
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
-                    modal.hide();
-                })
-                .catch(err => {
-                    Swal.fire('Error', err.response?.data, 'error')
-                })
-        }
-    </script>
 
 </main>

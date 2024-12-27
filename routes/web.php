@@ -9,6 +9,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\DatatablesController;
+use Livewire\Volt\Volt;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -45,10 +48,10 @@ Route::middleware(['auth'])->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Authenticated Routes
+| Protected Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'device.limit'])->group(function () {
+Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(function () {
     /*
     |--------------------------------------------------------------------------
     | Profile & General Routes
@@ -95,6 +98,28 @@ Route::middleware(['auth', 'device.limit'])->group(function () {
         Route::get('/admin/user-groups', function () {
             return view('livewire.pages.admin.users.groups');
         })->name('admin.user-groups');
+
+        // Admin Universitas Management
+        Route::get('/admin/universitas', function () {
+            return view('livewire.pages.admin.universitas.index');
+        })->name('admin.universitas');
+        
+        Route::get('/admin/universitas/create', function () {
+            return view('livewire.pages.admin.universitas.create');
+        })->name('admin.universitas.create');
+        
+        Route::get('/admin/universitas/{universitasId}/edit', function () {
+            return view('livewire.pages.admin.universitas.edit');
+        })->name('admin.universitas.edit');
+        
+        Route::get('/admin/universitas/{universitas}', function () {
+            return view('livewire.pages.admin.universitas.show');
+        })->name('admin.universitas.show');
+       
+        // Admin Active Sessions Management
+        Route::get('/admin/activesessions', function () {
+            return view('livewire.pages.admin.sessions.index');
+        })->name('admin.activesessions');
     });
 
     /*
@@ -148,22 +173,38 @@ Route::middleware(['auth', 'device.limit'])->group(function () {
         Route::get('/paket/{id}/ownership', [PaketController::class, 'checkOwnership']);
         Route::post('/paket/{id}/purchase', [PaketController::class, 'purchase']);
     });
-
-    /*
-    |--------------------------------------------------------------------------
-    | Payment Routes
-    |--------------------------------------------------------------------------
-    */
-    Route::post('/transaction/{id}/pay', [TransactionController::class, 'createPayment'])
-        ->middleware('auth:sanctum')
-        ->name('transaction.createPayment');
 });
+
 
 /*
 |--------------------------------------------------------------------------
-| Public API Routes
+| DataTables Routes
 |--------------------------------------------------------------------------
 */
+Route::middleware(['role:admin'])->group(function () {
+    Route::post('/datatables/active-sessions', [DatatablesController::class, 'activeSessions'])
+        ->name('datatables.active-sessions');
+    Route::post('/datatables/users', [DatatablesController::class, 'users'])
+        ->name('datatables.users');
+    Route::post('/datatables/universities', [DatatablesController::class, 'universities'])
+        ->name('datatables.universities');
+    Route::post('/datatables/universitas', [DatatablesController::class, 'universitas'])
+    ->name('datatables.universitas');
+});
+
+Route::middleware(['role:user'])->group(function () {
+    Route::post('/datatables/transactions', [DatatablesController::class, 'transactions'])
+        ->name('datatables.transactions');
+});
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
+Route::post('/transaction/{id}/pay', [TransactionController::class, 'createPayment'])
+    ->middleware(['auth:sanctum', 'check.active.session'])
+    ->name('transaction.createPayment');
+
 Route::post('/midtrans/notification', [TransactionController::class, 'notificationHandler']);
 
 require __DIR__.'/auth.php';

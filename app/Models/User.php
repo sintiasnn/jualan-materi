@@ -67,7 +67,7 @@ class User extends Authenticatable
     // Relationships
     public function universitas(): BelongsTo
     {
-        return $this->belongsTo(RefUniversitasList::class, 'universitas_id');
+        return $this->belongsTo(RefUniversitasList::class, 'universitas_id', 'id');
     }
 
     public function tryoutAttempts(): HasMany

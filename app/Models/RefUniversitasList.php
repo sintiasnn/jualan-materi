@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Added missing import
 
 class RefUniversitasList extends Model
 {
@@ -20,7 +21,8 @@ class RefUniversitasList extends Model
     // Relationships
     public function users(): HasMany
     {
-        return $this->hasMany(User::class, 'universitas_id');
+        // return $this->hasMany(User::class, 'universitas_id');
+        return $this->hasMany(User::class, 'universitas_id', 'id');
     }
 
     // Scopes
@@ -40,8 +42,9 @@ class RefUniversitasList extends Model
         return "{$this->universitas_name} ({$this->singkatan})";
     }
 
-    public function universitas(): BelongsTo
-    {
-        return $this->belongsTo(RefUniversitasList::class, 'universitas_id');
-    }
+    // Remove this relation as it's not correct
+    // public function universitas(): BelongsTo
+    // {
+    //     return $this->belongsTo(RefUniversitasList::class, 'universitas_id');
+    // }
 }

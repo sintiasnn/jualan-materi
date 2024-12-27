@@ -10,19 +10,19 @@
                 <div class="row align-items-center justify-content-between pt-3">
                     <div class="col-auto mb-3">
                         <h1 class="page-header-title">
-                            <div class="page-header-icon"><i data-feather="user-plus"></i></div>
-                            Tambah User
+                            <div class="page-header-icon"><i data-feather="home"></i></div>
+                            Tambah Universitas
                         </h1>
                     </div>
                     <div class="col-12 col-xl-auto mb-3">
-                        <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.users') }}">
+                        <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.universitas') }}">
                             <i class="me-1" data-feather="arrow-left"></i>
-                            Kembali ke Daftar User
+                            Kembali ke Daftar Universitas
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-    <livewire:pages.admin.components.user-form />
+    <livewire:pages.admin.components.universitas-form />
 </x-app-layout>

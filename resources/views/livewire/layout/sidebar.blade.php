@@ -34,12 +34,12 @@
                     <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
                         href="{{ '/user/beli' }}">
                         <div class="nav-link-icon"><i data-feather="package"></i></div>
-                        Daftar Paket
+                        Data Paket
                     </a>
                     <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
                         href="{{ '/user/transaksi' }}">
                         <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
-                        Daftar Transaksi
+                        Data Transaksi
                     </a>
                     <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
                         href="{{ '/user/transaksi' }}">
@@ -47,20 +47,27 @@
                         Kode Promo
                     </a>
                     <div class="sidenav-menu-heading">Membership</div>
-                    <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                    <a class="nav-link {{ request()->is('admin/users*') || request()->is('admin/universitas*') ? 'active' : '' }}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                         <div class="nav-link-icon"><i data-feather="user"></i></div>
                         Manajemen User
                         <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
-                    <div class="collapse {{ request()->is('admin/users*') ? 'show' : '' }}"  id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                    <div class="collapse {{ request()->is('admin/users*') || request()->is('admin/universitas*') ? 'show' : '' }}"  id="collapseDashboards" data-bs-parent="#accordionSidenav">
                         <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
 
                             <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}"
                                 href="{{ '/admin/users' }}">
-                                Daftar User</a>
-                            <a class="nav-link" href="dashboard-3.html">Data Universitas</a>
+                                Data User</a>
+                                <a class="nav-link {{ request()->is('admin/universitas*') ? 'active' : '' }}"
+                                    href="{{ '/admin/universitas' }}">
+                                    Data Universitas</a>
                         </nav>
                     </div>
+                    <a class="nav-link {{ request()->is('admin/activesessions*') ? 'active' : '' }}"
+                        href="{{ '/admin/activesessions' }}">
+                        <div class="nav-link-icon"><i data-feather="activity"></i></div>
+                        Active Sessions
+                    </a>
                     <div class="sidenav-menu-heading">App</div>
 
                     <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
@@ -109,15 +116,6 @@
                         <a class="nav-link" href="#">
                             <div class="nav-link-icon"><i data-feather="monitor"></i></div>
                             Belajar
-                        </a>
-                    @endif
-
-                    @if(in_array(auth()->user()->role, ['tutor']))
-                        <div class="sidenav-menu-heading">Materi</div>
-                        <a class="nav-link {{ request()->is(auth()->user()->role.'/materi*') ? 'active' : '' }}"
-                           href="{{ '/'.auth()->user()->role.'/materi' }}">
-                            <div class="nav-link-icon"><i data-feather="book"></i></div>
-                            Materi
                         </a>
                     @endif
 

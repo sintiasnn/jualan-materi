@@ -12,18 +12,18 @@
                     <div class="row align-items-center justify-content-between pt-3">
                         <div class="col-auto mb-3">
                             <h1 class="page-header-title">
-                                <div class="page-header-icon"><i data-feather="user"></i></div>
-                                Data User
+                                <div class="page-header-icon"><i data-feather="home"></i></div>
+                                Data Universitas
                             </h1>
                         </div>
                         <div class="col-12 col-xl-auto mb-3">
-                            <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.universitas') }}">
-                                <i class="me-1" data-feather="home"></i>
-                                Data Universitas
+                            <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.users') }}">
+                                <i class="me-1" data-feather="users"></i>
+                                Data User
                             </a>
-                            <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.users.create') }}">
-                                <i class="me-1" data-feather="user-plus"></i>
-                                Tambahkan User Baru
+                            <a class="btn btn-sm btn-light text-primary" href="{{ route('admin.universitas.create') }}">
+                                <i class="me-1" data-feather="plus"></i>
+                                Tambahkan Universitas Baru
                             </a>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
             </div>
         </header>
         
-        <livewire:pages.admin.components.user-table />
+        <livewire:pages.admin.components.universitas-table />
         
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">

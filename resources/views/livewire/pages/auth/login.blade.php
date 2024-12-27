@@ -111,7 +111,6 @@ new #[Layout('layouts.guest')] class extends Component
                                                 <label class="form-check-label" for="rememberPasswordCheck">Ingat saya</label>
                                             </div>
                                         </div>
-                                        <div id="login-error" class="text-red-500 mt-2 hidden"></div>
 
                                         <!-- Login Button -->
                                         <div class="d-flex align-items-center justify-content-between mt-4 mb-0">

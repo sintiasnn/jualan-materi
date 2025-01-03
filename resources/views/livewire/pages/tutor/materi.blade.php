@@ -28,46 +28,4 @@
         </div>
 
     </div>
-
-
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#materiTable').DataTable({
-                responsive: true,
-                pageLength: 10,
-                autoWidth: false,
-                searching: true,
-                ordering: true,
-                order: [[4, 'desc']], // Order by Tanggal Bergabung column
-                language: {
-                    search: 'Cari:',
-                    searchPlaceholder: 'Cari data...',
-                    paginate: {
-                        previous: 'Sebelumnya',
-                        next: 'Selanjutnya',
-                    },
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Tidak ada data yang ditemukan",
-                    infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
-                    infoFiltered: "(disaring dari _MAX_ total data)"
-                },
-                columnDefs: [
-                    { orderable: false, targets: [0, 4] } // Disable sorting for nama (with avatar) and action columns
-                ]
-            });
-        });
-    </script>
-
 </x-app-layout>

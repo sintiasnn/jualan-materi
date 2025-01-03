@@ -131,6 +131,7 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/tutor/dashboard', function () {
             return view('livewire.pages.tutor.dashboard');
         })->name('tutor.dashboard');
+        Route::post('/datatables/materi', [DatatablesController::class, 'materi'])->name('tutor.materi.materiDatatable');
         Route::resource('/tutor/materi', MateriController::class);
         Route::get('tutor/materi/subdomain/{domainCode}', [MateriController::class, 'getSubdomain'])->name('tutor.materi.getSubdomain');
 

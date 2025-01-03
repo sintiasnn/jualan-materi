@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActiveSession;
+use App\Models\ClassContent;
 use App\Models\TransaksiUser;
 use App\Models\User;
 use App\Models\RefUniversitasList;
@@ -17,7 +18,7 @@ class DatatablesController extends Controller
     public function activeSessions(Request $request)
     {
         $params = $this->getBaseQuery($request);
-        
+
         $query = ActiveSession::with('user')
             ->select('active_sessions.id', 'user_id', 'token', 'device_name', 'last_url', 'last_active_at', 'created_at');
 
@@ -43,7 +44,7 @@ class DatatablesController extends Controller
 
         // Apply search
         $query = $this->applySearch($query, $params['search'], $searchableColumns);
-        
+
         // Apply order
         $query = $this->applyOrder($query, $params['order'], $params['columns'], $orderableColumns, $relationColumns);
 
@@ -77,7 +78,7 @@ class DatatablesController extends Controller
     {
         try {
             $params = $this->getBaseQuery($request);
-            
+
             $query = User::with('universitas')
                 ->select('users.id', 'name', 'email', 'avatar', 'universitas_id', 'role', 'active_status', 'created_at');
 
@@ -109,7 +110,7 @@ class DatatablesController extends Controller
             // Apply order
             $orderColumn = $params['order'][0]['column'] ?? 4;
             $orderDir = $params['order'][0]['dir'] ?? 'desc';
-            
+
             switch($orderColumn) {
                 case 0: // name
                     $query->orderBy('name', $orderDir);
@@ -134,7 +135,7 @@ class DatatablesController extends Controller
             ]);
 
             $totalRecords = $query->count();
-            
+
             $results = $query->skip($params['start'])
                 ->take($params['length'])
                 ->get();
@@ -154,8 +155,8 @@ class DatatablesController extends Controller
                         'name' => $user->role,
                         'active' => $user->active_status
                     ],
-                    'universitas' => $user->role === 'admin' || $user->role === 'tutor' 
-                        ? '-' 
+                    'universitas' => $user->role === 'admin' || $user->role === 'tutor'
+                        ? '-'
                         : ($user->universitas?->universitas_name ?? 'Belum ada universitas'),
                     'created_at' => Carbon::parse($user->created_at)->translatedFormat('d F Y'),
                     'actions' => [
@@ -170,7 +171,7 @@ class DatatablesController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'error' => 'An error occurred while fetching data'
             ], 500);
@@ -181,7 +182,7 @@ class DatatablesController extends Controller
     {
         try {
             $params = $this->getBaseQuery($request);
-            
+
             // Remove the select() call since withCount adds a virtual column
             $query = RefUniversitasList::withCount('users');
 
@@ -196,7 +197,7 @@ class DatatablesController extends Controller
             // Apply order
             $orderColumn = $params['order'][0]['column'] ?? 0;
             $orderDir = $params['order'][0]['dir'] ?? 'asc';
-            
+
             switch($orderColumn) {
                 case 1:
                     $query->orderBy('singkatan', $orderDir);
@@ -209,7 +210,7 @@ class DatatablesController extends Controller
             }
 
             $totalRecords = $query->count();
-            
+
             $results = $query->skip($params['start'])
                 ->take($params['length'])
                 ->get();
@@ -237,7 +238,7 @@ class DatatablesController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'error' => 'An error occurred while fetching data'
             ], 500);
@@ -247,7 +248,7 @@ class DatatablesController extends Controller
     {
         try {
             $params = $this->getBaseQuery($request);
-            
+
             $query = TransaksiUser::with('paket')
                 ->where('user_id', auth()->id())
                 ->select('id', 'kode_transaksi', 'tanggal_pembelian', 'status', 'redirect_url', 'paket_id');
@@ -266,11 +267,11 @@ class DatatablesController extends Controller
             }
 
             $totalRecords = $query->count();
-            
+
             // Apply order
             $orderColumn = $params['order'][0]['column'] ?? 2;
             $orderDir = $params['order'][0]['dir'] ?? 'desc';
-            
+
             if ($orderColumn == 2) {
                 $query->orderBy('tanggal_pembelian', $orderDir);
             }
@@ -301,7 +302,76 @@ class DatatablesController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
+            return response()->json([
+                'error' => 'An error occurred while fetching data'
+            ], 500);
+        }
+    }
+
+    public function materi(Request $request){
+        try {
+            $params = $this->getBaseQuery($request);
+
+            // Remove the select() call since withCount adds a virtual column
+            $query = ClassContent::query();
+
+            // Apply search
+            if (!empty($params['search'])) {
+                $query->where(function($q) use ($params) {
+                    $q->where('nama_materi', 'like', "%{$params['search']}%")
+                        ->orWhere('nama_submateri', 'like', "%{$params['search']}%");
+                });
+            }
+
+            // Apply order
+            $orderColumn = $params['order'][0]['column'] ?? 0;
+            $orderDir = $params['order'][0]['dir'] ?? 'asc';
+
+            switch($orderColumn) {
+                case 1:
+                    $query->orderBy('nama_materi', $orderDir);
+                    break;
+                case 2:
+                    $query->orderBy('nama_submateri', $orderDir);
+                    break;
+                default:
+                    $query->orderBy('nama_materi', $orderDir);
+            }
+
+            $totalRecords = $query->count();
+
+            $results = $query->skip($params['start'])
+                ->take($params['length'])
+                ->get();
+
+            // Add debug logging
+            \Log::info('Query results:', $results->toArray());
+
+            return response()->json([
+                'draw' => (int)$params['draw'],
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $results->map(fn($content, $index) => [
+                    'id' => $content->id,
+                    'DT_RowIndex' => $params['start'] + $index + 1,
+                    'kode_materi' => $content->kode_materi,
+                    'nama_materi' => $content->nama_materi,
+                    'video_url' => $content->video_url,
+                    'created_at' => Carbon::parse($content->created_at)->translatedFormat('d F Y'),
+                    'actions' => [
+                        'edit_url' => route('materi.edit', $content->id),
+                        'view_url' => route('materi.show', $content->id)
+                    ]
+                ])
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('DataTables Error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'error' => 'An error occurred while fetching data'
             ], 500);

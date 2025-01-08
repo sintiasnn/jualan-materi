@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MateriController;
+use App\Http\Controllers\PaketContentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -173,6 +174,12 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/paket/{id}', [PaketController::class, 'show']);
         Route::get('/paket/{id}/ownership', [PaketController::class, 'checkOwnership']);
         Route::post('/paket/{id}/purchase', [PaketController::class, 'purchase']);
+    });
+
+    Route::middleware(['role:tutor'])->group(function () {
+        Route::get('/tutor/paket/materi', [PaketContentController::class, 'index'])->name('tutor.paket.materi');
+        Route::get('/tutor/paket/materi/create/{id}', [PaketContentController::class, 'create'])->name('tutor.paket.materi.create');
+        Route::post('/tutor/paket/materi/store/{id}', [PaketContentController::class, 'store'])->name('tutor.paket.materi.store');
     });
 });
 

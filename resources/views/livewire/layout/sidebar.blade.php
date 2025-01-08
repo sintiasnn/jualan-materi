@@ -126,6 +126,11 @@
                             <div class="nav-link-icon"><i data-feather="book"></i></div>
                             Materi
                         </a>
+                        <a class="nav-link {{ request()->is(auth()->user()->role.'/paket/materi*') ? 'active' : '' }}" href="{{'/'.auth()->user()->role.'/paket/materi'}}">
+                            <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
+                            Paket
+                        </a>
+
                     @endif
 
                     @if(in_array(auth()->user()->role, ['user', 'tutor']))

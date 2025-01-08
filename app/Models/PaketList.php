@@ -43,6 +43,12 @@ class PaketList extends Model
             ->withTimestamps();
     }
 
+    public function materi(): BelongsToMany
+    {
+        return $this->belongsToMany(ClassContent::class, 'paket_content', 'paket_id', 'content_id')
+        ->withPivot(['activation_date', 'expired_date']);
+    }
+
     public function transactions(): HasMany
     {
         return $this->hasMany(TransaksiUser::class, 'paket_id');
@@ -116,7 +122,7 @@ class PaketList extends Model
         }
 
         $now = now();
-        
+
         if ($this->isClass()) {
             return $this->classes()
                 ->wherePivot('activation_date', '<=', $now)

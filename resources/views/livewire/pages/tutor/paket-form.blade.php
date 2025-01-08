@@ -9,7 +9,7 @@
                             Pilih Materi ke Paket
                         </h1>
                         <h5 class="page-header-subtitle">
-                            {{\App\Models\PaketList::find($id)->nama_paket}}
+                            {{$namaPaket}}
                         </h5>
                     </div>
                 </div>
@@ -22,6 +22,37 @@
             <!-- Main page content -->
             <main>
                 <div class="container-fluid px-4">
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="h5">Konten Materi</h5>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="accordion" id="accordionExample">
+                                @foreach($arrayMateri as $materi)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$loop->iteration}}" aria-expanded="false" aria-controls="collapse-{{$loop->iteration}}">
+                                                {{$materi['nama_materi']}}
+                                            </button>
+                                        </h2>
+                                        <div id="collapse-{{$loop->iteration}}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <ul>
+                                                    @foreach($materi['nama_submateri'] as $submateri)
+                                                        <li>{{$submateri}}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-body">
 
@@ -48,7 +79,7 @@
                                 </div>
 
                                 <div class="col-md-3 mb-3 d-flex align-items-end">
-                                    <button id="resetFilter" class="btn btn-blue">
+                                    <button id="resetFilterMateri" class="btn btn-blue">
                                         <i data-feather="refresh-ccw" class="me-1"></i>
                                         Reset Filter
                                     </button>
@@ -60,19 +91,19 @@
                                 @csrf
 
                                 <div class="container mt-3">
-                                    <div class="row row-cols-3">
-                                        @foreach($materis as $materi)
-                                            <div class="col">
-                                                <div>
-                                                    <input class="form-check-input" type="checkbox" name="content_id[]" value="{{$materi->id}}" id="flexCheckDefault">
+                                    @foreach($allMateri as $materi)
+                                        <h5 class="h5 my-2">{{$materi['nama_materi']}}</h5>
+                                        <div class="row row-cols-3 mb-5">
+                                            @foreach($materi['nama_submateri'] as $key =>$submateri)
+                                                <div class="col mb-2">
+                                                    <input class="form-check-input" type="checkbox" name="content_id[]" value="{{$key}}" id="flexCheckDefault">
                                                     <label class="form-check-label" for="flexCheckDefault">
-                                                        {{$materi->nama_materi}}
+                                                        {{$submateri}}
                                                     </label>
                                                 </div>
-
-                                            </div>
                                         @endforeach
                                     </div>
+                                    @endforeach
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
@@ -96,6 +127,20 @@
 
             <script>
 
+                $('#resetFilterMateri').on('click', function () {
+                    $('#domainFilter, #subdomainFilter').val('');
+                })
+
+                function fetchMateri()
+                {
+                    axios.post(`${materiUrl}`, {})
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(err => {
+                            //Swal.fire('Error', err.response?.data, 'error')
+                        })
+                }
 
             </script>
         </div>

@@ -357,7 +357,8 @@ class DatatablesController extends Controller
                     'DT_RowIndex' => $params['start'] + $index + 1,
                     'kode_materi' => $content->kode_materi,
                     'nama_materi' => $content->nama_materi,
-                    'video_url' => $content->video_url,
+                    'kode_submateri' => $content->kode_submateri,
+                    'nama_submateri' => $content->nama_submateri,
                     'created_at' => Carbon::parse($content->created_at)->translatedFormat('d F Y'),
                     'actions' => [
                         'edit_url' => route('materi.edit', $content->id),

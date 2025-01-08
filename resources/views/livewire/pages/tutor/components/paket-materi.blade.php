@@ -66,37 +66,75 @@ new class extends Component {
                 </h5>
             </div>
             <div class="card-body">
-                <div class="accordion" id="accordionExample">
-                    @foreach($pakets as $paket)
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading-{{$loop->iteration}}">
-                                <button class="accordion-button {{$loop->iteration == '1' ? '' : 'collapsed'}}" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapse-{{$loop->iteration}}" aria-expanded="true"
-                                        aria-controls="collapse-{{$loop->iteration}}">
-                                    {{$paket->nama_paket}}
-                                </button>
-                            </h2>
-                            <div id="collapse-{{$loop->iteration}}" class="accordion-collapse {{$loop->iteration == '1' ? 'show' : 'collapse'}}"
-                                 aria-labelledby="heading-{{$loop->iteration}}" data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <div class="py-3">
-                                        <a type="button" href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-primary">
-                                            <i data-feather="plus-square" class="me-2"></i>
-                                            Tambah Materi
-                                        </a>
+
+                <div class="col-lg-12">
+                    <div class="row">
+                        @foreach($pakets as $paket)
+
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card h-100 shadow-sm rounded-3">
+                                    <img class="card-img-top" src="{{ asset('assets/img/paket/' . $paket->image) }}" alt="{{ $paket->nama_paket }}">
+                                    <div class="card-body">
+                                        <!-- Badges -->
+                                        <div class="mb-2">
+                                    <span class="badge bg-blue">
+                                        @if ($paket->tipe === 'class')
+                                            Kelas
+                                        @elseif ($paket->tipe === 'tryout')
+                                            Tryout
+                                        @elseif ($paket->tipe === 'osce')
+                                            OSCE
+                                        @else
+                                            {{ ucfirst($paket->tipe) }}
+                                        @endif
+                                    </span>
+                                            <span class="badge bg-orange">
+                                        @if (strtolower($paket->audience) === 'ukmppd' || strtolower($paket->audience) === 'aipki' || strtolower($paket->audience) === 'koas' || strtolower($paket->audience) === 'osce')
+                                                    {{ strtoupper($paket->audience) }}
+                                                @elseif (strtolower($paket->audience) === 'preklinik' || strtolower($paket->audience) === 'kelas')
+                                                    {{ ucfirst($paket->audience) }}
+                                                @else
+                                                    {{ $paket->audience }}
+                                                @endif
+                                    </span>
+
+                                        </div>
+                                        <h5 class="card-title">{{ $paket->nama_paket }}</h5>
+                                        <p class="card-text">{{ Str::limit($paket->deskripsi, 100) }}</p>
+                                        <div class="mt-2">
+                                            @if ($paket->tier == 'free')
+                                                <!-- Jika Gratis -->
+                                                <span class="fw-bold text-success fs-5">GRATIS!</span>
+                                            @else
+                                                <!-- Jika Ada Diskon -->
+                                                @if ($paket->discount > 0)
+                                                    <span class="text-danger text-decoration-line-through fs-6 me-2">
+                                                Rp {{ number_format($paket->harga, 0, ',', '.') }}
+                                            </span>
+                                                    <span class="fw-bold text-success fs-5">
+                                                Rp {{ number_format($paket->harga - $paket->discount, 0, ',', '.') }}
+                                            </span>
+                                                @else
+                                                    <!-- Jika Tidak Ada Diskon -->
+                                                    <span class="fw-bold text-success fs-5">
+                                                Rp {{ number_format($paket->harga, 0, ',', '.') }}
+                                            </span>
+                                                @endif
+                                            @endif
+                                        </div>
+
                                     </div>
-
-                                    <ul class="list-group ">
-                                        @foreach($paket->materi as $materi)
-                                            <li class="list-group-item list-group-item-action text-gray-700">{{$materi->nama_materi}}</li>
-                                        @endforeach
-                                    </ul>
-
+                                    <div class="card-footer bg-white text-center">
+                                        @if($paket->materi->count() > 0)
+                                            <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-primary w-100">Lihat Detail Materi</a>
+                                        @else
+                                            <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-success w-100">Tambahkan Materi pada Paket Ini</a>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
-
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,9 +7,10 @@
                     <thead>
                     <tr>
                         <th>No</th>
-                        <th>Kode</th>
+                        <th>Kode Materi</th>
                         <th>Nama Materi</th>
-                        <th>Video URL</th>
+                        <th>Kode Submateri</th>
+                        <th>Nama Submateri</th>
                         <th>Created at</th>
                         <th>Action</th>
                     </tr>
@@ -156,7 +157,8 @@
                     },
                     { data: 'kode_materi' },
                     { data: 'nama_materi' },
-                    { data: 'video_url' },
+                    { data: 'kode_submateri' },
+                    { data: 'nama_submateri' },
                     { data: 'created_at' },
                     {
                         data: 'actions',

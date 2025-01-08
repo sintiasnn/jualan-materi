@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassContent;
 use App\Models\PaketContent;
+use App\Models\PaketList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,10 +19,12 @@ class PaketContentController extends Controller
     }
 
     public function create($id){
-        $materi = ClassContent::where('kode_materi',14)->get();
+        $materi = PaketList::find($id);
         return view('livewire.pages.tutor.paket-form', [
-            'materis' => $materi,
-            'id' => $id,
+            'arrayMateri' => $this->restructureMateri($materi->materi),
+            'namaPaket' => $materi->nama_paket,
+            'allMateri' => $this->restructureMateri(ClassContent::all()),
+            'id' =>$id
         ]);
     }
 
@@ -54,4 +57,12 @@ class PaketContentController extends Controller
         }
     }
 
+    public function restructureMateri($materis){
+        $arrayMateri = [];
+        foreach ($materis as $materi) {
+            $arrayMateri[$materi->kode_materi]['nama_materi'] = $materi->nama_materi;
+            $arrayMateri[$materi->kode_materi]['nama_submateri'][$materi->id] = $materi->nama_submateri;
+        }
+        return $arrayMateri;
+    }
 }

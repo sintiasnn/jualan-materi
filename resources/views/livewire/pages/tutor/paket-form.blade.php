@@ -59,6 +59,15 @@
                         </div>
 
                         <div class="card-body">
+                            @if (session()->has('error') || session()->has('error-message'))
+                                <div class="alert alert-danger alert-dismissible pe-auto fade show" role="alert">
+                                    {{ session('error') ?? session('error-message')}}
+                                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
+
                             <div class="row mb-4">
                                 <div class="col-md-3 mb-3">
                                     <label for="domainFilter" class="form-label">Filter Domain</label>

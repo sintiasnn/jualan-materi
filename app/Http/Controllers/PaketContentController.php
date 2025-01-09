@@ -29,30 +29,31 @@ class PaketContentController extends Controller
 
     public function store(Request $request, $id){
         $content_id = $request->content_id;
-        foreach ($content_id as $content) {
-            $data[] = [
-                'content_id' => $content,
-                'paket_id' => $id,
-                'activation_date' => now(),
-                'expired_date' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
         try {
+            foreach ($content_id as $content) {
+                $data[] = [
+                    'content_id' => $content,
+                    'paket_id' => $id,
+                    'activation_date' => now(),
+                    'expired_date' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
             DB::beginTransaction();
             $paketContent = new PaketContent();
-            if($paketContent->insert($data)){
+            if(is_null($content_id) && $paketContent->insert($data)){
                 DB::commit();
                 return redirect()->route('tutor.paket.materi')->with('message', 'materi berhasil ditambahkan');
             }
             else {
                 DB::rollBack();
-                return redirect()->route('tutor.paket.materi')->with('error', true);
+                return redirect()->route('tutor.paket.materi.create',$id)->with('error', true);
             }
         } catch (\Exception $e){
             DB::rollBack();
-            return redirect()->route('tutor.paket.materi')->with('error-message', $e->getMessage());
+            return redirect()->route('tutor.paket.materi.create', $id)->with('error-message', $e->getMessage());
         }
     }
 

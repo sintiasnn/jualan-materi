@@ -181,6 +181,7 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::post('/tutor/paket/materi/data', [PaketContentController::class, 'materi'])->name('tutor.paket.materi.data');
         Route::get('/tutor/paket/materi/create/{id}', [PaketContentController::class, 'create'])->name('tutor.paket.materi.create');
         Route::post('/tutor/paket/materi/store/{id}', [PaketContentController::class, 'store'])->name('tutor.paket.materi.store');
+        Route::delete('/tutor/paket/materi/delete/{id}', [PaketContentController::class, 'destroy'])->name('tutor.paket.materi.delete');
     });
 });
 

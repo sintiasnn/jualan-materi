@@ -123,7 +123,7 @@
             <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
             <script>
-                const materiUrl = `{{route('tutor.paket.materi.data')}}`;
+                const materiUrl = `{{route('tutor.paket.materi')}}`;
 
                 $('#resetFilterMateri').on('click', function (e) {
                     e.preventDefault();
@@ -138,12 +138,24 @@
                     fetchMateri();
                 })
 
+                function deleteMateri(id){
+                    axios.delete(`${materiUrl}/delete/${id}`, {})
+                        .then(response => {
+                            Swal.fire('Success', 'Berhasil menghapus materi', 'success')
+                            fetchMateri()
+                        })
+                        .catch(err => {
+                            Swal.fire('Error', err.response?.data, 'error')
+                        })
+                }
+
                 function fetchMateri()
                 {
-                    axios.post(`${materiUrl}`,null, {
+                    axios.post(`${materiUrl}/data`,null, {
                         params : {
                             domain : $('#domainFilter').val(),
-                            subdomain : $('#subdomainFilter').val()
+                            subdomain : $('#subdomainFilter').val(),
+                            paket : @js($id)
                         }
                     })
                         .then(response => {
@@ -156,11 +168,14 @@
                                     arrMateri.forEach(ell => {
                                         subHtml += `
                                     <div class="col mb-2">
-                                    <input class="form-check-input" type="checkbox" name="content_id[]" value="${ell.id}" id="flexCheckDefault">
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                    ${ell.nama_submateri}
-                                </label>
-                                 </div>
+                                    <input class="form-check-input" type="checkbox" name="content_id[]" value="${ell.id}" id="flexCheckDefault" ${ell.is_selected ? 'checked disabled' : ''}>
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            ${ell.nama_submateri}
+                                        </label>
+                                        ${ell.paket_content_id ? `<button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Materi" onclick="deleteMateri(${ell.paket_content_id})" href="#">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>` : ''}
+                                    </div>
                                     `
                                     })
 
@@ -205,6 +220,8 @@
                 }
 
                 $(document).ready(function() {
+                    feather.replace();
+
                     fetchMateri();
                 })
 

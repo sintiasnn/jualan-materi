@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ClassContent extends Model
 {
@@ -50,6 +51,10 @@ class ClassContent extends Model
 
     public function subdomain(): BelongsTo {
         return $this->belongsTo(Subdomain::class, 'subdomain_id');
+    }
+
+    public function content(): HasOne {
+        return $this->hasOne(PaketContent::class, 'content_id');
     }
 
     // Scopes

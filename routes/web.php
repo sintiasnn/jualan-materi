@@ -178,6 +178,7 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
 
     Route::middleware(['role:tutor'])->group(function () {
         Route::get('/tutor/paket/materi', [PaketContentController::class, 'index'])->name('tutor.paket.materi');
+        Route::post('/tutor/paket/materi/data', [PaketContentController::class, 'materi'])->name('tutor.paket.materi.data');
         Route::get('/tutor/paket/materi/create/{id}', [PaketContentController::class, 'create'])->name('tutor.paket.materi.create');
         Route::post('/tutor/paket/materi/store/{id}', [PaketContentController::class, 'store'])->name('tutor.paket.materi.store');
     });

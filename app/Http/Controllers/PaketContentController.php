@@ -23,7 +23,6 @@ class PaketContentController extends Controller
         return view('livewire.pages.tutor.paket-form', [
             'arrayMateri' => $this->restructureMateri($materi->materi),
             'namaPaket' => $materi->nama_paket,
-            'allMateri' => $this->restructureMateri(ClassContent::all()),
             'id' =>$id
         ]);
     }
@@ -59,10 +58,49 @@ class PaketContentController extends Controller
 
     public function restructureMateri($materis){
         $arrayMateri = [];
-        foreach ($materis as $materi) {
+        foreach ($materis as $key => $materi) {
+            $arrayMateri[$materi->kode_materi]['kode_materi'] = $materi->kode_materi;
             $arrayMateri[$materi->kode_materi]['nama_materi'] = $materi->nama_materi;
-            $arrayMateri[$materi->kode_materi]['nama_submateri'][$materi->id] = $materi->nama_submateri;
+            $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['kode_submateri'] = $materi->kode_submateri;
+            $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['nama_submateri'] = $materi->nama_submateri;
+            $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['id'] = $materi->id;
+
+            $arrayMateri[$materi->kode_materi]['submateri'] = array_map(function($array) {
+                return (object) $array;
+            }, $arrayMateri[$materi->kode_materi]['submateri']);
         }
+        $arrayMateri = array_map(function($array) {
+            return (object) $array;
+        }, $arrayMateri);
+
         return $arrayMateri;
+    }
+
+    public function materi(Request $request){
+
+        try {
+            $query  = ClassContent::select('id','subdomain_id','kode_materi','nama_materi','kode_submateri','nama_submateri');
+            if($request->filled('subdomain')){
+                $query->where('subdomain_id', $request->subdomain);
+            }
+            if($request->filled('domain')){
+                $query->whereHas('subdomain', function($q) use($request){
+                    $q->where('domain_code', $request->domain);
+                });
+            }
+            return $this->restructureMateri($query->get());
+
+        } catch (\Exception $e) {
+            \Log::error('Fetch Error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => 'An error occurred while fetching data'
+            ], 500);
+        }
+
+
     }
 }

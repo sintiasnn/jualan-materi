@@ -316,6 +316,16 @@ class DatatablesController extends Controller
             // Remove the select() call since withCount adds a virtual column
             $query = ClassContent::query();
 
+            if ($request->filled('subdomainFilter')) {
+                $query->where('subdomain_id', $request->subdomainFilter);
+            }
+
+            if($request->filled('domainFilter')){
+                $query->whereHas('subdomain', function($q) use($request){
+                    $q->where('domain_code', $request->domainFilter);
+                });
+            }
+
             // Apply search
             if (!empty($params['search'])) {
                 $query->where(function($q) use ($params) {

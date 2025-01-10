@@ -3,6 +3,36 @@
     <div class="container-fluid px-4">
         <div class="card">
             <div class="card-body">
+                <!-- Filters -->
+                <div class="row mb-4">
+
+                    <div class="col-md-4 mb-3">
+                        <label for="domainFilter" class="form-label">Filter Domain</label>
+                        <select id="domainFilter" class="form-select">
+                            <option value="">Semua Domain</option>
+                            @foreach(\App\Models\Domain::get() as $domain)
+                                <option value="{{ $domain->code}}">{{ $domain->keterangan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="subdomainFilter" class="form-label">Filter Subdomain</label>
+                        <select id="subdomainFilter" class="form-select">
+                            <option value="">Semua Subdomain</option>
+                            @foreach(\App\Models\Subdomain::get() as $subdomain)
+                                <option value="{{ $subdomain->id}}">{{ $subdomain->keterangan }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button id="resetFilter" class="btn btn-blue">
+                            <i data-feather="refresh-ccw" class="me-1"></i>
+                            Reset Filter
+                        </button>
+                    </div>
+                </div>
+
+
                 <table id="materiTable" class="table table-striped table-bordered">
                     <thead>
                     <tr>
@@ -134,6 +164,10 @@
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
+                    data: function(d) {
+                        d.domainFilter = $('#domainFilter').val();
+                        d.subdomainFilter = $('#subdomainFilter').val();
+                    }
                 },
                 language: {
                     search: 'Cari:',
@@ -190,6 +224,16 @@
                         //return new bootstrap.Tooltip(tooltipTriggerEl);
                     });
                 }
+            });
+
+            $('#domainFilter, #subdomainFilter').on('change', function() {
+                table.draw();
+            });
+
+            // Reset filters
+            $('#resetFilter').on('click', function() {
+                $('#domainFilter, #subdomainFilter').val('');
+                table.draw();
             });
 
             $(document).ready(function(){

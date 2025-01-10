@@ -15,7 +15,7 @@
     </header>
 
     <div class="row">
-        <div class="col col-end-1 m-3 px-4">
+        <div class="col col-end-1 m-3 px-4 d-flex flex-row justify-content-end">
             <a type="button" href="{{route('materi.create')}}" class="btn btn-primary"><i data-feather="plus-square" class="me-2"></i>Buat Materi</a>
         </div>
     </div>

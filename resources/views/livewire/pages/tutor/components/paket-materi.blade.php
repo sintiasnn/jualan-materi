@@ -61,9 +61,9 @@ new class extends Component {
     <div class="container-fluid px-4">
         <div class="card">
             <div class="card-title">
-                <h5 class="card-body pb-0">
-                    List Paket
-                </h5>
+                <div class="card-header">
+                    <h5 class="h5">List Paket</h5>
+                </div>
             </div>
             <div class="card-body">
 

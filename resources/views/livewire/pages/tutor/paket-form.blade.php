@@ -30,7 +30,7 @@
 
                         <div class="card-body">
                             <div class="accordion" id="accordionExample">
-                                @foreach($arrayMateri as $materi)
+                                @forelse($arrayMateri as $materi)
                                     <div class="accordion-item">
                                         <h2 class="accordion-header">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{$loop->iteration}}" aria-expanded="false" aria-controls="collapse-{{$loop->iteration}}">
@@ -47,7 +47,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                @empty
+                                    <em>Belum ada materi yang ditambahkan</em>
+                                @endforelse
 
                             </div>
                         </div>
@@ -72,7 +74,7 @@
                                 <div class="col-md-3 mb-3">
                                     <label for="domainFilter" class="form-label">Filter Domain</label>
                                     <select id="domainFilter" class="form-select">
-                                        <option value="" selected disabled>Semua Domain</option>
+                                        <option value="" selected>Semua Domain</option>
                                         @foreach(\App\Models\Domain::all() as $domain)
                                             <option value="{{$domain->id}}">{{$domain->keterangan}}</option>
                                         @endforeach
@@ -81,7 +83,7 @@
                                 <div class="col-md-3 mb-3">
                                     <label for="subdomainFilter" class="form-label">Filter Subdomain</label>
                                     <select id="subdomainFilter" class="form-select">
-                                        <option value="" selected disabled>Semua Subdomain</option>
+                                        <option value="" selected>Semua Subdomain</option>
                                         @foreach(\App\Models\Subdomain::all() as $subdomain)
                                             <option value="{{$subdomain->id}}">{{$subdomain->keterangan}}</option>
                                         @endforeach
@@ -130,9 +132,8 @@
                     $('#domainFilter').val('');
                     $('#subdomainFilter option').remove();
                     let optionDisabled = document.createElement('option')
-                    optionDisabled.setAttribute('disabled', true);
-                    optionDisabled.setAttribute('selected', true);
                     optionDisabled.text = 'Semua Subdomain'
+                    optionDisabled.value = ''
                     $('#subdomainFilter').append(optionDisabled);
 
                     fetchMateri();
@@ -167,12 +168,14 @@
                                     let arrMateri = Object.keys(el.submateri).map((k) => el.submateri[k])
                                     arrMateri.forEach(ell => {
                                         subHtml += `
-                                    <div class="col mb-2">
-                                    <input class="form-check-input" type="checkbox" name="content_id[]" value="${ell.id}" id="flexCheckDefault" ${ell.is_selected ? 'checked disabled' : ''}>
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            ${ell.nama_submateri}
-                                        </label>
-                                        ${ell.paket_content_id ? `<button class="btn btn-outline-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Materi" onclick="deleteMateri(${ell.paket_content_id})" href="#">
+                                    <div class="col mb-2 d-flex flex-row justify-content-between">
+                                    <div>
+                                        <input class="form-check-input" type="checkbox" name="content_id[]" value="${ell.id}" id="check-submateri-${el.kode_materi}" ${ell.is_selected ? 'checked disabled' : ''}/>
+                                            <label class="form-check-label" for="check-submateri-${el.kode_materi}">
+                                                ${ell.nama_submateri}
+                                            </label>
+                                    </div>
+                                     ${ell.paket_content_id ? `<button class="btn btn-outline-danger btn-sm py-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Materi dari Paket" onclick="deleteMateri(${ell.paket_content_id})" href="#">
                                             <i class="fa-regular fa-trash-can"></i>
                                         </button>` : ''}
                                     </div>
@@ -181,14 +184,14 @@
 
                                     html += `
                                 <h5 class="h5 my-2">${el.nama_materi}</h5>
-                                        <div class="row row-cols-3 mb-5">
+                                        <div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1 row-cols-1 mb-5">
                                 ${subHtml}
                                 </div>`
                                 })
                             } else {
                                 html += ` <div class="row row-cols-1 mb-5">
                                         <div class="col mb-2">
-                                            <em>Belum ada materi yang ditambahkan pada domain dan subdomain ini</em>
+                                            <em>Belum ada materi pada domain dan subdomain ini</em>
                                         </div>
                                     </div>`
                             }
@@ -206,9 +209,8 @@
                         .then(res =>{
                             $('#subdomainFilter option').remove();
                             let optionDisabled = document.createElement('option')
-                            optionDisabled.setAttribute('disabled', true);
-                            optionDisabled.setAttribute('selected', true);
                             optionDisabled.text = 'Semua Subdomain'
+                            optionDisabled.value = ''
                             $('#subdomainFilter').append(optionDisabled);
                             res.data.forEach((val, i) => {
                                 let option = document.createElement("option");

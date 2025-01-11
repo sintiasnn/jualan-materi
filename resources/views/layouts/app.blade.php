@@ -26,7 +26,7 @@ new class extends Component
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         {{-- FOR NGROK LOCAL ONLY --}}
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+       {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--}}
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

@@ -10,7 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PaketController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\DatatablesController;
+use App\Http\Controllers\DataTablesController;
 use Livewire\Volt\Volt;
 
 
@@ -132,7 +132,7 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/tutor/dashboard', function () {
             return view('livewire.pages.tutor.dashboard');
         })->name('tutor.dashboard');
-        Route::post('/datatables/materi', [DatatablesController::class, 'materi'])->name('tutor.materi.materiDatatable');
+        Route::post('/datatables/materi', [DataTablesController::class, 'materi'])->name('tutor.materi.materiDatatable');
         Route::resource('/tutor/materi', MateriController::class);
         Route::get('tutor/materi/subdomain/{domainCode}', [MateriController::class, 'getSubdomain'])->name('tutor.materi.getSubdomain');
 
@@ -192,18 +192,18 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
 |--------------------------------------------------------------------------
 */
 Route::middleware(['role:admin'])->group(function () {
-    Route::post('/datatables/active-sessions', [DatatablesController::class, 'activeSessions'])
+    Route::post('/datatables/active-sessions', [DataTablesController::class, 'activeSessions'])
         ->name('datatables.active-sessions');
-    Route::post('/datatables/users', [DatatablesController::class, 'users'])
+    Route::post('/datatables/users', [DataTablesController::class, 'users'])
         ->name('datatables.users');
-    Route::post('/datatables/universities', [DatatablesController::class, 'universities'])
+    Route::post('/datatables/universities', [DataTablesController::class, 'universities'])
         ->name('datatables.universities');
-    Route::post('/datatables/universitas', [DatatablesController::class, 'universitas'])
+    Route::post('/datatables/universitas', [DataTablesController::class, 'universitas'])
     ->name('datatables.universitas');
 });
 
 Route::middleware(['role:user'])->group(function () {
-    Route::post('/datatables/transactions', [DatatablesController::class, 'transactions'])
+    Route::post('/datatables/transactions', [DataTablesController::class, 'transactions'])
         ->name('datatables.transactions');
 });
 /*

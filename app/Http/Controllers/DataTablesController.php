@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\DataTablesTrait;
 
-class DatatablesController extends Controller
+class DataTablesController extends Controller
 {
     use DataTablesTrait;
 

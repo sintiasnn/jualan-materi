@@ -121,11 +121,22 @@
 
                     @if(in_array(auth()->user()->role, ['tutor']))
                         <div class="sidenav-menu-heading">Materi</div>
-                        <a class="nav-link {{ request()->is(auth()->user()->role.'/materi*') ? 'active' : '' }}"
-                           href="{{ '/'.auth()->user()->role.'/materi' }}">
+                        <a class="nav-link {{ request()->is(auth()->user()->role.'/materi*') || request()->is(auth()->user()->role.'/domain*')  ? 'active' : '' }}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                             <div class="nav-link-icon"><i data-feather="book"></i></div>
-                            Materi
+                            Manajemen Materi
+                            <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                         </a>
+                        <div class="collapse {{ request()->is(auth()->user()->role.'/materi*') || request()->is(auth()->user()->role.'/domain*') ? 'show' : '' }}"  id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                            <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                <a class="nav-link {{ request()->is(auth()->user()->role.'/materi*') ? 'active' : '' }}" href="{{'/'.auth()->user()->role.'/materi'}}">
+                                    Materi dan Submateri
+                                </a>
+                                <a class="nav-link {{ request()->is(auth()->user()->role.'/domain*') ? 'active' : '' }}" href="{{'/'.auth()->user()->role.'/domain'}}">
+                                    Domain dan Subdomain
+                                </a>
+                            </nav>
+                        </div>
+
                         <a class="nav-link {{ request()->is(auth()->user()->role.'/paket/materi*') ? 'active' : '' }}" href="{{'/'.auth()->user()->role.'/paket/materi'}}">
                             <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
                             Paket

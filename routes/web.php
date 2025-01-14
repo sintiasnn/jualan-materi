@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DomainSubdomainController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PaketContentController;
 use Illuminate\Support\Facades\Route;
@@ -132,6 +133,12 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/tutor/dashboard', function () {
             return view('livewire.pages.tutor.dashboard');
         })->name('tutor.dashboard');
+
+        Route::get('/tutor/domain', [DomainSubdomainController::class, 'index'])->name('tutor.domain');
+        Route::post('/datatables/domain', [DataTablesController::class, 'domain'])->name('tutor.domain.datatable');
+        Route::post('tutor/domain/store', [DomainSubdomainController::class, 'storeDomain'])->name('tutor.domain.store');
+        Route::delete('tutor/domain/delete/{id}', [DomainSubdomainController::class, 'deleteDomain'])->name('tutor.domain.delete');
+
         Route::post('/datatables/materi', [DataTablesController::class, 'materi'])->name('tutor.materi.materiDatatable');
         Route::resource('/tutor/materi', MateriController::class);
         Route::get('tutor/materi/subdomain/{domainCode}', [MateriController::class, 'getSubdomain'])->name('tutor.materi.getSubdomain');

@@ -1,3 +1,15 @@
+<?php
+use Livewire\Volt\Component;
+
+new class extends Component {
+    public $selectedTab = 'submateri';
+
+    public function switchTab($tab)
+    {
+        $this->selectedTab = $tab;
+    }
+}; ?>
+
 
 <main>
     <div class="container-fluid px-4">
@@ -33,7 +45,7 @@
                 </div>
 
 
-                <table id="materiTable" class="table table-striped table-bordered">
+                <table id="submateriTable" class="table table-striped table-bordered">
                     <thead>
                     <tr>
                         <th>No</th>
@@ -150,7 +162,7 @@
                 },
             }
 
-            let table = $('#materiTable').DataTable({
+            let table = $('#submateriTable').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
@@ -167,6 +179,7 @@
                     data: function(d) {
                         d.domainFilter = $('#domainFilter').val();
                         d.subdomainFilter = $('#subdomainFilter').val();
+                        d.item = 'submateri';
                     }
                 },
                 language: {
@@ -237,7 +250,7 @@
             });
 
             $(document).ready(function(){
-                table.ajax.url(@js(route('tutor.materi.materiDatatable'))).load();
+                table.draw();
             })
         </script>
     </div>

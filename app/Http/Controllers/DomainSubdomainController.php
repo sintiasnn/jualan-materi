@@ -34,6 +34,24 @@ class DomainSubdomainController extends Controller
         }
     }
 
+    public function storeSubdomain(Request $request){
+        try {
+            DB::beginTransaction();
+            $subdomain = new Subdomain($request->all());
+            if($subdomain->saveOrFail()){
+                DB::commit();
+                return response()->json(['message'=> 'Domain berhasil ditambahkan', 'success' => true]);
+            }
+            else {
+                DB::rollBack();
+                return response()->json(['message'=> 'Materi gagal ditambahkan', 'success' => false]);
+            }
+        } catch (\Exception $e){
+            DB::rollBack();
+            return response()->json(['message'=> $e->getMessage(), 'success' => false]);
+        }
+    }
+
     public function deleteDomain($id){
         try {
             Domain::find($id)->delete();

@@ -214,7 +214,7 @@ new class extends Component {
                         className: 'text-center',
                         render: function(data, type, full, meta){
 
-                            return `<a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="${data.edit_url}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Materi">
+                            return `<a class="btn btn-datatable btn-icon btn-transparent-dark" href="${data.edit_url}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Materi">
                                             <i data-feather="edit"></i>
                                         </a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="${data.view_url}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Materi">

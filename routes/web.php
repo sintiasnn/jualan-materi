@@ -136,7 +136,9 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
 
         Route::get('/tutor/domain', [DomainSubdomainController::class, 'index'])->name('tutor.domain');
         Route::post('/datatables/domain', [DataTablesController::class, 'domain'])->name('tutor.domain.datatable');
+        Route::post('/datatables/subdomain', [DataTablesController::class, 'subdomain'])->name('tutor.subdomain.datatable');
         Route::post('tutor/domain/store', [DomainSubdomainController::class, 'storeDomain'])->name('tutor.domain.store');
+        Route::post('tutor/subdomain/store', [DomainSubdomainController::class, 'storeSubdomain'])->name('tutor.subdomain.store');
         Route::delete('tutor/domain/delete/{id}', [DomainSubdomainController::class, 'deleteDomain'])->name('tutor.domain.delete');
 
         Route::post('/datatables/materi', [DataTablesController::class, 'materi'])->name('tutor.materi.materiDatatable');

@@ -14,6 +14,20 @@ class PaketController extends Controller
     /**
      * Display a list of available packages.
      */
+
+    public function materi(Request $request){
+        return view('livewire.pages.user.materi',[
+            'id' => $request->route('id'),
+        ]);
+    }
+
+    public function content(Request $request){
+        return view('livewire.pages.user.content',[
+            'id' => $request->route('id'),
+            'code' => $request->route('code'),
+        ]);
+    }
+
     public function index(Request $request)
     {
         try {
@@ -29,16 +43,7 @@ class PaketController extends Controller
                 $query->where('audience', $request->audience);
             }
 
-            $pakets = $query->with([
-                'classes' => function($query) {
-                    $query->select('classes.id', 'nama', 'deskripsi')
-                        ->orderBy('class_paket.order');
-                },
-                'tryouts' => function($query) {
-                    $query->select('tryouts.id', 'nama', 'deskripsi')
-                        ->orderBy('tryout_paket.order');
-                }
-            ])->get();
+            $pakets = $query->get();
 
             // Transform the data to include content count
             $pakets = $pakets->map(function($paket) {
@@ -68,16 +73,7 @@ class PaketController extends Controller
     public function show($id)
     {
         try {
-            $paket = PaketList::with([
-                'classes' => function($query) {
-                    $query->select('classes.id', 'nama', 'deskripsi')
-                        ->orderBy('class_paket.order');
-                },
-                'tryouts' => function($query) {
-                    $query->select('tryouts.id', 'nama', 'deskripsi')
-                        ->orderBy('tryout_paket.order');
-                }
-            ])->findOrFail($id);
+            $paket = PaketList::findOrFail($id);
 
             $contentDetails = [
                 'has_classes' => $paket->classes->isNotEmpty(),
@@ -254,7 +250,7 @@ class PaketController extends Controller
             \Midtrans\Config::$isProduction = (bool)env('MIDTRANS_IS_PRODUCTION', false);
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
-            
+
             return \Midtrans\Snap::getSnapToken($payload);
         } catch (\Exception $e) {
             Log::error('Midtrans error: ' . $e->getMessage());

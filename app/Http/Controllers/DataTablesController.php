@@ -12,6 +12,8 @@ use App\Models\RefUniversitasList;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\DataTablesTrait;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class DataTablesController extends Controller
 {
@@ -396,7 +398,13 @@ class DataTablesController extends Controller
     private function getActionButton($transaksi)
     {
         if ($transaksi->status === 'success') {
-            $route = ($transaksi->paket->tipe ?? '') == 'tryout' ? '/user/tryout' : '/user/kelas';
+            $param = [
+                'kode_transaksi' => $transaksi->kode_transaksi,
+                'user_id' => Auth::user()->id,
+                'paket_id' => $transaksi->paket_id,
+            ];
+            $param = Crypt::encryptString(json_encode($param));
+            $route = ($transaksi->paket->tipe ?? '') == 'tryout' ? '/user/tryout' : '/paket/'.$transaksi->paket_id;
             return '<a href="' . $route . '" class="btn btn-sm btn-success">Buka Paket</a>';
         } elseif ($transaksi->status === 'pending' && !empty($transaksi->redirect_url)) {
             return '<a href="' . $transaksi->redirect_url . '" class="btn btn-sm btn-primary">Bayar</a>';

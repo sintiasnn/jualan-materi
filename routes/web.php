@@ -169,6 +169,15 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/user/transaksi', function () {
             return view('livewire.pages.user.daftar-transaksi');
         })->name('user.transaksi');
+
+        Route::get('/user/materi', function () {
+            return view('livewire.pages.user.materi');
+        })->name('user.materi');
+
+        Route::get('/user/materi/content', function () {
+            return view('livewire.pages.user.content');
+        })->name('user.materi.content');
+
     });
 
     /*
@@ -176,9 +185,13 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
     | Package Routes
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['role:user'])->group(function () {
-        Route::get('/paket', [PaketController::class, 'index']);
-        Route::get('/paket/{id}', [PaketController::class, 'show']);
+    Route::middleware(['role:user','paket.access'])->group(function () {
+        Route::get('/paket', [PaketController::class, 'index'])->name('paket.index');
+        Route::prefix('paket/{id}')->group(function () {
+            Route::get('/', [PaketController::class, 'materi'])->name('paket.materi');
+            Route::get('/content/{code}', [PaketController::class, 'content'])->name('paket.materi.content');
+        });
+
         Route::get('/paket/{id}/ownership', [PaketController::class, 'checkOwnership']);
         Route::post('/paket/{id}/purchase', [PaketController::class, 'purchase']);
     });

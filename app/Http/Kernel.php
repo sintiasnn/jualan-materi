@@ -78,6 +78,6 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Other route-specific middlewares...
         'role' => \App\Http\Middleware\RoleMiddleware::class, // Register role middleware here
-        'paket.access' => \App\Http\Middleware\PaketAccessMiddleware::class,
+        'paket.access' => \App\Http\Middleware\PaketAccess::class,
     ];
 }

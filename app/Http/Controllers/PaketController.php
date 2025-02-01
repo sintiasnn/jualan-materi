@@ -28,43 +28,9 @@ class PaketController extends Controller
         ]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        try {
-            $query = PaketList::active();
-
-            // Filter by type if specified
-            if ($request->has('tipe')) {
-                $query->where('tipe', $request->tipe);
-            }
-
-            // Filter by audience if specified
-            if ($request->has('audience')) {
-                $query->where('audience', $request->audience);
-            }
-
-            $pakets = $query->get();
-
-            // Transform the data to include content count
-            $pakets = $pakets->map(function($paket) {
-                $paket->content_summary = [
-                    'class_count' => $paket->classes->count(),
-                    'tryout_count' => $paket->tryouts->count()
-                ];
-                return $paket;
-            });
-
-            return response()->json([
-                'success' => true,
-                'data' => $pakets
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error fetching pakets: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengambil data paket'
-            ], 500);
-        }
+        return view('livewire.pages.tutor.paket');
     }
 
     /**

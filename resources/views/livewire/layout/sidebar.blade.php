@@ -94,26 +94,13 @@
                             <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
                             Transaksi
                         </a>
-                        <div class="sidenav-menu-heading">Tryout</div>
-                        {{-- <a class="nav-link" href="#">
-                            <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
-                            Beli Tryout
-                        </a> --}}
-                        <a class="nav-link" href="#">
-                            <div class="nav-link-icon"><i data-feather="book"></i></div>
-                            Kerjakan Tryout
-                        </a>
-                        <a class="nav-link" href="{#">
-                            <div class="nav-link-icon"><i data-feather="check-square"></i></div>
-                            Lihat Pembahasan
-                        </a>
 
                         <div class="sidenav-menu-heading">Kelas</div>
                         {{-- <a class="nav-link" href="#">
                             <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
                             Beli Kelas
                         </a> --}}
-                        <a class="nav-link" href="#">
+                        <a class="nav-link {{ request()->is('paket*') ? 'active' : '' }}"  href="{{'/paket'}}">
                             <div class="nav-link-icon"><i data-feather="monitor"></i></div>
                             Belajar
                         </a>

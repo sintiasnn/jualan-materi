@@ -24,35 +24,12 @@ new class extends Component {
             ->pluck('paket_id'); // Ambil hanya paket_id yang sudah dibeli atau pending
 
         // Exclude the purchased packages from the query
-        $query->whereNotIn('id', $purchasedPackages);
-
-        // Filter Kategori
-        if (!empty($this->filterKategori)) {
-            $query->whereIn('tipe', $this->filterKategori);
-        }
-
-        // Filter Harga
-        if (!empty($this->filterHarga)) {
-            if (in_array('gratis', $this->filterHarga)) {
-                $query->orWhere('tier', 'free');
-            }
-            if (in_array('berbayar', $this->filterHarga)) {
-                $query->orWhere('tier', 'paid');
-            }
-        }
-
-        // Filter Audience
-        if (!empty($this->filterAudience)) {
-            $query->whereIn('audience', $this->filterAudience);
+        if(request()->is('paket*')){
+            $query->whereIn('id', $purchasedPackages);
         }
 
         // Ambil paket-paket yang belum dibeli oleh user
         $this->pakets = $query->get();
-    }
-
-    public function loadPaketMateri($id)
-    {
-        return PaketContent::where('paket_id', $id);
     }
 };
 ?>
@@ -124,13 +101,19 @@ new class extends Component {
                                         </div>
 
                                     </div>
-                                    <div class="card-footer bg-white text-center">
-                                        @if($paket->materi->count() > 0)
-                                            <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-primary w-100">Lihat Detail Materi</a>
-                                        @else
-                                            <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-success w-100">Tambahkan Materi pada Paket Ini</a>
-                                        @endif
-                                    </div>
+                                    @if(request()->is('paket*'))
+                                        <div class="card-footer bg-white text-center">
+                                            <a href="{{route('paket.index').'/'. $paket->id}}" class="btn btn-md btn-primary w-100">Buka Paket</a>
+                                        </div>
+                                    @else
+                                        <div class="card-footer bg-white text-center">
+                                            @if($paket->materi->count() > 0)
+                                                <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-primary w-100">Lihat Detail Materi</a>
+                                            @else
+                                                <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-success w-100">Tambahkan Materi pada Paket Ini</a>
+                                            @endif
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach

@@ -187,15 +187,18 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
     | Package Routes
     |--------------------------------------------------------------------------
     */
-    Route::middleware(['role:user','paket.access'])->group(function () {
+    Route::middleware(['role:user'])->group(function () {
         Route::get('/paket', [PaketController::class, 'index'])->name('paket.index');
-        Route::prefix('paket/{id}')->group(function () {
-            Route::get('/', [PaketController::class, 'materi'])->name('paket.materi');
-            Route::get('/content/{code}', [PaketController::class, 'content'])->name('paket.materi.content');
-        });
 
-        Route::get('/paket/{id}/ownership', [PaketController::class, 'checkOwnership']);
-        Route::post('/paket/{id}/purchase', [PaketController::class, 'purchase']);
+        Route::middleware(['paket.access'])->group(function () {
+            Route::prefix('paket/{id}')->group(function () {
+                Route::get('/', [PaketController::class, 'materi'])->name('paket.materi');
+                Route::get('/content/{code}', [PaketController::class, 'content'])->name('paket.materi.content');
+            });
+
+            Route::get('/paket/{id}/ownership', [PaketController::class, 'checkOwnership']);
+            Route::post('/paket/{id}/purchase', [PaketController::class, 'purchase']);
+        });
     });
 
     Route::middleware(['role:tutor'])->group(function () {

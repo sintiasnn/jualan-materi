@@ -5,10 +5,6 @@
         </h2>
     </x-slot>
 
-    <?php
-    $materi = \App\Models\ClassContent::where('kode_materi',$code)
-        ->select('kode_materi','nama_materi')->distinct()->first();
-    ?>
     <main>
         <header class="page-header page-header-dark bg-gradient-primary-to-secondary mb-4">
             <div class="container-xl px-4">

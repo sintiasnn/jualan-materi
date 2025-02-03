@@ -16,8 +16,10 @@ class PaketController extends Controller
      */
 
     public function materi(Request $request){
+        $id =  $request->route('id');
         return view('livewire.pages.user.materi',[
-            'id' => $request->route('id'),
+            'id' => $id,
+            'paket' => PaketList::find($id),
         ]);
     }
 

@@ -5,10 +5,6 @@
         </h2>
     </x-slot>
 
-    <?php
-        $paket = \App\Models\PaketList::find($id);
-    ?>
-
     <main>
         <header class="page-header page-header-dark bg-gradient-primary-to-secondary mb-4">
             <div class="container-xl px-4">

@@ -35,7 +35,7 @@ new class extends Component {
     }
 
     public function setPaketId($id){
-        $this->paketId = $id;
+        return $this->paketId = $id;
     }
 }; ?>
 
@@ -129,7 +129,7 @@ new class extends Component {
     </div>
 
 
-    <div class="modal fade" id="deletePaketModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="terminateSessionModalLabel" aria-hidden="true">
+    <div class="modal fade" wire:ignore id="deletePaketModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="terminateSessionModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -149,7 +149,7 @@ new class extends Component {
 
 </div>
 
-
+@script
 <script>
     document.addEventListener('livewire:initialized', function () {
         let table = $('#paketTable').DataTable({
@@ -243,3 +243,4 @@ new class extends Component {
 
     });
 </script>
+@endscript

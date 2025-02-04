@@ -1,11 +1,11 @@
 <?php
 
+use App\Constants\Constants;
 use App\Models\PaketList;
 use App\Models\TransaksiUser;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
+new class extends Component {
     public $pakets;
     public $filterKategori = [];
     public $filterHarga = [];
@@ -70,7 +70,7 @@ new class extends Component
 };
 ?>
 
-<!-- Blade View -->
+    <!-- Blade View -->
 <div class="container-xl px-4 mt-n10">
     <div class="row">
         <!-- Filter Card -->
@@ -85,24 +85,28 @@ new class extends Component
                         <!-- Kategori Section -->
                         <div class="accordion-item border-0 mb-2">
                             <h2 class="accordion-header" id="headingKategori">
-                                <button class="accordion-button bg-light text-dark fw-bold" type="button" 
-                                        data-bs-toggle="collapse" data-bs-target="#collapseKategori" 
+                                <button class="accordion-button bg-light text-dark fw-bold" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#collapseKategori"
                                         aria-expanded="true" aria-controls="collapseKategori">
                                     <i class="bi bi-tags me-2"></i> Kategori
                                 </button>
                             </h2>
-                            <div id="collapseKategori" class="accordion-collapse collapse show" aria-labelledby="headingKategori" data-bs-parent="#filterAccordion">
+                            <div id="collapseKategori" class="accordion-collapse collapse show"
+                                 aria-labelledby="headingKategori" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
                                     <div class="form-check mb-2">
-                                        <input wire:model="filterKategori" type="checkbox" value="class" class="form-check-input" id="class">
+                                        <input wire:model="filterKategori" type="checkbox" value="class"
+                                               class="form-check-input" id="class">
                                         <label class="form-check-label" for="class">Kelas</label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input wire:model="filterKategori" type="checkbox" value="tryout" class="form-check-input" id="tryout">
+                                        <input wire:model="filterKategori" type="checkbox" value="tryout"
+                                               class="form-check-input" id="tryout">
                                         <label class="form-check-label" for="tryout">Tryout</label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input wire:model="filterKategori" type="checkbox" value="osce" class="form-check-input" id="tryout">
+                                        <input wire:model="filterKategori" type="checkbox" value="osce"
+                                               class="form-check-input" id="tryout">
                                         <label class="form-check-label" for="osce">OSCE</label>
                                     </div>
                                 </div>
@@ -110,57 +114,66 @@ new class extends Component
                         </div>
                         <!-- Audience -->
                         <!-- Audience Section -->
-                    <div class="accordion-item border-0 mb-2">
-                        <h2 class="accordion-header" id="headingAudience">
-                            <button class="accordion-button bg-light text-dark fw-bold collapsed" type="button" 
-                                    data-bs-toggle="collapse" data-bs-target="#collapseAudience" 
-                                    aria-expanded="false" aria-controls="collapseAudience">
-                                <i class="bi bi-people me-2"></i> Jenis
-                            </button>
-                        </h2>
-                        <div id="collapseAudience" class="accordion-collapse collapse" aria-labelledby="headingAudience" data-bs-parent="#filterAccordion">
-                            <div class="accordion-body">
-                                <div class="form-check mb-2">
-                                    <input wire:model="filterAudience" type="checkbox" value="ukmppd" class="form-check-input" id="ukmppd">
-                                    <label class="form-check-label" for="ukmppd">UKMPPD</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input wire:model="filterAudience" type="checkbox" value="aipki" class="form-check-input" id="aipki">
-                                    <label class="form-check-label" for="aipki">AIPKI</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input wire:model="filterAudience" type="checkbox" value="preklinik" class="form-check-input" id="preklinik">
-                                    <label class="form-check-label" for="preklinik">Preklinik</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input wire:model="filterAudience" type="checkbox" value="koas" class="form-check-input" id="koas">
-                                    <label class="form-check-label" for="koas">KOAS</label>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input wire:model="filterAudience" type="checkbox" value="osce" class="form-check-input" id="osce">
-                                    <label class="form-check-label" for="osce">OSCE</label>
+                        <div class="accordion-item border-0 mb-2">
+                            <h2 class="accordion-header" id="headingAudience">
+                                <button class="accordion-button bg-light text-dark fw-bold collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#collapseAudience"
+                                        aria-expanded="false" aria-controls="collapseAudience">
+                                    <i class="bi bi-people me-2"></i> Jenis
+                                </button>
+                            </h2>
+                            <div id="collapseAudience" class="accordion-collapse collapse"
+                                 aria-labelledby="headingAudience" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body">
+                                    <div class="form-check mb-2">
+                                        <input wire:model="filterAudience" type="checkbox" value="ukmppd"
+                                               class="form-check-input" id="ukmppd">
+                                        <label class="form-check-label" for="ukmppd">UKMPPD</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input wire:model="filterAudience" type="checkbox" value="aipki"
+                                               class="form-check-input" id="aipki">
+                                        <label class="form-check-label" for="aipki">AIPKI</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input wire:model="filterAudience" type="checkbox" value="preklinik"
+                                               class="form-check-input" id="preklinik">
+                                        <label class="form-check-label" for="preklinik">Preklinik</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input wire:model="filterAudience" type="checkbox" value="koas"
+                                               class="form-check-input" id="koas">
+                                        <label class="form-check-label" for="koas">KOAS</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input wire:model="filterAudience" type="checkbox" value="osce"
+                                               class="form-check-input" id="osce">
+                                        <label class="form-check-label" for="osce">OSCE</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
                         <!-- Harga Section -->
                         <div class="accordion-item border-0">
                             <h2 class="accordion-header" id="headingHarga">
-                                <button class="accordion-button bg-light text-dark fw-bold collapsed" type="button" 
-                                        data-bs-toggle="collapse" data-bs-target="#collapseHarga" 
+                                <button class="accordion-button bg-light text-dark fw-bold collapsed" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#collapseHarga"
                                         aria-expanded="false" aria-controls="collapseHarga">
                                     <i class="bi bi-currency-dollar me-2"></i> Harga
                                 </button>
                             </h2>
-                            <div id="collapseHarga" class="accordion-collapse collapse" aria-labelledby="headingHarga" data-bs-parent="#filterAccordion">
+                            <div id="collapseHarga" class="accordion-collapse collapse" aria-labelledby="headingHarga"
+                                 data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
                                     <div class="form-check mb-2">
-                                        <input wire:model="filterHarga" type="checkbox" value="berbayar" class="form-check-input" id="berbayar">
+                                        <input wire:model="filterHarga" type="checkbox" value="berbayar"
+                                               class="form-check-input" id="berbayar">
                                         <label class="form-check-label" for="berbayar">Berbayar</label>
                                     </div>
                                     <div class="form-check mb-2">
-                                        <input wire:model="filterHarga" type="checkbox" value="gratis" class="form-check-input" id="gratis">
+                                        <input wire:model="filterHarga" type="checkbox" value="gratis"
+                                               class="form-check-input" id="gratis">
                                         <label class="form-check-label" for="gratis">Gratis</label>
                                     </div>
                                 </div>
@@ -183,7 +196,9 @@ new class extends Component
                 @forelse ($pakets as $paket)
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card h-100 shadow-sm rounded-3">
-                            <img class="card-img-top" src="{{ asset('assets/img/paket/' . $paket->image) }}" alt="{{ $paket->nama_paket }}">
+                            <img class="card-img-top"
+                                 src="{{ file_exists(public_path() . '/storage' . Constants::PAKET_IMG_DIR . $paket->image) ? asset('storage' . Constants::PAKET_IMG_DIR . $paket->image) : asset(Constants::PAKET_IMG_DIR . $paket->image) }}"
+                                 alt="{{ $paket->nama_paket }}">
                             <div class="card-body">
                                 <!-- Badges -->
                                 <div class="mb-2">
@@ -207,7 +222,7 @@ new class extends Component
                                             {{ $paket->audience }}
                                         @endif
                                     </span>
-                                    
+
                                 </div>
                                 <h5 class="card-title">{{ $paket->nama_paket }}</h5>
                                 <p class="card-text">{{ Str::limit($paket->deskripsi, 100) }}</p>
@@ -232,14 +247,16 @@ new class extends Component
                                         @endif
                                     @endif
                                 </div>
-                                
+
                             </div>
                             <div class="card-footer bg-white text-center">
                                 <div class="card-footer bg-white text-center">
                                     @if ($paket->tier === 'free')
-                                        <a href="{{ route('user.checkout', ['id' => $paket->id]) }}" class="btn btn-sm btn-primary w-100">Daftar Sekarang!</a>
+                                        <a href="{{ route('user.checkout', ['id' => $paket->id]) }}"
+                                           class="btn btn-sm btn-primary w-100">Daftar Sekarang!</a>
                                     @else
-                                        <a href="{{ route('user.checkout', ['id' => $paket->id]) }}" class="btn btn-sm btn-success w-100">Beli Sekarang!</a>
+                                        <a href="{{ route('user.checkout', ['id' => $paket->id]) }}"
+                                           class="btn btn-sm btn-success w-100">Beli Sekarang!</a>
                                     @endif
                                 </div>
                             </div>

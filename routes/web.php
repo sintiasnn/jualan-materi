@@ -122,6 +122,27 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
         Route::get('/admin/activesessions', function () {
             return view('livewire.pages.admin.sessions.index');
         })->name('admin.activesessions');
+
+        //Admin Paket Management
+
+        Route::prefix('/admin/paket')->group(function () {
+            Route::get('/', function (){
+                return view('livewire.pages.admin.paket.index');
+            })->name('admin.paket');
+
+            Route::get('/create', function (){
+                return view('livewire.pages.admin.paket.create');
+            })->name('admin.paket.create');
+
+            Route::get('/edit/{id}', function (){
+                $editMode = true;
+                return view('livewire.pages.admin.paket.create', ['editMode' => $editMode]);
+            })->name('admin.paket.edit');
+
+
+            Route::post('/store', [PaketController::class, 'store'])->name('admin.paket.store');
+        });
+
     });
 
     /*
@@ -225,6 +246,8 @@ Route::middleware(['role:admin'])->group(function () {
         ->name('datatables.universities');
     Route::post('/datatables/universitas', [DataTablesController::class, 'universitas'])
     ->name('datatables.universitas');
+    Route::post('/datatables/paket', [DataTablesController::class, 'paket'])
+        ->name('datatables.paket');
 });
 
 Route::middleware(['role:user'])->group(function () {

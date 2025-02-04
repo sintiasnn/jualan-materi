@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Constants;
 use App\Models\ClassContent;
 use App\Models\PaketList;
 use App\Models\TransaksiUser;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PaketController extends Controller
 {
@@ -75,6 +77,52 @@ class PaketController extends Controller
             ], 404);
         }
     }
+
+    /**
+     * Store data for a package.
+     */
+    public function store(Request $request){
+        $request->validate([
+            'input-paket-image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        if($request->hasFile('input-paket-image')){
+            $paketImage = $request->file('input-paket-image');
+            $filename = time() . '.' . $paketImage->getClientOriginalName();
+        }
+        $paketItem = [
+            'image' => $filename,
+            'nama_paket' => $request->nama_paket,
+            'audience' => $request->audience,
+            'tipe' => $request->tipe,
+            'harga' => $request->harga,
+            'tier' => $request->tier,
+            'deskripsi' => $request->deskripsi,
+            'active_status' => 1
+        ];
+
+        try {
+
+            DB::beginTransaction();
+            $paket = PaketList::create($paketItem);
+
+            if($paket->saveOrFail()){
+                DB::commit();
+                if($request->hasFile('input-paket-image')){
+                    Storage::put('/public' . Constants::PAKET_IMG_DIR . $filename, file_get_contents($paketImage->getRealPath()));
+                }
+                return redirect()->route('admin.paket')->with('message', 'Paket berhasil ditambahkan');
+            }
+            else {
+                DB::rollBack();
+                return redirect()->route('admin.paket.create')->with('error', true);
+            }
+        } catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->route('admin.paket.create')->with('error-message', $e->getMessage());
+        }
+    }
+
 
     /**
      * Check if the current user owns the package and what content they can access.

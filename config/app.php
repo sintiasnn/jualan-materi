@@ -1,5 +1,6 @@
 <?php
 
+use App\Constants\Constants;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -185,6 +186,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Constants' => Constants::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ])->toArray(),
 

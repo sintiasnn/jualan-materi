@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ActiveSession;
 use App\Models\ClassContent;
 use App\Models\Domain;
+use App\Models\Materi;
+use App\Models\PaketList;
 use App\Models\Subdomain;
 use App\Models\TransaksiUser;
 use App\Models\User;
@@ -541,4 +543,78 @@ class DataTablesController extends Controller
             ], 500);
         }
     }
+
+    public function paket(Request $request){
+        try {
+            $params = $this->getBaseQuery($request);
+
+            $query = PaketList::query();
+            if (!empty($params['search'])) {
+                $query->where(function($q) use ($params) {
+                    $q->where('nama_paket', 'like', "%{$params['search']}%")
+                        ->orWhere('deskripsi', 'like', "%{$params['search']}%");
+                });
+            }
+
+            if($request->filled('tipeFilter')){
+                $query->where('tipe', $request->tipeFilter);
+            }
+
+            if($request->filled('tierFilter')){
+                $query->where('tier', $request->tierFilter);
+            }
+
+            // Apply order
+            $orderColumn = $params['order'][0]['column'] ?? 0;
+            $orderDir = $params['order'][0]['dir'] ?? 'asc';
+
+            /*switch($orderColumn) {
+                case 1:
+                    $query->orderBy('code', $orderDir);
+                    break;
+                case 2:
+                    $query->orderBy('keterangan', $orderDir);
+                    break;
+                default:
+                    $query->orderBy('code', $orderDir);
+            }*/
+
+            $totalRecords = $query->count();
+
+            $results = $query->skip($params['start'])
+                ->take($params['length'])
+                ->get();
+
+            // Add debug logging
+            \Log::info('Query results:', $results->toArray());
+
+            return response()->json([
+                'draw' => (int)$params['draw'],
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $totalRecords,
+                'data' => $results->map(fn($paket, $index) => [
+                    'DT_RowIndex' => $params['start'] + $index + 1,
+                    'nama_paket' => $paket->nama_paket,
+                    'tipe' => $paket->tipe,
+                    'tier' => $paket->tier,
+                    'harga' => $paket->harga,
+                    'discount' => $paket->discount,
+                    'actions' => [
+                        'edit_url' => route('admin.paket.edit', $paket->id),
+                        'delete' => $paket->id,
+                    ]])
+            ]);
+
+        } catch (\Exception $e){
+            \Log::error('DataTables Error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => 'An error occurred while fetching data'
+            ], 500);
+        }
+    }
+
 }

@@ -31,8 +31,8 @@
                      </a>
                     @if(auth()->user()->role === 'admin')
                     <div class="sidenav-menu-heading">Paket</div>
-                    <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
-                        href="{{ '/user/beli' }}">
+                    <a class="nav-link {{ request()->is('admin/paket*') ? 'active' : '' }}"
+                        href="{{ '/admin/paket' }}">
                         <div class="nav-link-icon"><i data-feather="package"></i></div>
                         Data Paket
                     </a>
@@ -71,7 +71,7 @@
                     <div class="sidenav-menu-heading">App</div>
 
                     <a class="nav-link {{ request()->is('user/beli*') ? 'active' : '' }}"
-                        href="{{ '/user/beli' }}">
+                        href="#">
                         <div class="nav-link-icon"><i data-feather="settings"></i></div>
                         Konfigurasi
                     </a>

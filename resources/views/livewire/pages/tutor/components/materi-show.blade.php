@@ -33,20 +33,14 @@
                             <td> : {{ $content->subdomain->keterangan}}</td>
                         </tr>
                         <tr>
-                            <th class="pe-3">Materi</th>
-                            <td> : {{ $content->nama_materi}}</td>
-                        </tr>
-                        <tr>
-                            <th class="pe-3">Submateri</th>
-                            <td> : {{ $content->nama_submateri}}</td>
-                        </tr>
-                        <tr>
-                            <th class="pe-3">Dibuat sejak</th>
-                            <td> : {{ $content->created_at->diffForHumans() }}</td>
-                        </tr>
-                        <tr>
-                            <th class="pe-3">Diperbarui sejak</th>
-                            <td> : {{ $content->updated_at->diffForHumans() }}</td>
+                            <th class="pe-3">Tingkat Kesulitan</th>
+                            <?php
+                                $level = '';
+                                foreach (range(1, $content->tingkat_kesulitan) as $item){
+                                    $level .= '⭐';
+                                }
+                            ?>
+                            <td> : {{$level}}</td>
                         </tr>
                     </table>
                 </div>
@@ -56,12 +50,13 @@
 
                 <div class="card-header">
                     <h4 class="h4">{{ $content->nama_materi }}</h4>
-                    <p class="text-gray-600 mb-0">{{ $content->nama_submateri }}</p>
                 </div>
 
                 <div class="card-body">
                     <div style="overflow-wrap: break-word;">
-                        {!! $content->deskripsi !!}
+                        @foreach($content->submateri as $submateri)
+                            {!! $submateri->deskripsi !!}
+                        @endforeach
                     </div>
                 </div>
 
@@ -73,10 +68,5 @@
 
         </div>
     </main>
-
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-
 
 </x-app-layout>

@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Livewire\Pages\Tutor\Materi;
 use App\Models\ClassContent;
-use App\Models\Classes;
 use App\Models\Domain;
-use App\Models\RefBidangList;
+use App\Models\Materi;
 use App\Models\Subdomain;
+use App\Models\Submateri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
 {
@@ -20,16 +18,32 @@ class MateriController extends Controller
     }
 
     public function create(){
-        $subdomains = Subdomain::all();
-        $domains = Domain::all();
-        return view('livewire.pages.tutor.components.materi-form', compact( 'subdomains', 'domains'));
+        return view('livewire.pages.tutor.materi-create');
     }
 
     public function store(Request $request){
+        $materiItem = [
+            'subdomain_id' => $request->subdomain_id,
+            'kode_materi' => $request->kode_materi,
+            'nama_materi' => $request->nama_materi,
+            'tingkat_kesulitan' => $request->tingkat_kesulitan,
+        ];
+
         try {
             DB::beginTransaction();
-            $classContent = new ClassContent($request->request->all());
-            if($classContent->saveOrFail()){
+            $materi = Materi::create($materiItem);
+
+            foreach(range(1, $request->submateri_count) as $idx){
+                $submateriItem[$idx] = [
+                    'materi_id' => $materi->id,
+                    'kode_submateri' => $request->kode_submateri[$idx],
+                    'nama_submateri' => $request->nama_submateri[$idx],
+                    'deskripsi' => $request->deskripsi[$idx],
+                ];
+            }
+
+            if($materi->saveOrFail()){
+                Submateri::insert($submateriItem);
                 DB::commit();
                 return redirect()->route('materi.index')->with('message', 'materi berhasil ditambahkan');
             }
@@ -44,7 +58,8 @@ class MateriController extends Controller
     }
 
     public function show($id){
-        $content = ClassContent::find($id);
+        $content = Materi::find($id);
+        $content->submateri = Submateri::where('materi_id', $id)->get();
         $content->viewOnly = true;
         return view('livewire.pages.tutor.components.materi-show', [
             'content' => $content,
@@ -52,12 +67,12 @@ class MateriController extends Controller
     }
 
     public function edit($id){
-        $content = ClassContent::find($id);
+        $content = Materi::find($id);
         $subdomains = Subdomain::all();
         $domains = Domain::all();
         $content->viewOnly = false;
         $content->editMode = true;
-        return view('livewire.pages.tutor.components.materi-form', [
+        return view('livewire.pages.tutor.materi-create', [
             'content' => $content,
             'subdomains' => $subdomains,
             'domains' => $domains,

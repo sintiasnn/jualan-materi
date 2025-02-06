@@ -320,9 +320,7 @@ class DataTablesController extends Controller
             $params = $this->getBaseQuery($request);
 
             // Remove the select() call since withCount adds a virtual column
-            if ($request->filled('item') && $request->item != 'materi') {
-                $query = ClassContent::query();
-            }
+            $query = Materi::query();
 
             if ($request->filled('subdomainFilter')) {
                 $query->where('subdomain_id', $request->subdomainFilter);
@@ -338,7 +336,7 @@ class DataTablesController extends Controller
             if (!empty($params['search'])) {
                 $query->where(function($q) use ($params) {
                     $q->where('nama_materi', 'like', "%{$params['search']}%")
-                        ->orWhere('nama_submateri', 'like', "%{$params['search']}%");
+                        ->orWhere('kode_materi', 'like', "%{$params['search']}%");
                 });
             }
 
@@ -351,7 +349,7 @@ class DataTablesController extends Controller
                     $query->orderBy('nama_materi', $orderDir);
                     break;
                 case 2:
-                    $query->orderBy('nama_submateri', $orderDir);
+                    $query->orderBy('reference', $orderDir);
                     break;
                 default:
                     $query->orderBy('nama_materi', $orderDir);
@@ -375,8 +373,8 @@ class DataTablesController extends Controller
                     'DT_RowIndex' => $params['start'] + $index + 1,
                     'kode_materi' => $content->kode_materi,
                     'nama_materi' => $content->nama_materi,
-                    'kode_submateri' => $content->kode_submateri,
-                    'nama_submateri' => $content->nama_submateri,
+                    'tingkat_kesulitan' => $content->tingkat_kesulitan,
+                    'reference' => $content->reference,
                     'created_at' => Carbon::parse($content->created_at)->translatedFormat('d F Y'),
                     'actions' => [
                         'edit_url' => route('materi.edit', $content->id),

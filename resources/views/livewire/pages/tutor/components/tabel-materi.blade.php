@@ -51,8 +51,8 @@ new class extends Component {
                         <th>No</th>
                         <th>Kode Materi</th>
                         <th>Nama Materi</th>
-                        <th>Kode Submateri</th>
-                        <th>Nama Submateri</th>
+                        <th>Tingkat Kesulitan</th>
+                        <th>Referensi</th>
                         <th>Created at</th>
                         <th>Action</th>
                     </tr>
@@ -179,7 +179,6 @@ new class extends Component {
                     data: function(d) {
                         d.domainFilter = $('#domainFilter').val();
                         d.subdomainFilter = $('#subdomainFilter').val();
-                        d.item = 'submateri';
                     }
                 },
                 language: {
@@ -204,8 +203,8 @@ new class extends Component {
                     },
                     { data: 'kode_materi' },
                     { data: 'nama_materi' },
-                    { data: 'kode_submateri' },
-                    { data: 'nama_submateri' },
+                    { data: 'tingkat_kesulitan' },
+                    { data: 'reference' },
                     { data: 'created_at' },
                     {
                         data: 'actions',

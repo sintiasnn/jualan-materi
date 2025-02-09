@@ -10,6 +10,7 @@ new class extends Component {
     public $paket_id;
     public $domain;
     public $subdomain;
+    public $tingkat_kesulitan;
 
     public function mount($id, $code)
     {
@@ -23,11 +24,16 @@ new class extends Component {
         $classContent->submateri = Submateri::where('materi_id', $classContent->id)->get();
         $this->contents = $classContent->submateri;
 
+        foreach (range(1, $classContent->tingkat_kesulitan) as $item){
+            $this->tingkat_kesulitan .= '⭐';
+        }
+
         $subdomain_id = $classContent->first()->subdomain_id;
         $subdomain = Subdomain::find($subdomain_id);
         $this->subdomain = $subdomain->keterangan;
         $this->domain = $subdomain->domain->keterangan;
     }
+
 
 };
 ?>
@@ -47,6 +53,10 @@ new class extends Component {
                 <tr>
                     <th class="pe-3">Subdomain</th>
                     <td> : {{$subdomain}}</td>
+                </tr>
+                <tr>
+                    <th class="pe-3">Tingkat Kesulitan</th>
+                    <td> : {{$tingkat_kesulitan}}</td>
                 </tr>
 
             </table>

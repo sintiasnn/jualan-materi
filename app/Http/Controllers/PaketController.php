@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\Constants;
 use App\Models\ClassContent;
+use App\Models\Materi;
 use App\Models\PaketList;
 use App\Models\TransaksiUser;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class PaketController extends Controller
     public function content(Request $request){
         $code = $request->route('code');
         $id =  $request->route('id');
-        $materi = ClassContent::where('kode_materi',$code)
+        $materi = Materi::where('kode_materi',$code)
             ->select('kode_materi','nama_materi')->distinct()->first();
         return view('livewire.pages.user.content',[
             'id' => $id,

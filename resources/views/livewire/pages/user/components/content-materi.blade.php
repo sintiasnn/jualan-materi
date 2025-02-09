@@ -1,9 +1,8 @@
 <?php
 
-use App\Models\ClassContent;
-use App\Models\PaketContent;
-use App\Models\PaketList;
-use App\Models\TransaksiUser;
+use App\Models\Materi;
+use App\Models\Subdomain;
+use App\Models\Submateri;
 use Livewire\Volt\Component;
 
 new class extends Component {
@@ -20,15 +19,14 @@ new class extends Component {
 
     public function loadContent($code)
     {
-        $classContent = ClassContent::where('kode_materi', $code);
-        $this->contents = $classContent->get();
+        $classContent = Materi::where('kode_materi', $code)->first();
+        $classContent->submateri = Submateri::where('materi_id', $classContent->id)->get();
+        $this->contents = $classContent->submateri;
 
-        $subdomain_id = $classContent->select('subdomain_id')->with('subdomain')->distinct()->first();
-        $subdomain = \App\Models\Subdomain::find($subdomain_id);
-        $this->subdomain = $subdomain->first()->keterangan;
-        foreach ($subdomain as $item){
-            $this->domain = $item->domain->keterangan;
-        }
+        $subdomain_id = $classContent->first()->subdomain_id;
+        $subdomain = Subdomain::find($subdomain_id);
+        $this->subdomain = $subdomain->keterangan;
+        $this->domain = $subdomain->domain->keterangan;
     }
 
 };

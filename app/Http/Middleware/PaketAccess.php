@@ -2,8 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\ClassContent;
-use App\Models\PaketMateri;
+use App\Models\PaketList;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\TransaksiUser;
@@ -52,11 +51,8 @@ class PaketAccess
 
         $hasAccessContent = true;
         if(!is_null($materi_code)){
-            $paketContent = PaketMateri::where('paket_id', $paketId)->with('content')->get();
-            foreach ($paketContent as $content) {
-                $content->kode_materi = ClassContent::find($content->content_id)->kode_materi;
-            }
-            $hasAccessContent = $paketContent->contains('kode_materi', $materi_code);
+            $paketMateri = PaketList::find($paketId)->materi;
+            $hasAccessContent = $paketMateri->contains('kode_materi', $materi_code);
         }
 
         // Allow access for free pakets or if user has valid transaction

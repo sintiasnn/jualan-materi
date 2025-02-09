@@ -14,19 +14,10 @@
         </div>
     </header>
 
-    <div class="row">
-        <div class="col col-end-1 m-3 px-4">
-
-        </div>
-    </div>
-
-    <div class="row">
-
-        <div class="col">
-            <!-- Main page content -->
+    <!-- Main page content -->
+    <div class="container-xl px-4">
+        <div class="row">
             <livewire:pages.tutor.components.paket-materi/>
-
         </div>
-
     </div>
 </x-app-layout>

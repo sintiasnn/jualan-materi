@@ -2,7 +2,7 @@
 
 use App\Models\PaketList;
 use App\Models\TransaksiUser;
-use App\Models\PaketContent;
+use App\Models\PaketMateri;
 use Livewire\Volt\Component;
 
 new class extends Component {
@@ -24,7 +24,7 @@ new class extends Component {
             ->pluck('paket_id'); // Ambil hanya paket_id yang sudah dibeli atau pending
 
         // Exclude the purchased packages from the query
-        if(request()->is('paket*')){
+        if (request()->is('paket*')) {
             $query->whereIn('id', $purchasedPackages);
         }
 
@@ -35,7 +35,7 @@ new class extends Component {
 ?>
 
 <main>
-    <div class="container-fluid px-4">
+    <div class="container-xl px-4">
         <div class="card">
             <div class="card-title">
                 <div class="card-header">
@@ -50,7 +50,8 @@ new class extends Component {
 
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="card h-100 shadow-sm rounded-3">
-                                    <img class="card-img-top" src="{{ asset('assets/img/paket/' . $paket->image) }}" alt="{{ $paket->nama_paket }}">
+                                    <img class="card-img-top" src="{{ asset('assets/img/paket/' . $paket->image) }}"
+                                         alt="{{ $paket->nama_paket }}">
                                     <div class="card-body">
                                         <!-- Badges -->
                                         <div class="mb-2">
@@ -103,14 +104,18 @@ new class extends Component {
                                     </div>
                                     @if(request()->is('paket*'))
                                         <div class="card-footer bg-white text-center">
-                                            <a href="{{route('paket.index').'/'. $paket->id}}" class="btn btn-md btn-primary w-100">Buka Paket</a>
+                                            <a href="{{route('paket.index').'/'. $paket->id}}"
+                                               class="btn btn-md btn-primary w-100">Buka Paket</a>
                                         </div>
                                     @else
                                         <div class="card-footer bg-white text-center">
                                             @if($paket->materi->count() > 0)
-                                                <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-primary w-100">Lihat Detail Materi</a>
+                                                <a href="{{route('tutor.paket.materi.create', $paket->id)}}"
+                                                   class="btn btn-md btn-primary w-100">Lihat Detail Materi</a>
                                             @else
-                                                <a href="{{route('tutor.paket.materi.create', $paket->id)}}" class="btn btn-md btn-success w-100">Tambahkan Materi pada Paket Ini</a>
+                                                <a href="{{route('tutor.paket.materi.create', $paket->id)}}"
+                                                   class="btn btn-md btn-success w-100">Tambahkan Materi pada Paket
+                                                    Ini</a>
                                             @endif
                                         </div>
                                     @endif

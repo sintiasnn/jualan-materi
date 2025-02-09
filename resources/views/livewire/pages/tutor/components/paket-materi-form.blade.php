@@ -2,7 +2,7 @@
 
 use App\Models\PaketList;
 use App\Models\TransaksiUser;
-use App\Models\PaketContent;
+use App\Models\PaketMateri;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Component;
 

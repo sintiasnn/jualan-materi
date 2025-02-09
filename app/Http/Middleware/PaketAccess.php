@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ClassContent;
-use App\Models\PaketContent;
+use App\Models\PaketMateri;
 use Closure;
 use Illuminate\Http\Request;
 use App\Models\TransaksiUser;
@@ -52,7 +52,7 @@ class PaketAccess
 
         $hasAccessContent = true;
         if(!is_null($materi_code)){
-            $paketContent = PaketContent::where('paket_id', $paketId)->with('content')->get();
+            $paketContent = PaketMateri::where('paket_id', $paketId)->with('content')->get();
             foreach ($paketContent as $content) {
                 $content->kode_materi = ClassContent::find($content->content_id)->kode_materi;
             }

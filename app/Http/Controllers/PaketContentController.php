@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassContent;
-use App\Models\PaketContent;
+use App\Models\Materi;
+use App\Models\PaketMateri;
 use App\Models\PaketList;
+use App\Models\Submateri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,30 +21,32 @@ class PaketContentController extends Controller
 
     public function create($id){
         $materi = PaketList::find($id);
+        foreach($materi->materi as $materi_item){
+            $materi_item->submateri = Submateri::where('materi_id', $materi_item->id)->select('kode_submateri','nama_submateri')->get();
+        }
         return view('livewire.pages.tutor.paket-form', [
-            'arrayMateri' => $this->restructureMateri($materi->materi),
+            'arrayMateri' => $materi->materi,
             'namaPaket' => $materi->nama_paket,
             'id' =>$id
         ]);
     }
 
     public function store(Request $request, $id){
-        $content_id = $request->content_id;
+        $materi_id = $request->materi_id;
+
         try {
-            foreach ($content_id as $content) {
+            foreach ($materi_id as $materi) {
                 $data[] = [
-                    'content_id' => $content,
+                    'materi_id' => $materi,
                     'paket_id' => $id,
-                    'activation_date' => now(),
-                    'expired_date' => now(),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
             }
 
             DB::beginTransaction();
-            $paketContent = new PaketContent();
-            if(!is_null($content_id) && $paketContent->insert($data)){
+            $paketContent = new PaketMateri();
+            if(!is_null($materi_id) && $paketContent->insert($data)){
                 DB::commit();
                 return redirect()->route('tutor.paket.materi.create',$id)->with('message', 'materi berhasil ditambahkan');
             }
@@ -60,45 +63,19 @@ class PaketContentController extends Controller
     public function destroy($id){
         try{
             DB::beginTransaction();
-            PaketContent::find($id)->delete();
+            PaketMateri::find($id)->delete();
             DB::commit();
-            return response()->json(['message' => 'Data berhasil dihapus', 'success' => true]);
+            return response()->json(['message' => 'Materi berhasil dihapus dari paket', 'success' => true]);
         } catch (\Exception $e){
             DB::rollBack();
-            return response($e->getMessage(), 500);
+            return response('Hapus materi dari paket gagal', 500);
         }
-    }
-
-    public function restructureMateri($materis){
-        $arrayMateri = [];
-        foreach ($materis as $key => $materi) {
-            $arrayMateri[$materi->kode_materi]['kode_materi'] = $materi->kode_materi;
-            $arrayMateri[$materi->kode_materi]['nama_materi'] = $materi->nama_materi;
-            $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['kode_submateri'] = $materi->kode_submateri;
-            $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['nama_submateri'] = $materi->nama_submateri;
-            $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['id'] = $materi->id;
-            if(isset($materi->isSelected)){
-                $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['is_selected'] = $materi->isSelected;
-            }
-            if(isset($materi->paket_content_id)){
-                $arrayMateri[$materi->kode_materi]['submateri'][$materi->kode_submateri]['paket_content_id'] = $materi->paket_content_id;
-            }
-
-            $arrayMateri[$materi->kode_materi]['submateri'] = array_map(function($array) {
-                return (object) $array;
-            }, $arrayMateri[$materi->kode_materi]['submateri']);
-        }
-        $arrayMateri = array_map(function($array) {
-            return (object) $array;
-        }, $arrayMateri);
-
-        return $arrayMateri;
     }
 
     public function materi(Request $request){
 
         try {
-            $query  = ClassContent::select('id','subdomain_id','kode_materi','nama_materi','kode_submateri','nama_submateri');
+            $query  = Materi::select('id','subdomain_id','kode_materi','nama_materi');
             if($request->filled('subdomain')){
                 $query->where('subdomain_id', $request->subdomain);
             }
@@ -110,12 +87,13 @@ class PaketContentController extends Controller
             $data = $query->get();
             if($request->filled('paket')){
                 foreach($data as $materi){
-                    $paket = PaketContent::where('paket_id', $request->paket)->where('content_id', $materi->id);
-                    $materi->isSelected = $paket->exists();
-                    $materi->paket_content_id = $paket->pluck('id')[0] ?? null;
+                    $paket = PaketMateri::where('paket_id', $request->paket)->where('materi_id', $materi->id);
+                    $materi->is_selected = $paket->exists();
+                    $materi->paket_materi_id = $paket->pluck('id')[0] ?? null;
+                    $materi->submateri = Submateri::where('materi_id', $materi->id)->select('kode_submateri','nama_submateri')->get();
                 }
             }
-            return $this->restructureMateri($data);
+            return $data;
 
         } catch (\Exception $e) {
             \Log::error('Fetch Error:', [

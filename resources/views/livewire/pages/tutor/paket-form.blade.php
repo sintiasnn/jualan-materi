@@ -170,20 +170,22 @@
                                         subHtml += `
                                     <div class="col mb-2 d-flex flex-row justify-content-between">
                                     <div>
-                                        <input class="form-check-input" type="checkbox" name="content_id[]" value="${ell.id}" id="check-submateri-${el.kode_materi}" ${ell.is_selected ? 'checked disabled' : ''}/>
                                             <label class="form-check-label" for="check-submateri-${el.kode_materi}">
                                                 ${ell.nama_submateri}
                                             </label>
                                     </div>
-                                     ${ell.paket_content_id ? `<button class="btn btn-outline-danger btn-sm py-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Materi dari Paket" onclick="deleteMateri(${ell.paket_content_id})" href="#">
-                                            <i class="fa-regular fa-trash-can"></i>
-                                        </button>` : ''}
-                                    </div>
-                                    `
+
+                                    </div>`
                                     })
 
                                     html += `
-                                <h5 class="h5 my-2">${el.nama_materi}</h5>
+                                <input class="form-check-input" type="checkbox" name="materi_id[]" value="${el.id}" id="check-materi-${el.kode_materi}" ${el.is_selected ? 'checked disabled' : ''}/>
+                                <label class="form-check-label h4" for="check-materi-${el.kode_materi}">
+                                                ${el.nama_materi}
+                                            </label>
+${el.paket_materi_id ? `<button class="btn btn-outline-danger btn-sm py-1 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Materi dari Paket" onclick="deleteMateri(${el.paket_materi_id})" href="#">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>` : ''}
                                         <div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1 row-cols-1 mb-5">
                                 ${subHtml}
                                 </div>`

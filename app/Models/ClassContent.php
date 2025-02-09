@@ -54,7 +54,7 @@ class ClassContent extends Model
     }
 
     public function content(): HasOne {
-        return $this->hasOne(PaketContent::class, 'content_id');
+        return $this->hasOne(PaketMateri::class, 'materi_id');
     }
 
     // Scopes

@@ -45,8 +45,7 @@ class PaketList extends Model
 
     public function materi(): BelongsToMany
     {
-        return $this->belongsToMany(ClassContent::class, 'paket_content', 'paket_id', 'content_id')
-        ->withPivot(['activation_date', 'expired_date']);
+        return $this->belongsToMany(Materi::class, 'paket_materi', 'paket_id', 'materi_id');
     }
 
     public function transactions(): HasMany

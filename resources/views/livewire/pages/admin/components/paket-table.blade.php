@@ -194,9 +194,6 @@ new class extends Component {
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="${data.edit_url}" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Paket">
                                             <i data-feather="edit"></i>
                                         </a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" href="${data.view_url}" data-bs-toggle="tooltip" data-bs-placement="top" title="View Paket">
-                                            <i data-feather="eye"></i>
-                                        </a>
                                         <button class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#deletePaketModal" data-bs-placement="top" title="Hapus Paket" wire:click="setPaketId(${data.delete})" href="javascript:void(0);">
                                             <i data-feather="trash-2"></i>
                                         </button>

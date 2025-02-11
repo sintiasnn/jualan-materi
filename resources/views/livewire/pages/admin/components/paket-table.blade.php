@@ -172,8 +172,20 @@ new class extends Component {
                 {data: 'nama_paket'},
                 {data: 'tipe'},
                 {data: 'tier'},
-                {data: 'harga'},
-                {data: 'discount'},
+                {
+                    data: 'harga',
+                    render: function (data) {
+                        let number = data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return `<div>Rp. ${number}</div>`
+                    }
+                },
+                {
+                    data: 'discount',
+                    render: function (data){
+                        let number = data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        return `<div>Rp. ${number}</div>`
+                    }
+                },
                 {
                     data: 'actions',
                     orderable: false,

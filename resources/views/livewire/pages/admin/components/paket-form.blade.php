@@ -115,7 +115,7 @@ new class extends Component {
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputHarga">Harga <span class="text-sm">(Rp.)</span></label>
                                         <div class="input-group mb-3">
-                                            <input type="number" min="0" name="harga" class="form-control"
+                                            <input id="inputHarga" min="0" name="harga" class="form-control"
                                                    value="{{isset($paketList) ? $paketList->harga : old('harga')}}"
                                                    placeholder="Harga" required>
                                         </div>
@@ -129,7 +129,7 @@ new class extends Component {
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputDiscount">Diskon <span class="text-sm">(Rp.)</span></label>
                                         <div class="input-group mb-3">
-                                            <input type="number" min="0" name="discount" class="form-control"
+                                            <input id="inputDiscount" min="0" name="discount" class="form-control"
                                                    value="{{isset($paketList) ? $paketList->discount : old('discount')}}"
                                                    placeholder="Diskon" required>
                                         </div>
@@ -204,11 +204,27 @@ new class extends Component {
     </div>
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.7/autoNumeric.min.js" integrity="sha512-PeXqWg6jrDiMcCruPw4Xr59oeIzqHlD2z7ffueHcWQE7+1DuzPAQz1ywu3gfCHAPXxHE6RejKe2DlhjYTmQgLw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @script
 <script>
-    $('#input-paket-image').on('change', function(){
-        console.log($(this).val());
-    })
+    document.addEventListener('livewire:initialized', function (){
+        $('#input-paket-image').on('change', function(){
+            console.log($(this).val());
+        })
 
+        let autoNumericOptions = {
+            digitGroupSeparator: '.',
+            decimalCharacter: ',',
+            decimalCharacterAlternative: '.',
+            currencySymbol: 'Rp ',
+            currencySymbolPlacement: 'p',
+            roundingMethod: 'B',
+            unformatOnSubmit: true,
+            allowDecimalPadding: false
+        };
+
+        new AutoNumeric('#inputHarga',autoNumericOptions);
+        new AutoNumeric('#inputDiscount',autoNumericOptions);
+    })
 </script>
 @endscript

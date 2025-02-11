@@ -15,6 +15,7 @@ class PaketList extends Model
         'audience',
         'tipe',
         'harga',
+        'discount',
         'tier',
         'deskripsi',
         'active_status'
@@ -22,6 +23,7 @@ class PaketList extends Model
 
     protected $casts = [
         'harga' => 'decimal:0',
+        'discount' => 'decimal:0',
         'active_status' => 'boolean',
         'audience' => 'string',
         'tipe' => 'string',

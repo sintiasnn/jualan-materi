@@ -141,6 +141,7 @@ Route::middleware(['auth', 'device.limit', 'check.active.session'])->group(funct
 
 
             Route::post('/store', [PaketController::class, 'store'])->name('admin.paket.store');
+            Route::post('/update/{id}', [PaketController::class, 'update'])->name('admin.paket.update');
         });
 
     });

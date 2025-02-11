@@ -32,10 +32,7 @@ new class extends Component {
 
         <form method="POST"
               enctype="multipart/form-data"
-              action="{{isset($editMode) && $editMode ? route('materi.update',$paketList->id) : route('admin.paket.store')}}">
-            @if(isset($editMode) && $editMode)
-                @method('PUT')
-            @endif
+              action="{{isset($editMode) && $editMode ? route('admin.paket.update',$paketList->id) : route('admin.paket.store')}}">
             @csrf
             <div class="row gx-4">
                 <div class="col-lg-8">
@@ -116,7 +113,7 @@ new class extends Component {
                                 <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                     <!-- Harga-->
                                     <div class="mb-3">
-                                        <label class="small mb-1" for="inputHarga">Harga</label>
+                                        <label class="small mb-1" for="inputHarga">Harga <span class="text-sm">(Rp.)</span></label>
                                         <div class="input-group mb-3">
                                             <input type="number" min="0" name="harga" class="form-control"
                                                    value="{{isset($paketList) ? $paketList->harga : old('harga')}}"
@@ -130,7 +127,7 @@ new class extends Component {
                                 <div class="col col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                     <!-- Discount -->
                                     <div class="mb-3">
-                                        <label class="small mb-1" for="inputDiscount">Diskon</label>
+                                        <label class="small mb-1" for="inputDiscount">Diskon <span class="text-sm">(Rp.)</span></label>
                                         <div class="input-group mb-3">
                                             <input type="number" min="0" name="discount" class="form-control"
                                                    value="{{isset($paketList) ? $paketList->discount : old('discount')}}"
@@ -166,11 +163,17 @@ new class extends Component {
                     <div class="card mb-4">
                         <div class="card-header">Foto Paket</div>
                         <div class="card-body text-center">
-                            <img id="paket-image" class="img-account-profile rounded-circle mb-2"
-                                 src="{{ asset('assets/img/avatar/default.jpg') }}"
-                                 style="width: 150px; height: 150px; overflow: hidden; position: relative; justify-content: center; align-items: center;"/>
-
-                            <div class="small font-italic text-muted mb-4">JPG atau PNG tidak lebih dari 1 MB</div>
+                            @if(isset($paketList->image))
+                                <img class="mb-2"
+                                     src="{{ file_exists(public_path() . '/storage' . Constants::PAKET_IMG_DIR . $paketList->image) ? asset('storage' . Constants::PAKET_IMG_DIR . $paketList->image) : asset(Constants::PAKET_IMG_DIR . $paketList->image) }}"
+                                     style="max-width: 100%; max-height: 100%;  overflow: hidden; position: relative; justify-content: center; align-items: center;" alt="paket-image"/>
+                                <div class="small font-italic text-muted mb-4">{{$paketList->image}}</div>
+                            @else
+                                <img class="img-account-profile rounded-circle mb-2"
+                                     src="{{asset('assets/img/avatar/default.jpg') }}"
+                                     style="width: 150px; height: 150px; overflow: hidden; position: relative; justify-content: center; align-items: center;"/>
+                                <div class="small font-italic text-muted mb-4">JPG atau PNG tidak lebih dari 1 MB</div>
+                            @endif
                             <input type="file" name="input-paket-image" id="input-paket-image" accept="image/*" class="form-control mb-3"/>
                         </div>
                     </div>
@@ -188,14 +191,11 @@ new class extends Component {
                                     {{ __('Kembali') }}
                                 </a>
                             </div>
-                            @if(!$editMode)
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">
-                                        {{ __('Submit') }}
-                                    </button>
-                                </div>
-                            @endif
-
+                            <div class="d-grid">
+                                <button type="submit" class="btn {{isset($editMode) && $editMode ? 'btn-warning' : 'btn-primary'}}">
+                                    {{isset($editMode) && $editMode ? __('Update') : __('Submit') }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

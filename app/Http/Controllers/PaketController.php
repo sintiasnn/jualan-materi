@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Constants;
-use App\Models\ClassContent;
 use App\Models\Materi;
 use App\Models\PaketList;
 use App\Models\TransaksiUser;
@@ -97,6 +96,7 @@ class PaketController extends Controller
             'audience' => $request->audience,
             'tipe' => $request->tipe,
             'harga' => $request->harga,
+            'discount' => $request->discount,
             'tier' => $request->tier,
             'deskripsi' => $request->deskripsi,
             'active_status' => 1
@@ -121,6 +121,59 @@ class PaketController extends Controller
         } catch (\Exception $e){
             DB::rollBack();
             return redirect()->route('admin.paket.create')->with('error-message', $e->getMessage());
+        }
+    }
+
+    public function update(Request $request, $id){
+
+        if($request->hasFile('input-paket-image')){
+            $request->validate([
+                'input-paket-image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
+
+            $paketImage = $request->file('input-paket-image');
+            $filename = time() . '.' . $paketImage->getClientOriginalName();
+            $paketItem = [
+                'image' => $filename,
+                'nama_paket' => $request->nama_paket,
+                'audience' => $request->audience,
+                'tipe' => $request->tipe,
+                'harga' => $request->harga,
+                'discount' => $request->discount,
+                'tier' => $request->tier,
+                'deskripsi' => $request->deskripsi,
+                'active_status' => 1
+            ];
+        } else {
+            $paketItem = [
+                'nama_paket' => $request->nama_paket,
+                'audience' => $request->audience,
+                'tipe' => $request->tipe,
+                'harga' => $request->harga,
+                'discount' => $request->discount,
+                'tier' => $request->tier,
+                'deskripsi' => $request->deskripsi,
+                'active_status' => 1
+            ];
+        }
+
+        try {
+
+            DB::beginTransaction();
+            $paketList = PaketList::find($id);
+            if($request->hasFile('input-paket-image')){
+                $prev_filename = $paketList->image;
+                unlink(public_path() . '/storage' . Constants::PAKET_IMG_DIR . $prev_filename);
+                Storage::put('/public' . Constants::PAKET_IMG_DIR . $filename, file_get_contents($paketImage->getRealPath()));
+            }
+
+            $paketList->update($paketItem);
+            DB::commit();
+
+            return redirect()->route('admin.paket')->with('message', 'Paket berhasil ditambahkan');
+        } catch (\Exception $e){
+            DB::rollBack();
+            return redirect()->route('admin.paket.edit', $id)->with('error-message', $e->getMessage());
         }
     }
 

@@ -36,16 +36,6 @@
                         <div class="nav-link-icon"><i data-feather="package"></i></div>
                         Data Paket
                     </a>
-                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
-                        href="{{ '/user/transaksi' }}">
-                        <div class="nav-link-icon"><i data-feather="shopping-bag"></i></div>
-                        Data Transaksi
-                    </a>
-                    <a class="nav-link {{ request()->is('user/transaksi*') ? 'active' : '' }}"
-                        href="{{ '/user/transaksi' }}">
-                        <div class="nav-link-icon"><i data-feather="dollar-sign"></i></div>
-                        Kode Promo
-                    </a>
                     <div class="sidenav-menu-heading">Membership</div>
                     <a class="nav-link {{ request()->is('admin/users*') || request()->is('admin/universitas*') ? 'active' : '' }}" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                         <div class="nav-link-icon"><i data-feather="user"></i></div>

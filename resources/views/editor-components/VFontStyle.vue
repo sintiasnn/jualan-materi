@@ -45,6 +45,17 @@
         >
             <i class="fa-solid fa-strikethrough"></i>
         </button>
+<!--        <button
+            data-bs-toggle="tooltip" data-bs-placement="top"
+            title="Link"
+            type="button"
+            class="btn btn-sm"
+            @click="setLink()"
+            :disabled="!editor.can().chain().focus().toggleStrike().run()"
+            :class="editor.isActive('strike') ? 'btn-primary' : 'btn-outline-primary'"
+        >
+
+        </button>-->
     </div>
 </template>
 <script setup lang="ts">

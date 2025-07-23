@@ -56,8 +56,40 @@
         </div>
 
         <div class="row mb-1">
-            <div class="col-sm-12">
+            <div class="col-sm-12 d-flex">
                 <v-table :editor="editor" />
+
+                <div class="btn-group btn-group-sm rounded-0 me-1">
+                    <button
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Add Link"
+                        class="btn btn-sm btn-outline-primary"
+                        type="button"
+                        @click="editor.chain().focus().addColumnBefore().run()"
+                    >
+                        <i class="fa-solid fa-link"></i>
+                    </button>
+                    <button
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Add Image"
+                        class="btn btn-sm btn-outline-primary"
+                        type="button"
+                        @click="addImage()"
+                    >
+                        <i class="fa-solid fa-image"></i>
+                    </button>
+                    <button
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="Add Video"
+                        class="btn btn-sm btn-outline-primary"
+                        type="button"
+                        @click="editor.chain().focus().addColumnBefore().run()"
+                    >
+                        <i class="fa-solid fa-video"></i>
+                    </button>
+
+
+                </div>
             </div>
         </div>
 
@@ -140,6 +172,7 @@ import Underline from '@tiptap/extension-underline'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
+import Link from '@tiptap/extension-link'
 import {Editor, EditorContent, BubbleMenu, FloatingMenu} from "@tiptap/vue-3";
 import NodeRange from '@tiptap/extension-node-range'
 import { DragHandle } from '@tiptap/extension-drag-handle-vue-3'
@@ -162,6 +195,9 @@ import TableRow from '@tiptap/extension-table-row'
 
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Image from '@tiptap/extension-image'
+import FileHandler from '@tiptap/extension-file-handler'
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 
 import {ref} from "vue";
@@ -206,10 +242,42 @@ export default {
 
     methods: {
         addImage() {
-            const url = window.prompt('URL')
+            const { value: url } = Swal.fire({
+                input: "url",
+                inputLabel: "Image Url",
+                inputPlaceholder: "Enter the URL",
+                showCancelButton: true,
+                cancelButtonColor: "#d33",
+
+            });
             if (url) {
                 this.editor.chain().focus().setImage({ src: url }).run()
             }
+
+           /* const url = window.prompt('URL')
+            this.$swal('Hello Vue world!!!');
+            if (url) {
+                this.editor.chain().focus().setImage({ src: url }).run()
+            }*/
+        },
+
+        setLink() {
+            const previousUrl = this.editor.getAttributes('link').href
+            const url = window.prompt('URL', previousUrl)
+
+            // cancelled
+            if (url === null) {
+                return console.log(url)
+            }
+
+            // empty
+            if (url === '') {
+                this.editor.chain().focus().extendMarkRange('link').unsetLink().run()
+                return console.log(url)
+            }
+
+            // update link
+            this.editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
         },
     },
 
@@ -247,6 +315,53 @@ export default {
                           class: 'details',
                       },
                   }),
+
+                    Link.configure({
+                        openOnClick: false,
+                        defaultProtocol: 'https',
+                    }),
+
+                FileHandler.configure({
+                    allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+                    onDrop: (currentEditor, files, pos) => {
+                        files.forEach(file => {
+                            const fileReader = new FileReader()
+
+                            fileReader.readAsDataURL(file)
+                            fileReader.onload = () => {
+                                currentEditor
+                                    .chain()
+                                    .insertContentAt(pos, {
+                                        type: 'image',
+                                        attrs: {
+                                            src: fileReader.result,
+                                        },
+                                    })
+                                    .focus()
+                                    .run()
+                            }
+                        })
+                    },
+                    onPaste: (currentEditor, files) => {
+                        files.forEach(file => {
+                            const fileReader = new FileReader();
+                            fileReader.readAsDataURL(file)
+                            fileReader.onload = () => {
+                                currentEditor
+                                    .chain()
+                                    .insertContentAt(currentEditor.state.selection.anchor, {
+                                        type: 'image',
+                                        attrs: {
+                                            src: fileReader.result,
+                                        },
+                                    })
+                                    .focus()
+                                    .run()
+                            }
+                        })
+                    },
+                }),
+
                   DetailsSummary,
                   DetailsContent,
 
@@ -267,7 +382,7 @@ export default {
                       },
                   }),
               ],
-            content: ` <h2>Hi there,</h2>`
+            content: ``
         })
     },
 

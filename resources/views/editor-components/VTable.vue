@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-group btn-group-sm rounded-0">
+    <div class="btn-group btn-group-sm rounded-0 me-1">
 <!--        <div class="dropdown">
             <button class="btn btn-outline-primary btn-sm dropdown-toggle" id="dropdownFadeIn" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-table"></i>
@@ -162,7 +162,7 @@
 
     </div>
 
-    <div class="dropdown">
+    <div class="dropdown me-2 d-flex">
         <button class="btn btn-outline-primary btn-sm dropdown-toggle" id="dropdownFadeIn" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="me-2 fa-solid fa-table"></i><span>Other</span>
         </button>

@@ -12,8 +12,6 @@ class PaketList extends Model
     protected $fillable = [
         'image',
         'nama_paket',
-        'audience',
-        'tipe',
         'harga',
         'discount',
         'tier',
@@ -25,8 +23,6 @@ class PaketList extends Model
         'harga' => 'decimal:0',
         'discount' => 'decimal:0',
         'active_status' => 'boolean',
-        'audience' => 'string',
-        'tipe' => 'string',
         'tier' => 'string'
     ];
 
@@ -71,12 +67,6 @@ class PaketList extends Model
         return $query->where('tier', 'paid');
     }
 
-    // Add scope for audience type
-    public function scopeForAudience($query, string $audience)
-    {
-        return $query->where('audience', $audience);
-    }
-
     // Your existing helpers
     public function isClass(): bool
     {
@@ -107,8 +97,6 @@ class PaketList extends Model
     // Add validation rules as a static property
     public static array $rules = [
         'nama_paket' => 'required|string|max:255',
-        'audience' => 'required|in:ukmppd,aipki,preklinik,koas,osce',
-        'tipe' => 'required|in:class,tryout',
         'harga' => 'required|numeric|min:0',
         'tier' => 'required|in:free,paid',
         'deskripsi' => 'nullable|string',

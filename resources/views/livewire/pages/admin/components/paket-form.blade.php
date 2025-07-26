@@ -57,42 +57,6 @@ new class extends Component {
                             </div>
 
                             <div class="row">
-                                <div class="col col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <!-- Audience -->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="selectAudience">Audience</label>
-                                        <select class="form-control" name="audience"
-                                                {{ isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} id="selectAudience"
-                                                required>
-                                            <option disabled selected>{{ __('Pilih Audience') }}</option>
-                                            <option {{isset($paketList) && $paketList->audience == 'ukmppd' ? 'selected' : ''}} value="ukmppd">{{ __('UKMPPD') }}</option>
-                                            <option {{isset($paketList) && $paketList->audience == 'aipki' ? 'selected' : ''}} value="aipki">{{ __('AIPKI') }}</option>
-                                            <option {{isset($paketList) && $paketList->audience == 'osce' ? 'selected' : ''}} value="osce">{{ __('OSCE') }}</option>
-                                        </select>
-                                        @error('form.subdomain') <span
-                                            class="text-danger">{{ $message }}</span> @enderror
-                                    </div>
-                                </div>
-
-                                <div class="col col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                                    <!-- Tipe -->
-                                    <div class="mb-3">
-                                        <label class="small mb-1" for="selectTipe">Tipe</label>
-                                        <select class="form-control" name="tipe"
-                                                {{ isset($content) && $content->viewOnly ? 'readonly disabled' : ''}} id="selectHardness"
-                                                required>
-                                            <option disabled selected>{{ __('Pilih Tipe') }}</option>
-                                            <option {{isset($paketList) && $paketList->tipe == 'tryout' ? 'selected' : ''}} value="tryout">{{ __('Tryout') }}</option>
-                                            <option {{isset($paketList) && $paketList->tipe == 'materi' ? 'selected' : ''}} value="materi">{{ __('Materi') }}</option>
-                                        </select>
-                                        @error('form.subdomain')
-                                        <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="mb-3">
                                         <label for="input-deskripsi-paket" class="small mb-1">Deskripsi</label>

@@ -93,8 +93,6 @@ class PaketController extends Controller
         $paketItem = [
             'image' => $filename,
             'nama_paket' => $request->nama_paket,
-            'audience' => $request->audience,
-            'tipe' => $request->tipe,
             'harga' => $request->harga,
             'discount' => $request->discount,
             'tier' => $request->tier,
@@ -136,8 +134,6 @@ class PaketController extends Controller
             $paketItem = [
                 'image' => $filename,
                 'nama_paket' => $request->nama_paket,
-                'audience' => $request->audience,
-                'tipe' => $request->tipe,
                 'harga' => $request->harga,
                 'discount' => $request->discount,
                 'tier' => $request->tier,
@@ -147,8 +143,6 @@ class PaketController extends Controller
         } else {
             $paketItem = [
                 'nama_paket' => $request->nama_paket,
-                'audience' => $request->audience,
-                'tipe' => $request->tipe,
                 'harga' => $request->harga,
                 'discount' => $request->discount,
                 'tier' => $request->tier,

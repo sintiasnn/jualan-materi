@@ -246,16 +246,17 @@ export default {
     },
 
     methods: {
-        addImage() {
-            const { value: url } = Swal.fire({
+        async addImage() {
+            const {value: url} = await Swal.fire({
                 input: "url",
                 inputLabel: "Image Url",
                 inputPlaceholder: "Enter the URL",
                 showCancelButton: true,
                 cancelButtonColor: "#d33",
-
             });
+
             if (url) {
+                console.log(url)
                 this.editor.chain().focus().setImage({ src: url }).run()
             }
 
@@ -298,13 +299,13 @@ export default {
     },
 
     mounted(){
-        console.log(this.editable);
         this.editor = new Editor({
             editable: this.editable,
             extensions: [
                   Document,
                   Paragraph,
                   Text,
+                Image,
                   Underline,
                   TextAlign.configure({
                       types: ['heading', 'paragraph'],

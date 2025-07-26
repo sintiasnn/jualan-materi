@@ -1,163 +1,166 @@
 <template>
     <div v-if="editor" class="container">
-        <div class="row mb-1">
-            <div class="col-sm-2 d-flex">
-                <v-heading class="me-1" :editor="editor" />
-                <v-font-style class="me-1" :editor="editor"/>
-                <v-list class="me-1" :editor="editor"/>
-                <v-paragraph class="me-1" :editor="editor" />
-                <v-undo-redo class="me-1" :editor="editor" />
-                <v-details :editor="editor"/>
-            </div>
-        </div>
 
-        <div class="row mb-1">
-            <div class="col-sm-12">
-                <div class="btn-group btn-group-sm rounded-0">
-                    <button
-                        data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Code Block"
-                        type="button"
-                        class="btn btn-sm"
-                        @click="editor.chain().focus().toggleCodeBlock().run()"
-                        :class="editor.isActive('codeBlock') ? 'btn-primary' : 'btn-outline-primary'">
-                        <i class="fa-solid fa-code"></i>
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        @click="editor.chain().focus().setHorizontalRule().run()"
-                    >
-                        Horizontal rule
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        @click="editor.chain().focus().setHardBreak().run()">
-                        Hard break
-                    </button>
-
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        @click="editor.chain().focus().unsetAllMarks().run()">
-                        Clear marks
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-primary"
-                        @click="editor.chain().focus().clearNodes().run()">
-                        Clear nodes
-                    </button>
+        <div v-if="this.editable && this.editable === true">
+            <div class="row mb-1">
+                <div class="col-sm-2 d-flex">
+                    <v-heading class="me-1" :editor="editor" />
+                    <v-font-style class="me-1" :editor="editor"/>
+                    <v-list class="me-1" :editor="editor"/>
+                    <v-paragraph class="me-1" :editor="editor" />
+                    <v-undo-redo class="me-1" :editor="editor" />
+                    <v-details :editor="editor"/>
                 </div>
             </div>
-        </div>
 
-        <div class="row mb-1">
-            <div class="col-sm-12 d-flex">
-                <v-table :editor="editor" />
+            <div class="row mb-1">
+                <div class="col-sm-12">
+                    <div class="btn-group btn-group-sm rounded-0">
+                        <button
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Code Block"
+                            type="button"
+                            class="btn btn-sm"
+                            @click="editor.chain().focus().toggleCodeBlock().run()"
+                            :class="editor.isActive('codeBlock') ? 'btn-primary' : 'btn-outline-primary'">
+                            <i class="fa-solid fa-code"></i>
+                        </button>
 
-                <div class="btn-group btn-group-sm rounded-0 me-1">
-                    <button
-                        data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Add Link"
-                        class="btn btn-sm btn-outline-primary"
-                        type="button"
-                        @click="editor.chain().focus().addColumnBefore().run()"
-                    >
-                        <i class="fa-solid fa-link"></i>
-                    </button>
-                    <button
-                        data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Add Image"
-                        class="btn btn-sm btn-outline-primary"
-                        type="button"
-                        @click="addImage()"
-                    >
-                        <i class="fa-solid fa-image"></i>
-                    </button>
-                    <button
-                        data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="Add Video"
-                        class="btn btn-sm btn-outline-primary"
-                        type="button"
-                        @click="editor.chain().focus().addColumnBefore().run()"
-                    >
-                        <i class="fa-solid fa-video"></i>
-                    </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            @click="editor.chain().focus().setHorizontalRule().run()"
+                        >
+                            Horizontal rule
+                        </button>
 
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            @click="editor.chain().focus().setHardBreak().run()">
+                            Hard break
+                        </button>
 
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            @click="editor.chain().focus().unsetAllMarks().run()">
+                            Clear marks
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-primary"
+                            @click="editor.chain().focus().clearNodes().run()">
+                            Clear nodes
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <bubble-menu
-            class="bubble-menu"
-            :tippy-options="{ duration: 100 }"
-            :editor="editor"
-        >
-        </bubble-menu>
+            <div class="row mb-1">
+                <div class="col-sm-12 d-flex">
+                    <v-table :editor="editor" />
 
-        <floating-menu
-            :tippy-options="{
+                    <div class="btn-group btn-group-sm rounded-0 me-1">
+                        <button
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Add Link"
+                            class="btn btn-sm btn-outline-primary"
+                            type="button"
+                            @click="editor.chain().focus().addColumnBefore().run()"
+                        >
+                            <i class="fa-solid fa-link"></i>
+                        </button>
+                        <button
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Add Image"
+                            class="btn btn-sm btn-outline-primary"
+                            type="button"
+                            @click="addImage()"
+                        >
+                            <i class="fa-solid fa-image"></i>
+                        </button>
+                        <button
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="Add Video"
+                            class="btn btn-sm btn-outline-primary"
+                            type="button"
+                            @click="editor.chain().focus().addColumnBefore().run()"
+                        >
+                            <i class="fa-solid fa-video"></i>
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <bubble-menu
+                class="bubble-menu"
+                :tippy-options="{ duration: 100 }"
+                :editor="editor"
+            >
+            </bubble-menu>
+
+            <floating-menu
+                :tippy-options="{
             placement:'left',
             animation: 'fade',
             duration: [300, 300],
         }"
-            :editor="editor"
-        >
-        </floating-menu>
+                :editor="editor"
+            >
+            </floating-menu>
 
-        <drag-handle
-            @nodeChange="handleNodeChange"
-            plugin-key="drag-only"
-            :tippy-options="{
+            <drag-handle
+                @nodeChange="handleNodeChange"
+                plugin-key="drag-only"
+                :tippy-options="{
                 placement: 'left',
                 animation: 'fade',
                 duration: [300, 300],
             }"
-            :editor="editor">
-            <div class="d-flex flex-row align-items-center">
-                <div class="dropdown">
-                    <button
-                        class="btn btn-sm btn-outline-dark p-1 me-1 dropdown-toggle"
-                        id="dropdownFadeIn" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa-solid fa-circle-plus"></i>
-                    </button>
-                    <div class="dropdown-menu animated--fade-in overflow-auto" aria-labelledby="dropdownFadeIn" style="max-height: 15em">
-                        <div class="dropdown-header dropdown-notifications-header m-0">
-                            Tambahkan
+                :editor="editor">
+                <div class="d-flex flex-row align-items-center">
+                    <div class="dropdown">
+                        <button
+                            class="btn btn-sm btn-outline-dark p-1 me-1 dropdown-toggle"
+                            id="dropdownFadeIn" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-circle-plus"></i>
+                        </button>
+                        <div class="dropdown-menu animated--fade-in overflow-auto" aria-labelledby="dropdownFadeIn" style="max-height: 15em">
+                            <div class="dropdown-header dropdown-notifications-header m-0">
+                                Tambahkan
+                            </div>
+                            <hr class="m-0">
+                            <a class="dropdown-item"><i class="me-1"></i><span>Heading 1</span></a>
+                            <a class="dropdown-item"><i class="me-1"></i><span>Heading 2</span></a>
+                            <a class="dropdown-item"><i class="me-1"></i><span>Heading 3</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-solid fa-list-ul"></i><span>Bullet List</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-solid fa-list-ol"></i><span>Ordered List</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-regular fa-square-check"></i><span>Checkbox List</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-regular fa-square-caret-down"></i><span>Dropdown List</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-solid fa-quote-left"></i><span>Block Quote</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-solid fa-table"></i><span>Table</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-solid fa-minus"></i><span>Horizontal Line</span></a>
+                            <hr class="m-0">
+                            <div class="dropdown-header dropdown-notifications-header m-0">
+                                Media
+                            </div>
+                            <hr class="m-0">
+                            <a class="dropdown-item"><i class="me-1 fa-regular fa-image"></i><span>Image</span></a>
+                            <a class="dropdown-item"><i class="me-1 fa-solid fa-video"></i><span>Video</span></a>
                         </div>
-                        <hr class="m-0">
-                        <a class="dropdown-item"><i class="me-1"></i><span>Heading 1</span></a>
-                        <a class="dropdown-item"><i class="me-1"></i><span>Heading 2</span></a>
-                        <a class="dropdown-item"><i class="me-1"></i><span>Heading 3</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-solid fa-list-ul"></i><span>Bullet List</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-solid fa-list-ol"></i><span>Ordered List</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-regular fa-square-check"></i><span>Checkbox List</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-regular fa-square-caret-down"></i><span>Dropdown List</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-solid fa-quote-left"></i><span>Block Quote</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-solid fa-table"></i><span>Table</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-solid fa-minus"></i><span>Horizontal Line</span></a>
-                        <hr class="m-0">
-                        <div class="dropdown-header dropdown-notifications-header m-0">
-                            Media
-                        </div>
-                        <hr class="m-0">
-                        <a class="dropdown-item"><i class="me-1 fa-regular fa-image"></i><span>Image</span></a>
-                        <a class="dropdown-item"><i class="me-1 fa-solid fa-video"></i><span>Video</span></a>
+
                     </div>
 
+                    <div class="custom-drag-handle"></div>
                 </div>
 
-                <div class="custom-drag-handle"></div>
-            </div>
+            </drag-handle>
+        </div>
 
-        </drag-handle>
-
-        <editor-content class="border rounded-1" :editor="editor" />
+        <editor-content name="editor_materi_content" class="border rounded-1 p-2" :editor="editor" />
     </div>
 </template>
 <script>
@@ -203,6 +206,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import {ref} from "vue";
 
 export default {
+    props: [ 'contentValue','editable'],
+
     components: {
         VParagraph,
         VHeading,
@@ -215,9 +220,9 @@ export default {
         DetailsContent,
         DetailsSummary,
         EditorContent,
-        Document,
+       /* Document,
         Paragraph,
-        Text,
+        Text,*/
         BubbleMenu,
         FloatingMenu,
         DragHandle,
@@ -293,7 +298,9 @@ export default {
     },
 
     mounted(){
+        console.log(this.editable);
         this.editor = new Editor({
+            editable: this.editable,
             extensions: [
                   Document,
                   Paragraph,
@@ -375,14 +382,11 @@ export default {
 
                   Placeholder.configure({
                       placeholder: ({ node }) => {
-                          if (node.type.name === 'heading') {
-                              return 'What’s the title?'
-                          }
-                          return 'Can you add some further context?'
+
                       },
                   }),
               ],
-            content: ``
+            content: this.contentValue,
         })
     },
 
@@ -484,7 +488,7 @@ export default {
         float:left;
         color:var(rgb(168 162 158));
         pointer-events:none;
-        height:0
+        height:0;
     }
     .ProseMirror .is-empty:before{
         content:attr(data-placeholder);
@@ -520,7 +524,7 @@ export default {
         display: flex;
         gap: 0.25rem;
         margin: 1.5rem 0;
-        border: 1px solid var(--bs-gray-200);
+        /*border: 1px solid var(--bs-gray-200);*/
         border-radius: 0.5rem;
         padding: 0.5rem;
 

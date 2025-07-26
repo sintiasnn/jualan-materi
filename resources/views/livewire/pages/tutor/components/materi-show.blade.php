@@ -51,13 +51,18 @@
                 <div class="card-header">
                     <h4 class="h4">{{ $content->nama_materi }}</h4>
                 </div>
-
                 <div class="card-body">
-                    <div style="overflow-wrap: break-word;">
-                        @foreach($content->submateri as $submateri)
-                            {!! $submateri->deskripsi !!}
-                        @endforeach
-                    </div>
+                    @if(count($content->submateri) > 0)
+                        <div style="overflow-wrap: break-word;">
+                            @foreach($content->submateri as $submateri)
+                                {!! $submateri->deskripsi !!}
+                            @endforeach
+                        </div>
+                    @else
+                        <div id="app">
+                            <text-editor :editable="false" content-value="{{$content->content}}"></text-editor>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="card-footer">

@@ -15,7 +15,8 @@ class Materi extends Model
         'nama_materi',
         'tingkat_kesulitan',
         'reference',
-        'video_url'
+        'video_url',
+        'content'
     ];
 
     public function subdomain(): BelongsTo

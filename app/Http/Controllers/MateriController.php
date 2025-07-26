@@ -22,18 +22,25 @@ class MateriController extends Controller
     }
 
     public function store(Request $request){
+
+        $id = $request->materi_id;
         $materiItem = [
             'subdomain_id' => $request->subdomain_id,
             'kode_materi' => $request->kode_materi,
             'nama_materi' => $request->nama_materi,
             'tingkat_kesulitan' => $request->tingkat_kesulitan,
+            'content' => $request->materi_content,
         ];
 
         try {
             DB::beginTransaction();
-            $materi = Materi::create($materiItem);
+            $materi = Materi::updateOrCreate(
+                ['id' => $id],
+            $materiItem);
+            DB::commit();
+            return redirect()->route('materi.index')->with('message', 'materi berhasil ditambahkan');
 
-            foreach(range(1, $request->submateri_count) as $idx){
+            /*foreach(range(1, $request->submateri_count) as $idx){
                 $submateriItem[$idx] = [
                     'materi_id' => $materi->id,
                     'kode_submateri' => $request->kode_submateri[$idx],
@@ -50,7 +57,7 @@ class MateriController extends Controller
             else {
                 DB::rollBack();
                 return redirect()->route('materi.create')->with('error', true);
-            }
+            }*/
         } catch (\Exception $e){
             DB::rollBack();
             return redirect()->route('materi.create')->with('error-message', $e->getMessage());
@@ -109,8 +116,9 @@ class MateriController extends Controller
     }
 
     public function getSubdomain($domainCode){
-        return Subdomain::select('id', 'domain_code','code', 'keterangan')
+        $subdomain = Subdomain::select('id', 'domain_code','code', 'keterangan')
             ->where('domain_code', $domainCode)->get();
+        return response()->json($subdomain, 200);
     }
 
 }

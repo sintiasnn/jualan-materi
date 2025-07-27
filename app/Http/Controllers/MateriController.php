@@ -108,9 +108,17 @@ class MateriController extends Controller
 
     public function destroy($id){
         try {
-            ClassContent::find($id)->delete();
-            return response()->json(['message'=> 'Materi berhasil dihapus', 'success' => true]);
+            DB::beginTransaction();
+            if(Materi::findOrFail($id)){
+                Materi::find($id)->delete();
+                DB::commit();
+                return response()->json(['message'=> 'Materi berhasil dihapus', 'success' => true]);
+            } else {
+                DB::rollBack();
+                return response()->json(['message'=> 'Materi tidak ditemukan', 'success' => false]);
+            }
         } catch (\Exception $exception){
+            DB::rollBack();
             return response($exception->getMessage(), 500);
         }
     }

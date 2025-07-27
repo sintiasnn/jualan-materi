@@ -9,6 +9,7 @@ use App\Models\Subdomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class DomainSubdomainController extends Controller
 {
@@ -19,14 +20,22 @@ class DomainSubdomainController extends Controller
     public function storeDomain(Request $request){
         try {
             DB::beginTransaction();
-            $classContent = new Domain($request->all());
-            if($classContent->saveOrFail()){
+            $validate = $request->validate([
+                'code' => 'required|unique:domain,code',
+                'keterangan' => 'required',
+            ], [
+                'code.required' => 'Kode tidak boleh kosong',
+                'code.unique' => 'Kode sudah terdaftar',
+                'keterangan.required' => 'Keterangan tidak boleh kosong',
+            ]);
+            $domain = new Domain($request->all());
+            if($validate && $domain->saveOrFail()){
                 DB::commit();
                 return response()->json(['message'=> 'Domain berhasil ditambahkan', 'success' => true]);
             }
             else {
                 DB::rollBack();
-                return response()->json(['message'=> 'Materi gagal ditambahkan', 'success' => false]);
+                return response()->json(['message'=> 'Domain gagal ditambahkan', 'success' => false]);
             }
         } catch (\Exception $e){
             DB::rollBack();
@@ -37,14 +46,23 @@ class DomainSubdomainController extends Controller
     public function storeSubdomain(Request $request){
         try {
             DB::beginTransaction();
+            $validate = $request->validate([
+                'domain_code' => 'required',
+                'code' => 'required|unique:domain,code',
+                'keterangan' => 'required',
+            ], [
+                'domain_code.required' => 'Domain tidak boleh kosong',
+                'code.required' => 'Kode subdomain tidak boleh kosong',
+                'keterangan.required' => 'Keterangan tidak boleh kosong',
+            ]);
             $subdomain = new Subdomain($request->all());
-            if($subdomain->saveOrFail()){
+            if($validate && $subdomain->saveOrFail()){
                 DB::commit();
-                return response()->json(['message'=> 'Domain berhasil ditambahkan', 'success' => true]);
+                return response()->json(['message'=> 'Subdomain berhasil ditambahkan', 'success' => true]);
             }
             else {
                 DB::rollBack();
-                return response()->json(['message'=> 'Materi gagal ditambahkan', 'success' => false]);
+                return response()->json(['message'=> 'Subdomain gagal ditambahkan', 'success' => false]);
             }
         } catch (\Exception $e){
             DB::rollBack();

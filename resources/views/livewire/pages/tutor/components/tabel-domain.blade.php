@@ -7,42 +7,35 @@
         </nav>
         <hr class="mt-0 mb-4" />
 
-        <div class="row">
-            <div x-show="activeTab === 'domain'">
-                <div class="row">
-                    <div class="col col-end-1 m-3 d-flex flex-row justify-content-end">
-                        <a type="button" onclick="$('.card-form-add-domain').removeClass('d-none').addClass('d-block')" class="btn btn-primary"><i data-feather="plus-square" class="me-2"></i>Tambah Domain</a>
-                    </div>
-                </div>
+        <div class="row p-2">
+            <div class="card p-0 mb-3">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="domainFilter" class="form-label">Filter Domain</label>
+                            <select id="domainFilter" class="form-select">
+                                <option value="">Semua Domain</option>
+                                @foreach(\App\Models\Domain::get() as $domain)
+                                    <option value="{{ $domain->code}}">{{ $domain->keterangan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
 
-                <div class="card mb-3 d-none card-form-add-domain">
-                    <div class="card-header d-flex flex-row justify-content-between">
-                        <h5 class="h5">Tambah Domain</h5>
-                        <button class="btn-close" type="button" aria-label="Close" onclick="$('.card-form-add-domain').addClass('d-none').removeClass('d-block')"></button>
-                    </div>
-
-
-                    <div class="card-body">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Deskripsi Domain</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><input type="text" id="input-domain-code" name="code" class="form-control" placeholder="Masukkan kode domain"></td>
-                                <td><input type="text" id="input-domain-keterangan" name="keterangan" class="form-control" placeholder="Masukkan deskripsi domain"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <input type="hidden" id="input-domain-isactive" name="is_active" value="1" class="form-control">
-                        <div class="d-flex flex-row justify-content-end">
-                            <button type="submit" id="submit-domain" class="btn btn-primary ">Submit</button>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-end">
+                            <a type="button" onclick="$('#modalConfirm').modal('show')" class="btn btn-light btn-outline-primary"><i data-feather="plus-square" class="me-2"></i>Domain</a>
+                        </div>
+                        <div class="col-md-2 d-flex flex-column justify-content-end">
+                            <a type="button" onclick="$('#modalAddSubdomain').modal('show')" class="btn btn-light btn-outline-primary"><i data-feather="plus-square" class="me-2"></i>Subdomain</a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div x-show="activeTab === 'domain'">
 
                 <div class="card">
                     <div class="card-body">
@@ -51,7 +44,7 @@
                                 <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Code</th>
+                                    <th>Kode</th>
                                     <th>Deskripsi Domain</th>
                                     <th>Status</th>
                                     <th>Jumlah Subdomain</th>
@@ -65,65 +58,15 @@
             </div>
 
             <div x-show="activeTab === 'subdomain'">
-                <div class="row">
-                    <div class="col col-end-1 m-3 d-flex flex-row justify-content-end">
-                        <a type="button" onclick="$('.card-form-add-subdomain').removeClass('d-none').addClass('d-block')" class="btn btn-primary"><i data-feather="plus-square" class="me-2"></i>Tambah Subdomain</a>
-                    </div>
-                </div>
-
-                <div class="card mb-3 d-none card-form-add-subdomain">
-                    <div class="card-header d-flex flex-row justify-content-between">
-                        <h5 class="h5">Tambah Subdomain</h5>
-                        <button class="btn-close" type="button" aria-label="Close" onclick="$('.card-form-add-subdomain').addClass('d-none').removeClass('d-block')"></button>
-                    </div>
-
-                    <div class="card-body">
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Domain</th>
-                                <th>Subdomain Code</th>
-                                <th>Deskripsi Domain</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><select id="domain-select" name="domain_code" class="form-select">
-                                        @foreach(\App\Models\Domain::get() as $domain)
-                                            <option value="{{ $domain->code}}">{{ $domain->keterangan }}</option>
-                                        @endforeach
-                                    </select></td>
-                                <td><input type="text" id="input-subdomain-code" name="code" class="form-control" placeholder="Masukkan kode domain"></td>
-                                <td><input type="text" id="input-subdomain-keterangan" name="keterangan" class="form-control" placeholder="Masukkan deskripsi domain"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <input type="hidden" id="input-subdomain-isactive" name="is_active" value="1" class="form-control">
-                        <div class="d-flex flex-row justify-content-end">
-                            <button type="submit" id="submit-subdomain" class="btn btn-primary ">Submit</button>
-                        </div>
-                    </div>
-                </div>
-
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="col-md-4 mb-3">
-                            <label for="domainFilter" class="form-label">Filter Domain</label>
-                            <select id="domainFilter" class="form-select">
-                                <option value="">Semua Domain</option>
-                                @foreach(\App\Models\Domain::get() as $domain)
-                                    <option value="{{ $domain->code}}">{{ $domain->keterangan }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
                         <div wire:ignore>
                             <table id="subdomainTable" class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Code</th>
+                                    <th>Kode</th>
                                     <th>Deskripsi Subdomain</th>
                                     <th>Status</th>
                                 </tr>
@@ -135,23 +78,108 @@
             </div>
         </div>
 
-        <div class="modal" id="modalConfirm" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateAvatarModalLabel" >
+        <div class="modal fade" id="modalConfirm" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="updateAvatarModalLabel" >
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="updateAvatarModalLabel"></h5>
-                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" onclick="modal.hide()"></button>
+                        <h5 class="modal-title" id="updateAvatarModalLabel">Tambah Domain</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" onclick="$(this).modal('hide')"></button>
                     </div>
                     <div class="modal-body">
 
+                        <div class="row">
+                            <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <input type="hidden" id="input-domain-isactive" name="is_active" value="1" class="form-control">
+                                <!-- Domain -->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="input-domain-code">Kode Domain</label>
+                                    <input type="text" name="code"
+                                           id="input-domain-code"
+                                           value="{{old('code')}}"
+                                           class="form-control"
+                                           placeholder="Masukkan kode domain" autocomplete="off" required>
+                                    @error('code') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Deskripsi Domain -->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="input-domain-keterangan">Deskripsi</label>
+                                    <textarea name="keterangan"
+                                              rows="3"
+                                              id="input-domain-keterangan"
+                                              class="form-control"
+                                              placeholder="Masukkan Deskripsi" autocomplete="off" required>{{old('keterangan')}}</textarea>
+                                    @error('keterangan') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
+
                     <div class="modal-footer">
-                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal" onclick="modal.hide()">Batal</button>
-                        <button class="btn btn-success" id="btn-submit" type="submit" form="avatar-form">Hapus</button>
+                        <button class="btn btn-outline-danger" type="button" data-bs-dismiss="modal" onclick="$(this).modal('hide')">Batal</button>
+                        <button class="btn btn-primary" id="btn-submit-domain" type="submit" form="avatar-form">Tambah</button>
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <div class="modal fade" id="modalAddSubdomain" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalAddSubdomainLabel" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAddSubdomainLabel">Tambah Subdomain</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" onclick="$(this).modal('hide')"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <input type="hidden" id="input-subdomain-isactive" name="is_active" value="1" class="form-control">
+                                <!-- Select domain -->
+
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="domain-select">Kode Domain</label>
+                                    <select id="domain-select" name="domain_code" class="form-select">
+                                        @foreach(\App\Models\Domain::get() as $domain)
+                                            <option value="{{ $domain->code}}">{{ $domain->keterangan }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Subdomain -->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="input-subdomain-code">Kode Subdomain</label>
+                                    <input type="text" name="code"
+                                           id="input-subdomain-code"
+                                           value="{{old('code')}}"
+                                           class="form-control"
+                                           placeholder="Masukkan kode Subdomain" autocomplete="off" required>
+                                    @error('code') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                                <!-- Deskripsi Domain -->
+                                <div class="mb-3">
+                                    <label class="small mb-1" for="input-domain-keterangan">Deskripsi</label>
+                                    <textarea name="keterangan"
+                                              rows="3"
+                                              id="input-subdomain-keterangan"
+                                              class="form-control"
+                                              placeholder="Masukkan Deskripsi" autocomplete="off" required>{{old('keterangan')}}</textarea>
+                                    @error('keterangan') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-danger" type="button" data-bs-dismiss="modal" onclick="$(this).modal('hide')">Batal</button>
+                        <button class="btn btn-primary" id="btn-submit-subdomain" type="submit" form="avatar-form">Tambah</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -166,16 +194,17 @@
         <script>
 
             function addDomain(){
-                axios.post(`{{route('tutor.domain.store')}}`, null, {
-                    params : {
-                        code : $('#input-domain-code').val(),
-                        keterangan : $('#input-domain-keterangan').val(),
-                        is_active : $('#input-domain-isactive').val(),
-                    }})
+                axios.post(`{{route('tutor.domain.store')}}`, {
+                    code : $('#input-domain-code').val(),
+                    keterangan : $('#input-domain-keterangan').val(),
+                    is_active : $('#input-domain-isactive').val(),
+                })
                     .then(response => {
-                        Swal.fire('Success', response.data.message, 'success')
+                        Swal.fire((response.data.success ? 'Success' : 'Error'), response.data.message, (response.data.success ? 'success' : 'error'))
                         $('#input-domain-code, #input-domain-keterangan').val('')
-                        $('.card-form-add-domain').addClass('d-none').removeClass('d-block')
+                        if(response.data.success){
+                            $('#modalConfirm').modal('hide');
+                        }
                     })
                     .catch(err => {
                         Swal.fire('Error', err.response?.data, 'error')
@@ -194,7 +223,7 @@
                         is_active : $('#input-subdomain-isactive').val(),
                     }})
                     .then(response => {
-                        Swal.fire('Success', response.data.message, 'success')
+                        Swal.fire((response.data.success ? 'Success' : 'Error'), response.data.message, (response.data.success ? 'success' : 'error'))
                         $('#input-subdomain-code, #input-subdomain-keterangan').val('')
                         $('.card-form-add-subdomain').addClass('d-none').removeClass('d-block')
                     })
@@ -206,15 +235,16 @@
                     })
             }
 
-            $('#submit-domain').on('click',function (){
+            $('#btn-submit-domain').on('click',function (){
                 addDomain();
             })
 
-            $('#submit-subdomain').on('click',function (){
+            $('#btn-submit-subdomain').on('click',function (){
                 addSubdomain();
             })
 
             $('#domainFilter').on('change', function(){
+                table.draw();
                 subdomainTable.draw();
             })
 

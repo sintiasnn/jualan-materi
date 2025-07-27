@@ -424,6 +424,10 @@ class DataTablesController extends Controller
                 });
             }
 
+            if($request->filled('domainFilter')){
+                $query->where('code', $request->domainFilter);
+            }
+
             // Apply order
             $orderColumn = $params['order'][0]['column'] ?? 0;
             $orderDir = $params['order'][0]['dir'] ?? 'asc';

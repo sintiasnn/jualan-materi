@@ -302,27 +302,27 @@ export default {
         this.editor = new Editor({
             editable: this.editable,
             extensions: [
-                  Document,
-                  Paragraph,
-                  Text,
+                StarterKit,
+                Document,
+                Paragraph,
+                Text,
                 Image,
-                  Underline,
-                  TextAlign.configure({
-                      types: ['heading', 'paragraph'],
-                  }),
-                  NodeRange.configure({
-                      key: null,
-                  }),
-                  Color.configure({ types: [TextStyle.name, ListItem.name] }),
-                  TextStyle.configure({ types: [ListItem.name] }),
-                  StarterKit,
+                Underline,
+                TextAlign.configure({
+                    types: ['heading', 'paragraph'],
+                }),
+                /*NodeRange.configure({
+                    key: null,
+                }),*/
+                Color.configure({ types: [TextStyle.name, ListItem.name] }),
+                TextStyle.configure({ types: [ListItem.name] }),
 
-                  Details.configure({
-                      persist: true,
-                      HTMLAttributes: {
+                Details.configure({
+                    persist: true,
+                        HTMLAttributes: {
                           class: 'details',
-                      },
-                  }),
+                        },
+                    }),
 
                     Link.configure({
                         openOnClick: false,
@@ -370,23 +370,23 @@ export default {
                     },
                 }),
 
-                  DetailsSummary,
-                  DetailsContent,
+                DetailsSummary,
+                DetailsContent,
 
-                  Gapcursor,
-                  Table.configure({
-                      resizable: true,
-                  }),
-                  TableRow,
-                  TableHeader,
-                  TableCell,
+                Gapcursor,
+                Table.configure({
+                  resizable: true,
+                }),
+                TableRow,
+                TableHeader,
+                TableCell,
 
-                  Placeholder.configure({
-                      placeholder: ({ node }) => {
+                Placeholder.configure({
+                  placeholder: ({ node }) => {
 
-                      },
-                  }),
-              ],
+                  },
+                }),
+            ],
             content: this.contentValue,
         })
     },
@@ -411,12 +411,16 @@ export default {
     ul,
     ol {
         padding: 0 1rem;
-        margin: 1.25rem 1rem 1.25rem 0.4rem;
+        margin: 0.25rem 0.5rem 0.25rem 0.4rem;
 
         li p {
             margin-top: 0.25em;
             margin-bottom: 0.25em;
         }
+    }
+
+    p {
+        margin-top: 0.25rem;
     }
 
     /* Heading styles */
@@ -427,8 +431,8 @@ export default {
     }
 
     h1, h2 {
-        margin-top: 1rem;
-        margin-bottom: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.7rem;
     }
 
     h1 {
@@ -524,36 +528,42 @@ export default {
     .details {
         display: flex;
         gap: 0.25rem;
-        margin: 1.5rem 0;
+        /*margin: 0.5rem 0;*/
         /*border: 1px solid var(--bs-gray-200);*/
         border-radius: 0.5rem;
         padding: 0.5rem;
 
         summary {
             font-weight: 700;
+
+            &::marker {
+                background: rgba(255, 255, 255, 0);;
+                color: rgba(255, 255, 255, 0);
+            }
         }
 
         > button {
+            border: rgba(255, 255, 255, 0);
             align-items: center;
             background: transparent;
             border-radius: 4px;
             display: flex;
-            font-size: 1.5rem;
-            height: 1.25rem;
+            font-size: 0.5rem;
             justify-content: center;
             line-height: 1;
             margin-top: 0.1rem;
             padding: 0;
-            width: 1.25rem;
+            height: 1.2rem;
+            width: 1.2rem;
 
             &:hover {
                 background-color: var(--bs-gray-200);
             }
 
             &::before {
-                content: '\25B6';
+                font-size: 30pt;
+                content: '\25B8';
             }
-
         }
 
         &.is-open > button::before {
@@ -576,7 +586,7 @@ export default {
         }
 
         .details {
-            margin: 0.5rem 0;
+           /* margin: 0.5rem 0;*/
         }
     }
 }

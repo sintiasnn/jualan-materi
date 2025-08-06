@@ -43,6 +43,7 @@ new class extends Component
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
         {{-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script> --}}
+        <link rel="stylesheet" href="{{asset('packages/select2/dist/css/select2.css')}}">
         @vite(['resources/js/app.js'])
         @livewireStyles
     </head>
@@ -89,5 +90,6 @@ new class extends Component
         @livewireScripts
     </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="{{asset('packages/select2/dist/js/select2.full.js')}}"></script>
 
 </html>

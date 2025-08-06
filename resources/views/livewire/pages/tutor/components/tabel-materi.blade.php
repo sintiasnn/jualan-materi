@@ -15,7 +15,7 @@
                     <select id="domainFilter" class="form-select">
                         <option value="">Semua Domain</option>
                         @foreach(\App\Models\Domain::get() as $domain)
-                            <option value="{{ $domain->code}}">{{ $domain->keterangan }}</option>
+                            <option value="{{ $domain->code}}">{{ $domain->code . " / " . $domain->keterangan }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -24,7 +24,7 @@
                     <select id="subdomainFilter" class="form-select select2">
                         <option value="">Semua Subdomain</option>
                         @foreach(\App\Models\Subdomain::get() as $subdomain)
-                            <option value="{{ $subdomain->id}}">{{ $subdomain->keterangan }}</option>
+                            <option value="{{ $subdomain->id}}">{{ $subdomain->code . ' / ' . $subdomain->keterangan }}</option>
                         @endforeach
                     </select>
                 </div>

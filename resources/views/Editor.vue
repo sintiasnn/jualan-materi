@@ -1,57 +1,37 @@
 <template>
-    <button type="button" @click="">Set Content</button>
-    <Editor :extensions="[]" ref="editorRef" />
+    <div class="col-sm-2 mb-2 d-flex">
+        <button
+            data-bs-toggle="tooltip" data-bs-placement="top"
+            title="Bold"
+            type="button"
+            class="btn btn-sm"
+            @click="editorRef.editor.chain().toggleBold().run()"
+            :disabled="!editorRef?.editor.can().chain().focus().toggleBold().run()"
+            :class="editorRef?.editor.isActive('bold') ? 'btn-primary' : 'btn-outline-primary'"
+        >
+            <i class="fa-solid fa-bold"></i>
+        </button>
+    </div>
 
-    <button
-        type="button"
-        class="floating-btn"
-        @click="floatingAction"
+    <bubble-menu
+        class="bubble-menu"
+        :tippy-options="{ duration: 100 }"
+        :editor="editorRef?.editor"
     >
-    </button>
+    </bubble-menu>
+
+    <Editor :extensions="[BubbleMenu]" ref="editorRef" />
+
+
 </template>
 
 <script setup lang="ts">
 import {Editor as EditorClass, Extensions} from "@tiptap/core";
 import { Editor } from "novel-vue";
-import { Color } from '@tiptap/extension-color'
-import {ListItem} from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
-import {StarterKit} from "@tiptap/starter-kit";
-import {Document} from "@tiptap/extension-document";
-import {Dropcursor} from "@tiptap/extension-dropcursor";
-import {Image} from "@tiptap/extension-image";
 import {onMounted, type PropType, ref} from "vue";
-const editorRef = ref<{
-    editor: EditorClass,
-    extension: Extensions
-}>();
+import {BubbleMenu, FloatingMenu} from "@tiptap/vue-3";
 
-onMounted(() => {
-    editorRef.value.editor.commands.setContent({
-        type: "doc",
-        content: [
-            {
-                type: "paragraph",
-                content: [
-                    {
-                        type: "text",
-                        text: "Example Text",
-                    },
-                ],
-            },
-        ],
-    });
-})
-
-const floatingAction = () => {
-    // Example: Insert a new paragraph at the end
-    editorRef.value?.editor.chain().focus().insertContent({
-        type: "paragraph",
-        content: [
-            { type: "text", text: "New block from floating button" },
-        ],
-    }).run();
-};
+const editorRef = ref<{ editor: EditorClass }>();
 
 </script>
 

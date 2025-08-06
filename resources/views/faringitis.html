@@ -1,0 +1,1164 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>03. Faringitis</title><style>
+    /* cspell:disable-file */
+    /* webkit printing magic: print all background colors */
+    html {
+        -webkit-print-color-adjust: exact;
+    }
+    * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    @media only screen {
+        body {
+            margin: 2em auto;
+            max-width: 900px;
+            color: rgb(55, 53, 47);
+        }
+    }
+
+    body {
+        line-height: 1.5;
+        white-space: pre-wrap;
+    }
+
+    a,
+    a.visited {
+        color: inherit;
+        text-decoration: underline;
+    }
+
+    .pdf-relative-link-path {
+        font-size: 80%;
+        color: #444;
+    }
+
+    h1,
+    h2,
+    h3 {
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0.75em;
+    }
+
+    h1 {
+        font-size: 1.875rem;
+        margin-top: 1.875rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+        margin-top: 1.25rem;
+    }
+
+    .source {
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        padding: 1.5em;
+        word-break: break-all;
+    }
+
+    .callout {
+        border-radius: 3px;
+        padding: 1rem;
+    }
+
+    figure {
+        margin: 1.25em 0;
+        page-break-inside: avoid;
+    }
+
+    figcaption {
+        opacity: 0.5;
+        font-size: 85%;
+        margin-top: 0.5em;
+    }
+
+    mark {
+        background-color: transparent;
+    }
+
+    .indented {
+        padding-left: 1.5em;
+    }
+
+    hr {
+        background: transparent;
+        display: block;
+        width: 100%;
+        height: 1px;
+        visibility: visible;
+        border: none;
+        border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    @media only print {
+        img {
+            max-height: 100vh;
+            object-fit: contain;
+        }
+    }
+
+    @page {
+        margin: 1in;
+    }
+
+    .collection-content {
+        font-size: 0.875rem;
+    }
+
+    .column-list {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .column {
+        padding: 0 1em;
+    }
+
+    .column:first-child {
+        padding-left: 0;
+    }
+
+    .column:last-child {
+        padding-right: 0;
+    }
+
+    .table_of_contents-item {
+        display: block;
+        font-size: 0.875rem;
+        line-height: 1.3;
+        padding: 0.125rem;
+    }
+
+    .table_of_contents-indent-1 {
+        margin-left: 1.5rem;
+    }
+
+    .table_of_contents-indent-2 {
+        margin-left: 3rem;
+    }
+
+    .table_of_contents-indent-3 {
+        margin-left: 4.5rem;
+    }
+
+    .table_of_contents-link {
+        text-decoration: none;
+        opacity: 0.7;
+        border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid rgba(55, 53, 47, 0.09);
+        border-collapse: collapse;
+    }
+
+    table {
+        border-left: none;
+        border-right: none;
+    }
+
+    th,
+    td {
+        font-weight: normal;
+        padding: 0.25em 0.5em;
+        line-height: 1.5;
+        min-height: 1.5em;
+        text-align: left;
+    }
+
+    th {
+        color: rgba(55, 53, 47, 0.6);
+    }
+
+    ol,
+    ul {
+        margin: 0;
+        margin-block-start: 0.6em;
+        margin-block-end: 0.6em;
+    }
+
+    li > ol:first-child,
+    li > ul:first-child {
+        margin-block-start: 0.6em;
+    }
+
+    ul > li {
+        list-style: disc;
+    }
+
+    ul.to-do-list {
+        padding-inline-start: 0;
+    }
+
+    ul.to-do-list > li {
+        list-style: none;
+    }
+
+    .to-do-children-checked {
+        text-decoration: line-through;
+        opacity: 0.375;
+    }
+
+    ul.toggle > li {
+        list-style: none;
+    }
+
+    ul {
+        padding-inline-start: 1.7em;
+    }
+
+    ul > li {
+        padding-left: 0.1em;
+    }
+
+    ol {
+        padding-inline-start: 1.6em;
+    }
+
+    ol > li {
+        padding-left: 0.2em;
+    }
+
+    .mono ol {
+        padding-inline-start: 2em;
+    }
+
+    .mono ol > li {
+        text-indent: -0.4em;
+    }
+
+    .toggle {
+        padding-inline-start: 0em;
+        list-style-type: none;
+    }
+
+    /* Indent toggle children */
+    .toggle > li > details {
+        padding-left: 1.7em;
+    }
+
+    .toggle > li > details > summary {
+        margin-left: -1.1em;
+    }
+
+    .selected-value {
+        display: inline-block;
+        padding: 0 0.5em;
+        background: rgba(206, 205, 202, 0.5);
+        border-radius: 3px;
+        margin-right: 0.5em;
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+        white-space: nowrap;
+    }
+
+    .collection-title {
+        display: inline-block;
+        margin-right: 1em;
+    }
+
+    .page-description {
+        margin-bottom: 2em;
+    }
+
+    .simple-table {
+        margin-top: 1em;
+        font-size: 0.875rem;
+        empty-cells: show;
+    }
+    .simple-table td {
+        height: 29px;
+        min-width: 120px;
+    }
+
+    .simple-table th {
+        height: 29px;
+        min-width: 120px;
+    }
+
+    .simple-table-header-color {
+        background: rgb(247, 246, 243);
+        color: black;
+    }
+    .simple-table-header {
+        font-weight: 500;
+    }
+
+    time {
+        opacity: 0.5;
+    }
+
+    .icon {
+        display: inline-block;
+        max-width: 1.2em;
+        max-height: 1.2em;
+        text-decoration: none;
+        vertical-align: text-bottom;
+        margin-right: 0.5em;
+    }
+
+    img.icon {
+        border-radius: 3px;
+    }
+
+    .user-icon {
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 100%;
+        margin-right: 0.5rem;
+    }
+
+    .user-icon-inner {
+        font-size: 0.8em;
+    }
+
+    .text-icon {
+        border: 1px solid #000;
+        text-align: center;
+    }
+
+    .page-cover-image {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        max-height: 30vh;
+    }
+
+    .page-header-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .page-header-icon-with-cover {
+        margin-top: -0.72em;
+        margin-left: 0.07em;
+    }
+
+    .page-header-icon img {
+        border-radius: 3px;
+    }
+
+    .link-to-page {
+        margin: 1em 0;
+        padding: 0;
+        border: none;
+        font-weight: 500;
+    }
+
+    p > .user {
+        opacity: 0.5;
+    }
+
+    td > .user,
+    td > time {
+        white-space: nowrap;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.5);
+        margin-right: 0.6em;
+        vertical-align: middle;
+    }
+
+    p {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    .image {
+        border: none;
+        margin: 1.5em 0;
+        padding: 0;
+        border-radius: 0;
+        text-align: center;
+    }
+
+    .code,
+    code {
+        background: rgba(135, 131, 120, 0.15);
+        border-radius: 3px;
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 85%;
+        tab-size: 2;
+    }
+
+    code {
+        color: #eb5757;
+    }
+
+    .code {
+        padding: 1.5em 1em;
+    }
+
+    .code-wrap {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .code > code {
+        background: none;
+        padding: 0;
+        font-size: 100%;
+        color: inherit;
+    }
+
+    blockquote {
+        font-size: 1.25em;
+        margin: 1em 0;
+        padding-left: 1em;
+        border-left: 3px solid rgb(55, 53, 47);
+    }
+
+    .bookmark {
+        text-decoration: none;
+        max-height: 8em;
+        padding: 0;
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .bookmark-title {
+        font-size: 0.85em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 1.75em;
+        white-space: nowrap;
+    }
+
+    .bookmark-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bookmark-info {
+        flex: 4 1 180px;
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .bookmark-image {
+        width: 33%;
+        flex: 1 1 180px;
+        display: block;
+        position: relative;
+        object-fit: cover;
+        border-radius: 1px;
+    }
+
+    .bookmark-description {
+        color: rgba(55, 53, 47, 0.6);
+        font-size: 0.75em;
+        overflow: hidden;
+        max-height: 4.5em;
+        word-break: break-word;
+    }
+
+    .bookmark-href {
+        font-size: 0.75em;
+        margin-top: 0.25em;
+    }
+
+    .sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+    .code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+    .serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+    .mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+    .pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+    .pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+    .pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+    .pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+    .pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+    .pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+    .pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+    .pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+    .pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+    .pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+    .pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+    .pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+    .pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+    .pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+    .pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+    .pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+    .highlight-default {
+        color: rgba(55, 53, 47, 1);
+    }
+    .highlight-gray {
+        color: rgba(120, 119, 116, 1);
+        fill: rgba(120, 119, 116, 1);
+    }
+    .highlight-brown {
+        color: rgba(159, 107, 83, 1);
+        fill: rgba(159, 107, 83, 1);
+    }
+    .highlight-orange {
+        color: rgba(217, 115, 13, 1);
+        fill: rgba(217, 115, 13, 1);
+    }
+    .highlight-yellow {
+        color: rgba(203, 145, 47, 1);
+        fill: rgba(203, 145, 47, 1);
+    }
+    .highlight-teal {
+        color: rgba(68, 131, 97, 1);
+        fill: rgba(68, 131, 97, 1);
+    }
+    .highlight-blue {
+        color: rgba(51, 126, 169, 1);
+        fill: rgba(51, 126, 169, 1);
+    }
+    .highlight-purple {
+        color: rgba(144, 101, 176, 1);
+        fill: rgba(144, 101, 176, 1);
+    }
+    .highlight-pink {
+        color: rgba(193, 76, 138, 1);
+        fill: rgba(193, 76, 138, 1);
+    }
+    .highlight-red {
+        color: rgba(212, 76, 71, 1);
+        fill: rgba(212, 76, 71, 1);
+    }
+    .highlight-default_background {
+        color: rgba(55, 53, 47, 1);
+    }
+    .highlight-gray_background {
+        background: rgba(241, 241, 239, 1);
+    }
+    .highlight-brown_background {
+        background: rgba(244, 238, 238, 1);
+    }
+    .highlight-orange_background {
+        background: rgba(251, 236, 221, 1);
+    }
+    .highlight-yellow_background {
+        background: rgba(251, 243, 219, 1);
+    }
+    .highlight-teal_background {
+        background: rgba(237, 243, 236, 1);
+    }
+    .highlight-blue_background {
+        background: rgba(231, 243, 248, 1);
+    }
+    .highlight-purple_background {
+        background: rgba(244, 240, 247, 0.8);
+    }
+    .highlight-pink_background {
+        background: rgba(249, 238, 243, 0.8);
+    }
+    .highlight-red_background {
+        background: rgba(253, 235, 236, 1);
+    }
+    .block-color-default {
+        color: inherit;
+        fill: inherit;
+    }
+    .block-color-gray {
+        color: rgba(120, 119, 116, 1);
+        fill: rgba(120, 119, 116, 1);
+    }
+    .block-color-brown {
+        color: rgba(159, 107, 83, 1);
+        fill: rgba(159, 107, 83, 1);
+    }
+    .block-color-orange {
+        color: rgba(217, 115, 13, 1);
+        fill: rgba(217, 115, 13, 1);
+    }
+    .block-color-yellow {
+        color: rgba(203, 145, 47, 1);
+        fill: rgba(203, 145, 47, 1);
+    }
+    .block-color-teal {
+        color: rgba(68, 131, 97, 1);
+        fill: rgba(68, 131, 97, 1);
+    }
+    .block-color-blue {
+        color: rgba(51, 126, 169, 1);
+        fill: rgba(51, 126, 169, 1);
+    }
+    .block-color-purple {
+        color: rgba(144, 101, 176, 1);
+        fill: rgba(144, 101, 176, 1);
+    }
+    .block-color-pink {
+        color: rgba(193, 76, 138, 1);
+        fill: rgba(193, 76, 138, 1);
+    }
+    .block-color-red {
+        color: rgba(212, 76, 71, 1);
+        fill: rgba(212, 76, 71, 1);
+    }
+    .block-color-default_background {
+        color: inherit;
+        fill: inherit;
+    }
+    .block-color-gray_background {
+        background: rgba(241, 241, 239, 1);
+    }
+    .block-color-brown_background {
+        background: rgba(244, 238, 238, 1);
+    }
+    .block-color-orange_background {
+        background: rgba(251, 236, 221, 1);
+    }
+    .block-color-yellow_background {
+        background: rgba(251, 243, 219, 1);
+    }
+    .block-color-teal_background {
+        background: rgba(237, 243, 236, 1);
+    }
+    .block-color-blue_background {
+        background: rgba(231, 243, 248, 1);
+    }
+    .block-color-purple_background {
+        background: rgba(244, 240, 247, 0.8);
+    }
+    .block-color-pink_background {
+        background: rgba(249, 238, 243, 0.8);
+    }
+    .block-color-red_background {
+        background: rgba(253, 235, 236, 1);
+    }
+    .select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+    .select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+    .select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+    .select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+    .select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+    .select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+    .select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+    .select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+    .select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+    .select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+    .select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+    .select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+    .select-value-color-pageGlass { background-color: undefined; }
+    .select-value-color-washGlass { background-color: undefined; }
+
+    .checkbox {
+        display: inline-flex;
+        vertical-align: text-bottom;
+        width: 16;
+        height: 16;
+        background-size: 16px;
+        margin-left: 2px;
+        margin-right: 5px;
+    }
+
+    .checkbox-on {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+    }
+
+    .checkbox-off {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+    }
+
+</style></head>
+<body>
+<article id="0abb5357-e5b1-415a-87c5-e0b75564027b" class="page sans">
+    <header>
+        <img class="page-cover-image" src="istockphoto-1039095700-612x612.jpg" style="object-position:center 50%"/>
+        <div class="page-header-icon page-header-icon-with-cover"><img class="icon" src="external-pharynx-anatomy-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"/></div>
+        <h1 class="page-title">03. Faringitis</h1>
+        <p class="page-description"></p>
+        <table class="properties">
+            <tbody>
+            <tr class="property-row property-row-select">
+                <th>
+                     <span class="icon property-icon">
+                        <svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesSelect">
+                           <path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM7.62402 10.6348C7.79492 10.915 8.20508 10.9287 8.37598 10.6348L10.666 6.73145C10.8574 6.41016 10.7002 6.04102 10.3652 6.04102H5.62793C5.29297 6.04102 5.14941 6.43066 5.32031 6.73145L7.62402 10.6348Z"></path>
+                        </svg>
+                     </span>
+                    Domain
+                </th>
+                <td><span class="selected-value select-value-color-pink">01. Farmakoterapi &amp; Farmasi Klinis</span></td>
+            </tr>
+            <tr class="property-row property-row-select">
+                <th>
+                     <span class="icon property-icon">
+                        <svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesSelect">
+                           <path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM7.62402 10.6348C7.79492 10.915 8.20508 10.9287 8.37598 10.6348L10.666 6.73145C10.8574 6.41016 10.7002 6.04102 10.3652 6.04102H5.62793C5.29297 6.04102 5.14941 6.43066 5.32031 6.73145L7.62402 10.6348Z"></path>
+                        </svg>
+                     </span>
+                    Subdomain
+                </th>
+                <td><span class="selected-value select-value-color-pink">03. Sistem Pernapasan</span></td>
+            </tr>
+            <tr class="property-row property-row-select">
+                <th>
+                     <span class="icon property-icon">
+                        <svg role="graphics-symbol" viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0" class="typesSelect">
+                           <path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM7.62402 10.6348C7.79492 10.915 8.20508 10.9287 8.37598 10.6348L10.666 6.73145C10.8574 6.41016 10.7002 6.04102 10.3652 6.04102H5.62793C5.29297 6.04102 5.14941 6.43066 5.32031 6.73145L7.62402 10.6348Z"></path>
+                        </svg>
+                     </span>
+                    Tingkat Kesulitan
+                </th>
+                <td><span class="selected-value select-value-color-yellow">🔥🔥🔥</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </header>
+    <div class="page-body">
+        <div id="708fc117-615c-4736-8a0c-04f0a1f3efa0" class="column-list">
+            <div id="f5fb4208-649f-471e-99fc-981b1cbfef7b" style="width:50%" class="column">
+                <div>
+                    <figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="8f6c3557-a4a2-43d2-85fe-76eb0b812b6b">
+                        <div style="font-size:1.5em"><img class="icon" src="https://www.notion.so/icons/info-alternate_red.svg"/></div>
+                        <div style="width:100%">
+                            Berikut adalah Navigasi dari topik ini. Silakan menuju bagian yang diinginkan
+                            <nav id="b9f88589-d7f4-442a-ac9d-2b03aec95e76" class="block-color-gray table_of_contents"></nav>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+            <div id="9d3293c2-9d93-4b0c-9f98-2aa9fd48f3e9" style="width:50%" class="column">
+                <div>
+                    <figure class="block-color-red_background callout" style="white-space:pre-wrap;display:flex" id="7fbd8444-4523-4a1d-81b5-4e2097bde060">
+                        <div style="font-size:1.5em"><img class="icon" src="https://www.notion.so/icons/info-alternate_red.svg"/></div>
+                        <div style="width:100%">
+                            <strong>Ini </strong>adalah <strong>Pomodoro! Salah satu alat fokus belajar terpopuler!</strong> Coba tantang dirimu fokus selama 25 menit dan istirahatnya 5 menit yaa!
+                            <div>
+                                <ul id="178eb967-67c8-4378-b2ec-524f7488fd26" class="toggle">
+                                    <li>
+                                        <details open="">
+                                            <summary><strong>Cek Pomodoromu!</strong></summary>
+                                            <figure id="d670e8cd-b7fb-4943-81e9-1030a454b827">
+                                                <div class="source"><a href="https://studywithme.io/aesthetic-pomodoro-timer/">https://studywithme.io/aesthetic-pomodoro-timer/</a></div>
+                                            </figure>
+                                        </details>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+            </div>
+        </div>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">1. Definisi</summary>
+            <div class="indented">
+                <ul id="2dc3aca8-a3d2-4a78-8d39-7f20391877f6" class="bulleted-list">
+                    <li style="list-style-type:disc">Faringitis : peradangan pada selaput lendir yang mana melapisi bagian belakang tenggorokan atau bagian faring. Peradangan dalam hal ini menyebabkan ketidaknyamanan, kekeringan, dan kesulitas menelan. Faringitis dapat disebabkan akibat infeksi maupun non-infeksi. Faringitis yaitu kondisi umum yang jarang berkembang menjadi penyakit serius. Peradangan ini biasanya bisa sembuh dengan sendirinya dalam waktu kurang lebih seminggu.</li>
+                </ul>
+                <ul id="473b0214-c0a9-4df9-8225-6390b88c5322" class="bulleted-list">
+                    <li style="list-style-type:disc">Farinigitis merupakan salah satu penyakit infeksi saluran pernapasan atas dengan prevalensi terbanyak.</li>
+                </ul>
+                <ul id="351cf277-49e1-4faf-bab1-6f9cc7e917e9" class="bulleted-list">
+                    <li style="list-style-type:disc">Istilah faringitis akut digunakan untuk menunjukkan semua infeksi akut pada faring, termasuk tonsilitis (tonsilofaringitis) yang berlangsung hingga 14 hari. Faringitis merupakan peradangan akut membran mukosa faring dan struktur lain di sekitarnya. Karena letaknya yang sangat dekat dengan hidung dan tonsil, jarang terjadi hanya infeksi lokal faring atau tonsil. Oleh karena itu, pengertian faringitis secara luas mencakup tonsilitis, nasofaringitis, dan tonsilofaringitis. Infeksi pada daerah faring dan sekitarnya ditandai dengan keluhan nyeri tenggorok. Faringitis Streptokokus beta hemolitikus grup A (SBHGA) adalah infeksi akut orofaring dan/atau nasofaring oleh SBHGA.</li>
+                </ul>
+                <ul id="d929e5d1-4366-4ae3-b899-667516480a83" class="bulleted-list">
+                    <li style="list-style-type:disc">Virus dan bakteri merupakan penyebab terbanyak faringitis</li>
+                </ul>
+                <ul id="324fa738-7795-4bbf-b872-b31d7953dd45" class="bulleted-list">
+                    <li style="list-style-type:disc">Group A streptococcal adalah bakteri umum penyebab faringitis</li>
+                </ul>
+                <ul id="c524a4b5-dd87-4587-bd46-c793b15b6c68" class="bulleted-list">
+                    <li style="list-style-type:disc">RADT dan throat culture digunakan dalam diagnosa</li>
+                </ul>
+                <ul id="513c0830-3fc4-4760-9bc6-9193693f31e3" class="bulleted-list">
+                    <li style="list-style-type:disc">Amoksisilin merupakan terapi lini pertama bila tidak ada kontraindikasi</li>
+                </ul>
+                <ul id="0c6e4012-516d-44ac-a72b-79f32a0e1a0e" class="bulleted-list">
+                    <li style="list-style-type:disc">Sefadroksil, sefaleksin, klaritromisin, azitromisin dan klindamisin merupakan lini kedua bila terdapat kontraindikasi pada lini pertama</li>
+                </ul>
+                <ul id="3ee62c79-7ad6-47fc-85cc-6e58093c1276" class="bulleted-list">
+                    <li style="list-style-type:disc">Skrining pengobatan/obat, konseling atau home care oleh Apoteker penting untuk mencapai pengobatan yang optimal, efektif dan aman pada pasien faringitis.</li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">2. Pembagian Faringitis</summary>
+            <div class="indented">
+                <p id="c3cb3cc4-5be4-45bf-882a-ea540140e1ea" class="">Tidak ada pembagian dalam faringitis</p>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">3. Etiologi dan Faktor Pemicu Faringitis</summary>
+            <div class="indented">
+                <ul id="95b9ba09-3102-4df3-95eb-666607ba0625" class="bulleted-list">
+                    <li style="list-style-type:disc">Berbagai bakteri dan virus dapat menjadi etiologi faringitis, baik faringitis sebagai manifestasi tunggal maupun sebagai bagian dari penyakit lain. </li>
+                </ul>
+                <ul id="1d68f6f4-97fd-4001-8cb0-c6ed0e151b4b" class="toggle">
+                    <li>
+                        <details open="">
+                            <summary>Bakteri</summary>
+                            <ul id="1dd2148d-8fb8-42e7-b1f3-6dd277716629" class="bulleted-list">
+                                <li style="list-style-type:disc">Streptokokus beta hemolitikus grup A adalah bakteri penyebab terbanyak faringitis/tonsilofaringitis akut. Bakteri tersebut mencakup 15−30% (di luar kejadian epidemik) dari penyebab faringitis akut pada anak, sedangkan pada dewasa hanya sekitar 5−10% kasus. Streptokokus Grup A biasanya bukan merupakan penyebab yang umum pada anak usia prasekolah, tetapi pernah dilaporkan terjadi outbreak di tempat penitipan anak (day care). </li>
+                            </ul>
+                            <ul id="b325940b-a3bd-4b04-96d2-cdf273e32fdb" class="bulleted-list">
+                                <li style="list-style-type:disc">Mikroorganisme seperti Klamidia dan Mikoplasma dilaporkan dapat menyebabkan infeksi, tetapi sangat jarang terjadi.</li>
+                            </ul>
+                            <ul id="92822a3e-9eb8-48d0-badb-b97f648ce387" class="bulleted-list">
+                                <li style="list-style-type:disc">Di negara Inggris dan Skandinavia pernah dilaporkan infeksi Arcobacterium haemolyticum. Beberapa bakteri dapat melakukan proliferasi ketika sedang terjadi infeksi virus (copathogen bacterial) dan dapat ditemukan pada kultur, tetapi biasanya bukan merupakan penyebab dari faringitis/tonsilofaringitis akut. </li>
+                            </ul>
+                            <ul id="e2b74bf9-8778-4836-825e-50b63fc0705d" class="bulleted-list">
+                                <li style="list-style-type:disc">Beberapa bakteri tersebut adalah Staphylococcus aureus, Haemophilus influenzae, Moraxella catarrhalis, Bacteroides fragilis, Bacteroides oralis, Bacteroides melaninogenicus, spesies Fusobacterium, dan spesies Peptostreptococcus. </li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+                <ul id="2605e65a-1033-45e2-b11e-ee225757dfbe" class="toggle">
+                    <li>
+                        <details open="">
+                            <summary>Virus</summary>
+                            <ul id="f6d84bb3-1bcc-46df-9d20-0ff3dadb2a33" class="bulleted-list">
+                                <li style="list-style-type:disc">Virus merupakan etiologi terbanyak faringitis akut, terutama pada anak berusia ≤3 tahun (prasekolah). Virus penyebab penyakit respiratori seperti Adenovirus, Rhinovirus, dan virus Parainfluenza dapat menjadi penyebab faringitis. </li>
+                            </ul>
+                            <ul id="ee713d0b-8041-455f-8745-fbd04841cf45" class="bulleted-list">
+                                <li style="list-style-type:disc">Virus Epstein Barr (Epstein Barr virus, EBV) dapat menyebabkan faringitis, tetapi disertai dengan gejala infeksi mononukleosis seperti splenomegali dan limfadenopati generalisata. Infeksi sistemik seperti infeksi virus campak, Cytomegalovirus (CMV), virus Rubella, dan berbagai virus lainnya juga dapat menunjukkan gejala faringitis akut. </li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+                <ul id="6d4be1ee-488c-492b-bd37-4d6ffc07ed33" class="toggle">
+                    <li>
+                        <details open="">
+                            <summary>Mikroorganisme yang dapat menyebabkan faringitis dapat dilihat pada toogle</summary>
+                            <table id="06b9574b-fe30-4d65-b877-29abf5dcca36" class="simple-table">
+                                <tbody>
+                                <tr id="809ed494-60df-445a-9a70-9efa1b967391">
+                                    <td id="W&gt;ZZ" class=""><strong>Mikroorganisme</strong></td>
+                                    <td id="ogWE" class=""><strong>Kelainan yang ditimbulkan</strong></td>
+                                </tr>
+                                <tr id="f6713afb-fe10-4932-9a2d-d331d26c6904">
+                                    <td id="W&gt;ZZ" class=""><em><strong>Bakteri</strong></em></td>
+                                    <td id="ogWE" class=""></td>
+                                </tr>
+                                <tr id="ccba5672-327d-4a3c-bc6f-5be1c5ac70ba">
+                                    <td id="W&gt;ZZ" class="">Streptokokus, group A</td>
+                                    <td id="ogWE" class="">Faringitis, tonsilitis, demam scarlet</td>
+                                </tr>
+                                <tr id="95fc77f9-003d-4dc6-b47e-e4cbb9b04c66">
+                                    <td id="W&gt;ZZ" class="">Streptokokus, group C dan G</td>
+                                    <td id="ogWE" class="">Faringitis, tonsilitis, <em>scarlatiniform</em></td>
+                                </tr>
+                                <tr id="7b13be61-8570-4918-8bda-c1d782836d24">
+                                    <td id="W&gt;ZZ" class="">Campuran bakteri anaerob</td>
+                                    <td id="ogWE" class=""><em>Vincent&#x27;s angina</em></td>
+                                </tr>
+                                <tr id="07b55548-994f-4594-8476-b3ac4c9a324f">
+                                    <td id="W&gt;ZZ" class=""><em>Neisseria gonorrhoeae</em></td>
+                                    <td id="ogWE" class="">Faringitis, tonsilitis</td>
+                                </tr>
+                                <tr id="8a0e8309-bbac-4910-a5c9-d491abd97d62">
+                                    <td id="W&gt;ZZ" class=""><em>Corynebacterium diphtheriae</em></td>
+                                    <td id="ogWE" class="">Difteri</td>
+                                </tr>
+                                <tr id="ac20ffbb-b85d-457e-90c8-83be78a867a1">
+                                    <td id="W&gt;ZZ" class=""><em>Arcanobacterium haemolyticum</em></td>
+                                    <td id="ogWE" class="">Faringitis, <em>scarlatiniform</em></td>
+                                </tr>
+                                <tr id="1e81b265-dba8-4143-b6c7-f51f96e19941">
+                                    <td id="W&gt;ZZ" class=""><em>Yersinia enterocolitica</em></td>
+                                    <td id="ogWE" class="">Faringitis, enterokolitis</td>
+                                </tr>
+                                <tr id="94d47d5d-997a-4d34-9806-d5be670e4de8">
+                                    <td id="W&gt;ZZ" class=""><em>Yersinia pestis</em></td>
+                                    <td id="ogWE" class=""><em>Plague</em></td>
+                                </tr>
+                                <tr id="3dd6be60-0354-44d8-968f-0f1171601108">
+                                    <td id="W&gt;ZZ" class=""><em>Francisella tularensis</em></td>
+                                    <td id="ogWE" class="">Tularemia (oropharyngeal form)</td>
+                                </tr>
+                                <tr id="fbbfbd64-40f6-43e6-aeed-2415b4844b9c">
+                                    <td id="W&gt;ZZ" class=""><em><strong>Virus</strong></em></td>
+                                    <td id="ogWE" class=""></td>
+                                </tr>
+                                <tr id="e06dc33b-4168-45cf-8530-1457e22d62ba">
+                                    <td id="W&gt;ZZ" class="">Virus Rhino</td>
+                                    <td id="ogWE" class="">Common cold/rinitis</td>
+                                </tr>
+                                <tr id="9d497433-c119-41fc-942a-ca2eb39f2b0a">
+                                    <td id="W&gt;ZZ" class="">Virus Corona</td>
+                                    <td id="ogWE" class="">Common cold</td>
+                                </tr>
+                                <tr id="0c899eee-83cb-4af6-88b0-958369c04407">
+                                    <td id="W&gt;ZZ" class="">Virus Adeno</td>
+                                    <td id="ogWE" class="">Pharyngoconjunctival fever, IRA</td>
+                                </tr>
+                                <tr id="077893b5-3e13-4f72-bd0a-0f4aa8c33c82">
+                                    <td id="W&gt;ZZ" class="">Virus Herpes simplex 1 dan 2</td>
+                                    <td id="ogWE" class="">Faringitis, gingivostomatitis</td>
+                                </tr>
+                                <tr id="569f1020-553d-4437-a7c0-aa36369fb3ef">
+                                    <td id="W&gt;ZZ" class="">Virus Parainfluenza</td>
+                                    <td id="ogWE" class="">Cold, croup</td>
+                                </tr>
+                                <tr id="ae1c744c-550a-4553-9433-4b1223d7c99f">
+                                    <td id="W&gt;ZZ" class="">Virus Coxsackie A</td>
+                                    <td id="ogWE" class="">Herpangina, hand-foot-and-mouth disease</td>
+                                </tr>
+                                <tr id="ae191b70-901e-4e55-89e6-74bfccbc6c52">
+                                    <td id="W&gt;ZZ" class="">Virus Epstein-Barr</td>
+                                    <td id="ogWE" class="">Infeksi mononukleosis</td>
+                                </tr>
+                                <tr id="f9874743-8b24-4c50-9dcc-048e458d9038">
+                                    <td id="W&gt;ZZ" class="">Virus Sitomegalo</td>
+                                    <td id="ogWE" class="">Mononucleosis Virus Sitomegalo</td>
+                                </tr>
+                                <tr id="5d1f0f80-853a-4597-b7d9-a8cffdbc2018">
+                                    <td id="W&gt;ZZ" class="">Human immunodeficiency virus</td>
+                                    <td id="ogWE" class="">Infeksi HIV primer</td>
+                                </tr>
+                                <tr id="dcab27cd-0584-4bb2-b779-30593e958aff">
+                                    <td id="W&gt;ZZ" class="">Influenza virus A and B</td>
+                                    <td id="ogWE" class="">Influenza</td>
+                                </tr>
+                                <tr id="2af2fe7a-6afe-42e6-88ac-ab7b24a2f459">
+                                    <td id="W&gt;ZZ" class=""><em><strong>Mycoplasma</strong></em></td>
+                                    <td id="ogWE" class=""></td>
+                                </tr>
+                                <tr id="97a0acd2-c525-491b-957c-ce6fef9e137b">
+                                    <td id="W&gt;ZZ" class="">Mycoplasma pneumoniae</td>
+                                    <td id="ogWE" class="">Pneumonia, bronkitis, faringitis(?)</td>
+                                </tr>
+                                <tr id="200ff62a-1ce5-4660-9650-cef400e45bac">
+                                    <td id="W&gt;ZZ" class=""><em><strong>Klamidia</strong></em></td>
+                                    <td id="ogWE" class=""></td>
+                                </tr>
+                                <tr id="5f23bd4e-d18b-4315-8dd3-d41381b73c39">
+                                    <td id="W&gt;ZZ" class="">Chlamydia psittaci</td>
+                                    <td id="ogWE" class="">IRA, pneumonia</td>
+                                </tr>
+                                <tr id="80ac51b3-698b-432d-89c2-3eb430166f36">
+                                    <td id="W&gt;ZZ" class="">Chlamydia pneumoniae</td>
+                                    <td id="ogWE" class="">Pneumonia, faringitis (?)</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </details>
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">4. Patofisiologi</summary>
+            <div class="indented">
+                <ul id="02f03435-493b-4553-8e5a-7c79d55c0e6a" class="bulleted-list">
+                    <li style="list-style-type:disc">Virus dan bakteria merupakan penyebab umum faringitis. Faringitis yang diakibatkan bakteri (Group A Streptococcal) disebarkan melalui droplet (Musher DM, 2003). </li>
+                </ul>
+                <ul id="bc109a58-e1d3-470c-bdc2-91e17d133e21" class="bulleted-list">
+                    <li style="list-style-type:disc">
+                        Mekanisme secara pasti bagaimana Group A Streptococcal mengakibatkan faringitis belum diketahui secara pasti, akan tetapi beberapa hal telah diketahui  (Marquez MAC, 2016).
+                        <ul id="e222827b-1958-4cc4-85cd-7bf827631fab" class="bulleted-list">
+                            <li style="list-style-type:circle">Group A Streptococcal memiliki eksotoksin, adhesin, kapsul hyaluronic acid dan M protein. Eksotoksin dan Adhesin digunakan bakteri untuk evade dari sistem imunitas melalui evade dari sistem faringeal dan menempel pada faring</li>
+                        </ul>
+                        <ul id="fb4aac86-551b-44ca-93ba-2137fc3fb210" class="bulleted-list">
+                            <li style="list-style-type:circle">Hyaluronic acid dan M protein memiliki fungsi dalam virulensi dan kesamaan dengan myosin jantung manusia sehingga menimbulkan reaksi silang yang mengakibatkan penyakit rematik jantung</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">5. Manifestasi Klinis Faringitis dan Diagnosisnya</summary>
+            <div class="indented">
+                <ul id="4f1c1533-1ccf-4551-afb7-eaedf2259b1e" class="toggle">
+                    <li>
+                        <details open="">
+                            <summary>Manifestasi Klinis</summary>
+                            <ul id="24e5e94a-a6d7-417f-b1c8-6c8e2c8ac4a5" class="bulleted-list">
+                                <li style="list-style-type:disc">Sangat sulit untuk membedakan penyebab faringitis (virus atau bakteri) hanya berdasarkan manifestasi klinik/ tanda dan gejala yang dirasakan pasien. Akan tetapi skoring menggunakan kriteria Centor dapat digunakan untuk memprediksi faringitis yang diakibatkan infeksi bakteri Group A Streptococcal (Mc Isaac dkk,2004). Gejala umum yang sering dirasakan seperti sakit tenggorokan, demam, sakit kepala, sakit otot, peteki pada palatin dan eksudat pada tonsil (Choby BA, 2009).</li>
+                            </ul>
+                            <ul id="838c4839-9f26-4228-922d-42e50738082e" class="bulleted-list">
+                                <li style="list-style-type:disc">Gejala faringitis yang khas akibat bakteri Streptokokus berupa nyeri tenggorokan dengan awitan mendadak, disfagia, dan demam. Urutan gejala yang biasanya dikeluhkan oleh anak berusia di atas 2 tahun adalah nyeri kepala, nyeri perut, dan muntah. Selain itu juga didapatkan demam yang dapat mencapai suhu 40°C, beberapa jam kemudian terdapat nyeri tenggorok. Gejala seperti rinorea, suara serak, batuk, konjungtivitis, dan diare biasanya disebabkan oleh virus. Kontak dengan penderita rinitis juga dapat ditemukan pada anamnesis.</li>
+                            </ul>
+                            <ul id="7d645a5f-d417-4160-97ce-72deb6dd5175" class="bulleted-list">
+                                <li style="list-style-type:disc">Pada pemeriksaan fisis, tidak semua pasien tonsilofaringitis akut Streptokokus menunjukkan tanda infeksi Streptokokus, yaitu eritema pada tonsil dan faring yang disertai dengan pembesaran tonsil.</li>
+                            </ul>
+                            <ul id="6b95533b-aed7-4594-abf2-0e790e290e6f" class="bulleted-list">
+                                <li style="list-style-type:disc">
+                                    Faringitis streptokokus sangat mungkin jika dijumpai gejala dan tanda berikut:
+                                    <ol type="1" id="1476804d-781a-46ab-bbdd-03bb4f8f291d" class="numbered-list" start="1">
+                                        <li>onset akut, disertai mual dan muntah - faring hiperemis</li>
+                                    </ol>
+                                    <ol type="1" id="5d37fff1-5c59-426b-a34a-bebce18783ee" class="numbered-list" start="2">
+                                        <li>demam</li>
+                                    </ol>
+                                    <ol type="1" id="013cae46-005c-4704-9ebd-cb60f9a22587" class="numbered-list" start="3">
+                                        <li>nyeri tenggorokan</li>
+                                    </ol>
+                                    <ol type="1" id="7ccd4a6b-3726-4fd3-b959-763e55b2ea19" class="numbered-list" start="4">
+                                        <li>tonsil bengkak dengan eksudasi</li>
+                                    </ol>
+                                    <ol type="1" id="8195f30d-7555-4bee-bea5-2891a17a2a57" class="numbered-list" start="5">
+                                        <li>kelenjar getah bening leher anterior bengkak dan nyeri</li>
+                                    </ol>
+                                    <ol type="1" id="fb42197e-959a-48c7-9348-046a52f5301e" class="numbered-list" start="6">
+                                        <li>uvula bengkak dan merah</li>
+                                    </ol>
+                                    <ol type="1" id="7ba78c2d-7aef-4287-8802-bec7baaedfd9" class="numbered-list" start="7">
+                                        <li>ekskoriasi hidung disertai lesi impetigo sekunder</li>
+                                    </ol>
+                                    <ol type="1" id="dc24f8fc-976b-4973-8ab3-6aeef8bbca2f" class="numbered-list" start="8">
+                                        <li>ruam skarlatina</li>
+                                    </ol>
+                                    <ol type="1" id="cb133cf6-7f87-4219-9fe2-b0b1d3afb4dd" class="numbered-list" start="9">
+                                        <li>petekie palatum mole</li>
+                                    </ol>
+                                </li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+                <ul id="3e175be5-1629-43ca-b1a4-7085e8b4d79f" class="toggle">
+                    <li>
+                        <details open="">
+                            <summary>Diagnosis</summary>
+                            <ul id="c97f0409-75b3-421a-8aab-b1fb7aa70e04" class="toggle">
+                                <li>
+                                    <details open="">
+                                        <summary>Algoritma Centor Score</summary>
+                                        <figure id="4614ef35-8403-4240-9071-cdcc262d1868" class="image"><a href="Untitled.png"><img style="width:443px" src="Untitled.png"/></a></figure>
+                                    </details>
+                                </li>
+                            </ul>
+                            <ul id="055d5862-dad0-4a99-b83b-aa245f41228f" class="bulleted-list">
+                                <li style="list-style-type:disc">Centor Score digunakan untuk mengetahui probabilitas faringitis yang diakibatkan oleh Group A Streptococcus. Rapid Antigen Detection Testing (RADT) dan Throat Culture adalah uji laboratorium untuk memastikan etiologi faringitis. </li>
+                            </ul>
+                            <ul id="85e8b47c-5afc-4163-984e-0643a187e7f4" class="bulleted-list">
+                                <li style="list-style-type:disc">Rapid Antigen Detection Testing merupakan pemeriksaan awal. Berdasarkan centor score diatas bila skor 0 dan 1 maka antibiotika dan pengujian lanjutan tidak diindikasikan. Skor 2 dan 3 diindikasikan RADT atau kultur, bila hasil positif maka antibiotika diindikasikan. Sedangkan bila skor ⪰ 4 maka antibiotik diindikasikan.</li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">6. Terapi Faringitis</summary>
+            <div class="indented">
+                <ul id="bb36ad64-3f80-4677-a70d-e663c8d47462" class="bulleted-list">
+                    <li style="list-style-type:disc">Umumnya faringitis akan membaik setelah 5 hari tanpa pengobatan. Namun biasanya pasien sebaiknya diberikan PCT untuk mengurangi gejala nyeri dan demam</li>
+                </ul>
+                <ul id="425a4535-d993-408d-ba90-d2b8be57cd41" class="bulleted-list">
+                    <li style="list-style-type:disc">Pada faringitis yang diakibatkan oleh bakteri seperti streptococcus, maka terapinya ditambah antibiotik seperti amoksisilin</li>
+                </ul>
+                <ul id="53cf26ee-c8b8-4cb2-819d-20cb7c014220" class="bulleted-list">
+                    <li style="list-style-type:disc">Pada faringitis yang diakibatkan oleh virus rhinovirus, terapi antiviral tidak menunjukkan manfaat yang lebih baik.</li>
+                </ul>
+                <ul id="911e6e90-915b-42ea-ba31-2f6810134187" class="bulleted-list">
+                    <li style="list-style-type:disc">Usaha untuk membedakan faringitis bakteri dan virus bertujuan agar pemberian antibiotik sesuai indikasi. Faringitis Streptokokus grup A merupakan satu-satunya faringitis yang memiliki indikasi kuat dan aturan khusus dalam penggunaan antibiotik (selain difteri yang disebabkan oleh Corynebacterium diphteriae).</li>
+                </ul>
+                <ul id="870a9f2f-c520-42ae-b305-9a47990890a1" class="bulleted-list">
+                    <li style="list-style-type:disc">Pemberian antibiotik tidak diperlukan pada faringitis virus, karena tidak akan mempercepat waktu penyembuhan atau mengurangi derajat keparahan. Istirahat cukup dan pemberian cairan yang sesuai merupakan terapi suportif yang dapat diberikan. Selain itu, pemberian gargles (obat kumur) dan lozenges (obat hisap), pada anak yang cukup besar dapat meringankan keluhan nyeri tenggorok. Apabila terdapat nyeri yang berlebih atau demam, dapat diberikan parasetamol atau ibuprofen. Pemberian aspirin tidak dianjurkan, terutama pada infeksi Influenza, karena insidens sindrom Reye kerap terjadi.</li>
+                </ul>
+                <ul id="f22540f4-2306-456d-891a-9a60ff9eb512" class="bulleted-list">
+                    <li style="list-style-type:disc">Pemberian antibiotik pada faringitis harus berdasarkan pada gejala klinis dan hasil kultur positif pada pemeriksaan usapan tenggorok. Akan tetapi, hingga saat ini masih terdapat pemberian antibiotik yang tidak rasional untuk kasus faringitis akut. Salah satu penyebabnya adalah terdapat overdiagnosis faringitis menjadi faringitis akut Streptokokus, dan memberikan antibiotik karena khawatir dengan salah satu komplikasinya, berupa demam reumatik.</li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">7. Algoritma Terapi Faringitis</summary>
+            <div class="indented">
+                <ul id="9c9e7d91-4ee8-406a-97ae-d05ad40823ca" class="toggle">
+                    <li>
+                        <details open="">
+                            <summary>Antibiotik pilihan pada terapi faringitis akut:</summary>
+                            <ul id="7ff7e87f-4c28-497f-8b08-3a7aa0a8999f" class="bulleted-list">
+                                <li style="list-style-type:disc">Streptokokus grup A adalah Penisilin V oral 15-30 mg/kgBB/hari dibagi 3 dosis selama 10 hari atau benzatin penisilin G IM dosis tunggal dengan dosis 600.000 IU (BB30 kg). </li>
+                            </ul>
+                            <ul id="9b4fe36f-a60a-4315-9b86-1c14b1dbc6d8" class="bulleted-list">
+                                <li style="list-style-type:disc">Amoksisilin dapat digunakan sebagai pengganti penisilin pada anak yang lebih kecil, karena selain efeknya sama, amoksisilin juga memiliki rasa yang lebih enak. </li>
+                            </ul>
+                            <ul id="363a6586-f6da-4b5d-8d76-a362520a99f4" class="bulleted-list">
+                                <li style="list-style-type:disc">Amoksisilin dengan dosis 50 mg/kgBB/hari dibagi 2 selama 6 hari, efektivitasnya sama dengan Penisilin V oral selama 10 hari.</li>
+                            </ul>
+                            <ul id="ee660157-fccc-4d86-8601-9c906e307281" class="bulleted-list">
+                                <li style="list-style-type:disc">Untuk anak yang alergi penisilin dapat diberikan eritromisin etil suksinat 40 mg/kgBB/hari, eritromisin estolat 20-40 mg/kgBB/hari, dengan pemberian 2, 3, atau 4 kali per hari selama 10 hari; atau dapat juga diberikan makrolid baru misalnya azitromisin dengan dosis tunggal 10 mg/kgBB/hari, selama 3 hari berturut-turut. </li>
+                            </ul>
+                            <ul id="e616a7aa-09a2-4b35-905c-13295f95ae05" class="bulleted-list">
+                                <li style="list-style-type:disc">Antibiotik golongan sefalosporin generasi I dan II dapat juga memberikan efek yang sama, tetapi pemakaiannya tidak dianjurkan, karena selain mahal risiko resistensinya juga lebih besar.</li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">8. Monitoring &amp; Evaluasi</summary>
+            <div class="indented">
+                <ul id="792a1426-29b7-47f2-a83d-c64d920b419e" class="bulleted-list">
+                    <li style="list-style-type:disc">Peran apoteker dalam penatalaksanaan faringitis adalah untuk memastikan terapi yang optimal (efektif) dan aman. Skrining awal potensi terjadinya masalah-masalah terkait obat (Drugs Related Problems) menjadi sangat penting. </li>
+                </ul>
+                <ul id="ad804db5-a7de-4a6b-b806-4d6c490fc059" class="bulleted-list">
+                    <li style="list-style-type:disc">Home care menjadi metode monitoring terhadap pasien faringitis dengan melihat gejala pasien seperti demam, kecepatan nadi, dan kecepatan nafas. Selain itu, parameter laboratorium seperti jumlah leukosit dan eradikasi bakteri menjadi faktor penting dalam monitoring terapi obat. </li>
+                </ul>
+                <ul id="4944b01c-fdbe-42d0-8383-e269a349ab7b" class="bulleted-list">
+                    <li style="list-style-type:disc">Kerjasama tim adalah salah satu faktor penentu dalam ketercepaian terapi.</li>
+                </ul>
+            </div>
+        </details>
+        <details open="">
+            <summary style="font-weight:600;font-size:1.875em;line-height:1.3;margin:0">9. TLDR: Rangkuman untuk UKAI - Faringitis</summary>
+            <div class="indented">
+                <ul id="df79d964-aa27-4f16-a7c5-b49b3593acd3" class="bulleted-list">
+                    <li style="list-style-type:disc"><strong>Faringitis</strong> merupakan peradangan pada selaput lendir yang mana melapisi bagian belakang tenggorokan atau bagian faring. Pengertian faringitis secara luas mencakup tonsilitis, nasofaringitis, dan tonsilofaringitis. </li>
+                </ul>
+                <ul id="9657a5b4-afe6-4288-aa14-ecef82a67aa6" class="bulleted-list">
+                    <li style="list-style-type:disc">Penyebab terbanyak faringitis adalah virus dan bakteri. Group A streptococcal adalah bakteri umum penyebab faringitis. </li>
+                </ul>
+                <ul id="6f17f198-765a-4ec3-8a95-eedba92d9be5" class="bulleted-list">
+                    <li style="list-style-type:disc">
+                        <strong>Gejala</strong> faringitis yang khas <strong>akibat</strong> <strong>bakteri Streptokokus</strong> berupa nyeri tenggorokan dengan awitan mendadak, disfagia, dan demam. Urutan gejala yang biasanya dikeluhkan oleh anak berusia di atas 2 tahun adalah nyeri kepala, nyeri perut, dan muntah.
+                        <ul id="970c6b2e-2d0a-47cd-ae11-2b9f278709fd" class="bulleted-list">
+                            <li style="list-style-type:circle">Selain itu juga didapatkan demam yang dapat mencapai suhu 40°C, beberapa jam kemudian terdapat nyeri tenggorok. Gejala faringitis <strong>akibat virus</strong> seperti rinorea, suara serak, batuk, konjungtivitis, dan diare.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul id="e584e3aa-fd2a-43eb-a16b-9cbaf33ac7a5" class="bulleted-list">
+                    <li style="list-style-type:disc">
+                        Terapi faringitis
+                        <ol type="1" id="9b89848c-384b-453b-9a7d-abeab2cacefd" class="numbered-list" start="1">
+                            <li>Pemberian PCT untuk mengurangi gejala</li>
+                        </ol>
+                        <ol type="1" id="ffb1dff7-94ac-4358-8baf-ac5222031a01" class="numbered-list" start="2">
+                            <li>Faringitis akibat bakteri (<em>Streptococcus</em>) à antibiotik penicillin V, amoksisilin</li>
+                        </ol>
+                        <ol type="1" id="9113d556-6aeb-4501-a38e-f6a094681892" class="numbered-list" start="3">
+                            <li>Faringitis akibat virus (<em>rhinovirus</em>) à istirahat cukup, pemberian cairan yang sesuai, pemberia gargles dan lozenges pada anak untuk meringankan keluhan nyeri tenggorok, ibuprofen/pct (nyeri berlebihan atau demam)</li>
+                        </ol>
+                        <ol type="1" id="766beb2e-0ba3-4856-b1c4-e3479fadac30" class="numbered-list" start="4">
+                            <li>Bagi anak yang alergi penisilin à eritromisin etil sukinat, eritromisin estolat, azitromisin</li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+        </details>
+        <p id="30f2840d-2931-4dda-add6-79933eadf804" class=""></p>
+        <div>
+            <p id="e619bff4-da67-4278-b7df-e080ae22c77e" class=""><a href="https://www.notion.so/Modul-UKAI-Persiapan-Masuk-Apoteker-07c18307df11419bbb83cc1aff4302cb?pvs=21"><mark class="highlight-red"><strong>Menuju Menu Utama Materi</strong></mark></a><strong> | </strong><a href="https://www.notion.so/Latihan-Soal-Persiapan-UKMPPAI-e645e5b765194a6b8d0c065cc8f25c84?pvs=21"><mark class="highlight-yellow"><strong>Menuju Menu Utama Soal</strong></mark></a><strong> | </strong><a href="https://www.notion.so/Yuk-Latihan-Mengingat-Materi-dan-Soal-dengan-Flashcard-e31560e28e8d4308aa1cf1bc55468e8d?pvs=21"><mark class="highlight-blue"><strong>Menuju Menu Utama Flashcard</strong></mark></a></p>
+        </div>
+    </div>
+</article>
+<span class="sans" style="font-size:14px;padding-top:2em"></span>
+</body>
+</html>

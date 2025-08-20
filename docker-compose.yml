@@ -17,7 +17,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-qwerty}
       MYSQL_PASSWORD: ${DB_PASSWORD:-qwerty}
       MYSQL_USER: ${DB_USERNAME:-root}
-    ports: ["3307:3306"]
+    ports: ["3306:3306"]
     volumes: [dbdata:/var/lib/mysql]
 
   composer:

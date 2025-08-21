@@ -72,6 +72,10 @@ COPY --from=vendor /app /var/www
 
 # Copy hasil build Vite
 COPY --from=frontend /app/public/build /var/www/public/build
+RUN test -s /var/www/public/build/manifest.json
+
+# pastikan tidak force hot mode
+RUN rm -f /var/www/public/hot
 
 # Pastikan folder penting bisa ditulis web user
 RUN mkdir -p storage/logs \

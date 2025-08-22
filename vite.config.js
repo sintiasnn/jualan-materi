@@ -25,7 +25,7 @@ export default defineConfig({
 // -    host: 'localhost',
 // -    port: '3000'
     // agar bisa diakses dari host saat jalan di container
-    host: true,           // atau "0.0.0.0"
+    host: true,
     port: 3000
   }
 });

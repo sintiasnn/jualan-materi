@@ -173,11 +173,7 @@ new class extends Component {
                                 <input type="hidden" name="materi_id" value="{{$materi_id ?? ''}}"/>
                                 <div class="mb-3">
                                     <label class="small mb-1" for="selectDomain">Domain</label>
-                                    <select class="form-control" {{$openEditMateri ? '' : 'disabled'}}
-                                            {{isset($domains) ? 'readonly' : ''}}
-                                            id="selectDomain"
-                                            required
-                                    >
+                                    <select class="form-control" id="selectDomain" required>
                                         <option disabled selected>{{ __('Pilih Domain') }}</option>
                                         @foreach($domains as $domain)
                                             <option {{isset($materi) && $materi->subdomain->domain_code == $domain->code ? 'selected' : ''}}  value="{{$domain->code}}">{{$domain->keterangan}}</option>
@@ -193,7 +189,7 @@ new class extends Component {
                                 <!-- Subdomain -->
                                 <div class="mb-3">
                                     <label class="small mb-1 form-label" for="selectSubdomain">Subdomain</label>
-                                    <select class="form-control" name="subdomain_id" {{$openEditMateri ? '' : 'disabled'}} id="selectSubdomain" required>
+                                    <select class="form-control" name="subdomain_id" id="selectSubdomain" required>
                                         <option disabled selected>{{ __('Pilih Subdomain') }}</option>
                                         @foreach($subdomains as $subdomainItem)
                                             <option
@@ -331,7 +327,20 @@ new class extends Component {
 
 <script>
     $(document).ready(function (){
+        var form = document.getElementById('materi_form');
         $('#materi_submit').on('click', function(){
+            for(var i=0; i < form.elements.length; i++){
+                if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+                    swal.fire({
+                        title: "Warning",
+                        text: "Harap mengisi semua data",
+                        icon: "warning",
+                    })
+                    //alert('There are some required fields!');
+                    return false;
+                }
+            }
+
             swal.fire({
                 title: "Konfirmasi",
                 text: "Apakah anda yakin submit materi? ",
@@ -342,7 +351,12 @@ new class extends Component {
                 confirmButtonText: 'Iya'
             }).then((result) => {
                 if(result.isConfirmed){
-                    $.ajaxSetup({
+                    var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'materi_content').val($('.tiptap').html());
+                    $('#materi_form').append(input);
+                    form.submit();
+                    /*$.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Ambil CSRF token dari meta tag
                         }
@@ -361,7 +375,8 @@ new class extends Component {
                         contentType: 'application/json',
                         processData: false,
                         success: function (response) {
-                            swal.fire({
+                            console.log(response);
+                            /!*swal.fire({
                                 text: response.message,
                                 icon: "success",
                                 allowOutsideClick: false,
@@ -370,9 +385,9 @@ new class extends Component {
                                 if(res.isConfirmed){
                                     window.location.href = `{{route('materi.index')}}`
                                 }
-                            })
+                            })*!/
                         }
-                    })
+                    })*/
                 }
             })
         });

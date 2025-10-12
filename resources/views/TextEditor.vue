@@ -62,7 +62,7 @@
                     <v-table :editor="editor" />
 
                     <div class="btn-group btn-group-sm rounded-0 me-1">
-                        <button
+<!--                        <button
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Add Link"
                             class="btn btn-sm btn-outline-primary"
@@ -70,7 +70,7 @@
                             @click="editor.chain().focus().addColumnBefore().run()"
                         >
                             <i class="fa-solid fa-link"></i>
-                        </button>
+                        </button>-->
                         <button
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Add Image"
@@ -80,7 +80,18 @@
                         >
                             <i class="fa-solid fa-image"></i>
                         </button>
-                        <button
+
+                        <input
+                            type="file"
+                            id="file-upload-input"
+                            ref="fileInput"
+                            @change="onFileChange"
+                            accept="image/png,image/jpg,image/jpeg,image/gif,image/webp"
+                            hidden
+                        />
+                        <button type="button" class="btn btn-sm btn-outline-primary" @click="triggerFileUpload">Upload Image</button>
+
+<!--                        <button
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             title="Add Video"
                             class="btn btn-sm btn-outline-primary"
@@ -88,7 +99,7 @@
                             @click="editor.chain().focus().addColumnBefore().run()"
                         >
                             <i class="fa-solid fa-video"></i>
-                        </button>
+                        </button>-->
 
 
                     </div>
@@ -165,7 +176,7 @@
 </template>
 <script>
 
-import { Color } from '@tiptap/extension-color'
+import {Color} from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
 import StarterKit from '@tiptap/starter-kit'
@@ -176,9 +187,8 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import Link from '@tiptap/extension-link'
-import {Editor, EditorContent, BubbleMenu, FloatingMenu} from "@tiptap/vue-3";
-import NodeRange from '@tiptap/extension-node-range'
-import { DragHandle } from '@tiptap/extension-drag-handle-vue-3'
+import {BubbleMenu, Editor, EditorContent, FloatingMenu} from "@tiptap/vue-3";
+import {DragHandle} from '@tiptap/extension-drag-handle-vue-3'
 import VHeading from "./editor-components/VHeading.vue";
 import VParagraph from "./editor-components/VParagraph.vue";
 import VUndoRedo from "./editor-components/VUndoRedo.vue";
@@ -199,7 +209,6 @@ import TableRow from '@tiptap/extension-table-row'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Image from '@tiptap/extension-image'
 import FileHandler from '@tiptap/extension-file-handler'
-import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 
@@ -246,6 +255,45 @@ export default {
     },
 
     methods: {
+        async triggerFileUpload () {
+            document.getElementById("file-upload-input").click();
+        },
+
+        async onFileChange (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                const data = await this.uploadImage(file);
+                reader.onload = () => {
+                    const base64 = reader.result;
+                    this.editor
+                        .chain()
+                        .focus()
+                        .setImage({ src: data.url })
+                        .run();
+                };
+
+                reader.readAsDataURL(file);
+            }
+            event.target.value = ""; // Reset the input
+        },
+
+        async uploadImage(file){
+            const formData = new FormData();
+            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            formData.append('image', file);
+
+            const response = await fetch('/api/upload', { // Your upload endpoint
+                method: 'POST',
+                body: formData,
+            });
+
+            return await response.json();
+        },
+
+
         async addImage() {
             const {value: url} = await Swal.fire({
                 input: "url",
@@ -328,6 +376,15 @@ export default {
                         openOnClick: false,
                         defaultProtocol: 'https',
                     }),
+                Image.extend({
+                    addOptions() {
+                        return {
+                            ...this.parent?.(),
+                            inline: false,
+                            allowBase64: true,
+                        };
+                    },
+                }),
 
                 FileHandler.configure({
                     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],

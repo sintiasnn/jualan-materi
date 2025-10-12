@@ -37,8 +37,19 @@ class MateriController extends Controller
             $materi = Materi::updateOrCreate(
                 ['id' => $id],
             $materiItem);
-            DB::commit();
-            return redirect()->route('materi.index')->with('message', 'materi berhasil ditambahkan');
+
+            if($materi->saveOrFail()){
+                DB::commit();
+                return redirect()->route('materi.index')
+                    ->with('alert', [
+                        'type' => 'success',
+                        'title' => 'Berhasil',
+                        'message' => 'materi berhasil ditambahkan'
+                    ]);
+            } else {
+                DB::rollBack();
+                return redirect()->route('materi.create')->with('error', 'materi gagal ditambahkan');
+            }
 
             /*foreach(range(1, $request->submateri_count) as $idx){
                 $submateriItem[$idx] = [
@@ -94,7 +105,12 @@ class MateriController extends Controller
             $classContent = ClassContent::find($id)->fill($request->request->all());
             if($classContent->saveOrFail()){
                 DB::commit();
-                return redirect()->route('materi.index')->with('message', 'materi berhasil diperbarui');
+                return redirect()->route('materi.index')
+                    ->with('alert', [
+                        'type' => 'success',
+                        'title' => 'Berhasil',
+                        'message' => 'materi berhasil diperbarui'
+                    ]);
             }
             else {
                 DB::rollBack();

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DomainSubdomainController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\PaketContentController;
 use Illuminate\Support\Facades\Route;
@@ -265,5 +266,8 @@ Route::post('/transaction/{id}/pay', [TransactionController::class, 'createPayme
     ->name('transaction.createPayment');
 
 Route::post('/midtrans/notification', [TransactionController::class, 'notificationHandler']);
+
+
+Route::post('/api/upload', [FileController::class, 'upload_file'])->name('upload');
 
 require __DIR__.'/auth.php';
